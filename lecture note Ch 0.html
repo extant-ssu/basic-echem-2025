@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 0장 시각자료 모음</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .main-title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .index-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .index-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border-color: #6c5ce7;
+        }
+        
+        .card-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .card-icon:nth-child(odd) {
+            animation-delay: 0s;
+        }
+        
+        .card-icon:nth-child(even) {
+            animation-delay: 1.5s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .card-description {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .content-area {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: none;
+            position: relative;
+        }
+        
+        .content-area.active {
+            display: block;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: #5a4fcf;
+        }
+        
+        .content-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
+        }
+        
+        /* Individual content styles */
+        .diagram {
+            position: relative;
+            width: 100%;
+            margin: 20px auto;
+        }
+        
+        /* Applications styles */
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .application-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .application-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .app-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .app-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .app-desc {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+        
+        /* Scientific method styles */
+        .scientific-method {
+            height: 500px;
+            position: relative;
+        }
+        
+        .step {
+            position: absolute;
+            width: 160px;
+            height: 100px;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .step:hover {
+            transform: scale(1.05);
+        }
+        
+        .step1 {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            top: 80px;
+            left: 50px;
+        }
+        
+        .step2 {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            top: 80px;
+            right: 50px;
+        }
+        
+        .step3 {
+            background: linear-gradient(135deg, #45b7d1, #96ceb4);
+            bottom: 200px;
+            right: 50px;
+        }
+        
+        .step4 {
+            background: linear-gradient(135deg, #f9ca24, #f0932b);
+            bottom: 80px;
+            right: 50px;
+        }
+        
+        .step5 {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            bottom: 80px;
+            left: 50px;
+        }
+        
+        .step-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .step-desc {
+            font-size: 10px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+        
+        .arrow {
+            position: absolute;
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .arrow1 { top: 120px; left: 250px; }
+        .arrow2 { top: 180px; right: 80px; transform: rotate(90deg); }
+        .arrow3 { bottom: 180px; right: 250px; transform: rotate(180deg); }
+        .arrow4 { bottom: 120px; right: 250px; transform: rotate(180deg); }
+        .arrow5 { bottom: 180px; left: 80px; transform: rotate(270deg); }
+        .arrow6 { top: 180px; left: 80px; transform: rotate(270deg); }
+        
+        .center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: bold;
+            background: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 50%;
+            border: 3px solid #3498db;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* World comparison styles */
+        .worlds-container {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .world {
+            flex: 1;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .physical-world {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 3px solid #fdcb6e;
+        }
+        
+        .meta-world {
+            background: linear-gradient(135deg, #d1ecf1, #74b9ff);
+            border: 3px solid #0984e3;
+        }
+        
+        .world-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .physical-world .world-title {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .meta-world .world-title {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        
+        .world-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .world-item {
+            background: rgba(255,255,255,0.7);
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            border-left: 4px solid;
+        }
+        
+        .physical-world .world-item {
+            border-left-color: #f39c12;
+        }
+        
+        .meta-world .world-item {
+            border-left-color: #3498db;
+        }
+        
+        /* Electrochemical cell styles */
+        .cell-diagram {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            margin: 30px 0;
+            background: linear-gradient(to bottom, #ecf0f1, #bdc3c7);
+            border: 3px solid #34495e;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        
+        .electrode {
+            position: absolute;
+            width: 15px;
+            height: 200px;
+            top: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .anode {
+            left: 100px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .cathode {
+            right: 100px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+        
+        .electrode-label {
+            position: absolute;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        
+        .anode-label {
+            left: 50px;
+            top: 15px;
+            background: rgba(231, 76, 60, 0.9);
+        }
+        
+        .cathode-label {
+            right: 50px;
+            top: 15px;
+            background: rgba(52, 152, 219, 0.9);
+        }
+        
+        .electrolyte {
+            position: absolute;
+            left: 130px;
+            right: 130px;
+            top: 40px;
+            height: 200px;
+            background: rgba(116, 187, 251, 0.3);
+            border: 2px dashed #74bbfb;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .wire {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            border-radius: 2px;
+            top: 20px;
+            left: 108px;
+            right: 108px;
+        }
+        
+        /* Double layer styles */
+        .double-layer-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            overflow: hidden;
+            background: linear-gradient(to right, #2c3e50 0%, #2c3e50 15%, #ecf0f1 15%, #ecf0f1 100%);
+            margin: 20px 0;
+        }
+        
+        .dl-electrode {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 15%;
+            height: 100%;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .layer-boundary {
+            position: absolute;
+            height: 100%;
+            width: 2px;
+            background: rgba(52, 73, 94, 0.3);
+            border-left: 2px dashed #34495e;
+        }
+        
+        .layer1 { left: 27%; }
+        .layer2 { left: 42%; }
+        .layer3 { left: 60%; }
+        
+        .layer-label {
+            position: absolute;
+            bottom: 10px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            padding: 5px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 5px;
+        }
+        
+        .label1 { left: 15%; width: 12%; }
+        .label2 { left: 27%; width: 15%; }
+        .label3 { left: 42%; width: 18%; }
+        .label4 { left: 60%; width: 35%; }
+        
+        /* Mass transport styles */
+        .transport-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .transport-card {
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px solid;
+            text-align: center;
+        }
+        
+        .diffusion-card {
+            background: linear-gradient(135deg, #ffecec, #ffcccb);
+            border-color: #e74c3c;
+        }
+        
+        .migration-card {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-color: #f39c12;
+        }
+        
+        .convection-card {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-color: #3498db;
+        }
+        
+        .transport-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .transport-desc {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        .transport-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .transport-feature {
+            background: rgba(255,255,255,0.8);
+            margin: 6px 0;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            border-left: 4px solid;
+            color: #2c3e50;
+        }
+        
+        .diffusion-card .transport-feature {
+            border-left-color: #e74c3c;
+        }
+        
+        .migration-card .transport-feature {
+            border-left-color: #f39c12;
+        }
+        
+        .convection-card .transport-feature {
+            border-left-color: #3498db;
+        }
+        
+        /* Overpotential styles */
+        .overpotential-analogy {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        
+        .analogy-box {
+            flex: 1;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid;
+        }
+        
+        .door-analogy {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-color: #fdcb6e;
+        }
+        
+        .ec-analogy {
+            background: linear-gradient(135deg, #d1ecf1, #74b9ff);
+            border-color: #0984e3;
+        }
+        
+        .analogy-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .analogy-icon {
+            font-size: 48px;
+            margin: 15px 0;
+        }
+        
+        .analogy-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .analogy-step {
+            background: rgba(255,255,255,0.7);
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            border-left: 4px solid;
+            color: #2c3e50;
+        }
+        
+        .door-analogy .analogy-step {
+            border-left-color: #f39c12;
+        }
+        
+        .ec-analogy .analogy-step {
+            border-left-color: #3498db;
+        }
+        
+        .overpotential-types {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .overpotential-type {
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+        
+        .activation {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .concentration {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .resistance {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .type-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .type-desc {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .type-example {
+            font-size: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 6px;
+            border-radius: 5px;
+        }
+        
+        /* Roadmap styles */
+        .roadmap-container {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .roadmap-path {
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, #6c5ce7, #a29bfe);
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+            bottom: 0;
+            border-radius: 2px;
+        }
+        
+        .milestone {
+            position: relative;
+            margin: 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .milestone:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .milestone-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 350px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 3px solid;
+            position: relative;
+        }
+        
+        .ch0 {
+            border-color: #ff7675;
+            background: linear-gradient(135deg, #fff0f0, #ffe6e6);
+        }
+        
+        .ch1 {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #ffecec, #ffcccb);
+        }
+        
+        .ch2 {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+        }
+        
+        .milestone-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+        
+        .milestone:nth-child(odd) .milestone-icon {
+            left: -20px;
+        }
+        
+        .milestone:nth-child(even) .milestone-icon {
+            right: -20px;
+        }
+        
+        .ch0-icon {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+        }
+        
+        .ch1-icon {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        
+        .ch2-icon {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+        
+        .milestone-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .milestone-subtitle {
+            font-size: 12px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .milestone-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 11px;
+        }
+        
+        .milestone-feature {
+            background: rgba(255,255,255,0.8);
+            padding: 6px;
+            border-radius: 4px;
+            border-left: 3px solid;
+            color: #2c3e50;
+        }
+        
+        .ch0 .milestone-feature { border-left-color: #ff7675; }
+        .ch1 .milestone-feature { border-left-color: #e74c3c; }
+        .ch2 .milestone-feature { border-left-color: #f39c12; }
+        
+        .current-highlight {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="main-title">전기화학 0장 시각자료 모음</div>
+            <div class="subtitle">클릭하여 각 시각자료를 확인하세요</div>
+        </div>
+        
+        <!-- Index Grid -->
+        <div id="indexGrid" class="index-grid">
+            <div class="index-card" onclick="showContent('applications')">
+                <div class="card-icon">🔋</div>
+                <div class="card-title">전기화학의 응용 분야</div>
+                <div class="card-description">에너지, 환경, 의료, 산업 등 다양한 분야의 전기화학 응용</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('scientific-method')">
+                <div class="card-icon">🔬</div>
+                <div class="card-title">과학적 방법론</div>
+                <div class="card-description">관찰-해석-가설-예측-실험의 순환과정</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('physical-vs-meta')">
+                <div class="card-icon">🌍</div>
+                <div class="card-title">물리적 vs 메타-물리적 세계</div>
+                <div class="card-description">관찰 가능한 현상과 이론적 설명의 차이</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('electrochemical-cell')">
+                <div class="card-icon">⚡</div>
+                <div class="card-title">전기화학 셀 구조</div>
+                <div class="card-description">전극-전해질-전극의 기본 구조와 원리</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('double-layer')">
+                <div class="card-icon">🔗</div>
+                <div class="card-title">전기화학 이중층</div>
+                <div class="card-description">IHP, OHP, 확산층, 벌크 용액의 구조</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('concert-analogy')">
+                <div class="card-icon">🎵</div>
+                <div class="card-title">콘서트장 비유</div>
+                <div class="card-description">이중층을 콘서트장으로 쉽게 이해하기</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('mass-transport')">
+                <div class="card-icon">🌊</div>
+                <div class="card-title">물질이동의 세 방식</div>
+                <div class="card-description">확산, 이동, 대류의 메커니즘</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('overpotential')">
+                <div class="card-icon">⚙️</div>
+                <div class="card-title">과전압 개념</div>
+                <div class="card-description">전기화학 반응의 핵심 제어 요소</div>
+            </div>
+            
+            <div class="index-card" onclick="showContent('roadmap')">
+                <div class="card-icon">🗺️</div>
+                <div class="card-title">학습 여정 로드맵</div>
+                <div class="card-description">전기화학 전체 커리큘럼 개관</div>
+            </div>
+        </div>
+        
+        <!-- Content Areas -->
+        
+        <!-- 1. Applications -->
+        <div id="applications" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">전기화학의 무한한 가능성</div>
+            
+            <div class="applications-grid">
+                <div class="application-card">
+                    <div class="app-icon">🔋</div>
+                    <div class="app-title">에너지 저장</div>
+                    <div class="app-desc">스마트폰, 전기자동차, 배터리</div>
+                </div>
+                <div class="application-card">
+                    <div class="app-icon">🌍</div>
+                    <div class="app-title">환경 정화</div>
+                    <div class="app-desc">수질정화, 대기정화, 탄소포집</div>
+                </div>
+                <div class="application-card">
+                    <div class="app-icon">🏥</div>
+                    <div class="app-title">의료 기술</div>
+                    <div class="app-desc">생체센서, 인공심박기</div>
+                </div>
+                <div class="application-card">
+                    <div class="app-icon">🏭</div>
+                    <div class="app-title">산업 응용</div>
+                    <div class="app-desc">전기도금, 알루미늄 제련</div>
+                </div>
+                <div class="application-card">
+                    <div class="app-icon">🔬</div>
+                    <div class="app-title">연구 분석</div>
+                    <div class="app-desc">센서, pH측정, 분석기기</div>
+                </div>
+                <div class="application-card">
+                    <div class="app-icon">🚀</div>
+                    <div class="app-title">미래 기술</div>
+                    <div class="app-desc">수소연료전지, 인공광합성</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background: rgba(108, 92, 231, 0.1); border-radius: 15px;">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">💡 전기화학을 배우는 이유</h3>
+                <p style="color: #2c3e50; font-size: 16px; line-height: 1.6;">
+                    전기화학은 단순한 학문이 아닙니다. 우리의 일상생활을 혁신하고, 
+                    지구의 미래를 바꿀 수 있는 강력한 도구입니다. 
+                    <strong>작은 전자의 움직임이 세상을 바꾸는 마법</strong>을 함께 배워봅시다! ✨
+                </p>
+            </div>
+        </div>
+        
+        <!-- 2. Scientific Method -->
+        <div id="scientific-method" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">과학적 방법론의 순환과정</div>
+            
+            <div class="scientific-method">
+                <div class="step step1">
+                    <div class="step-title">관찰</div>
+                    <div class="step-desc">Observation<br/>현상을 주의깊게 살펴보기</div>
+                </div>
+                
+                <div class="step step2">
+                    <div class="step-title">해석</div>
+                    <div class="step-desc">Interpretation<br/>관찰 결과 분석하기</div>
+                </div>
+                
+                <div class="step step3">
+                    <div class="step-title">가정과 가설</div>
+                    <div class="step-desc">Hypothesis<br/>현상을 설명하는 추론</div>
+                </div>
+                
+                <div class="step step4">
+                    <div class="step-title">예측</div>
+                    <div class="step-desc">Prediction<br/>가설이 맞다면 일어날 일</div>
+                </div>
+                
+                <div class="step step5">
+                    <div class="step-title">실험/검증</div>
+                    <div class="step-desc">Experiment<br/>예측을 테스트하기</div>
+                </div>
+                
+                <div class="arrow arrow1">→</div>
+                <div class="arrow arrow2">→</div>
+                <div class="arrow arrow3">→</div>
+                <div class="arrow arrow4">→</div>
+                <div class="arrow arrow5">→</div>
+                <div class="arrow arrow6">→</div>
+                
+                <div class="center-text">과학적<br/>방법론</div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 15px; border-left: 5px solid #3498db;">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">🔬 전기화학에서의 예시</h3>
+                <p style="color: #2c3e50; line-height: 1.6;">
+                    <strong>관찰:</strong> 배터리가 방전되어 전류가 흐르지 않음<br/>
+                    <strong>해석:</strong> 화학반응이 멈춘 것으로 보임<br/>
+                    <strong>가설:</strong> 반응물질이 소모되어 더 이상 전자 이동이 일어나지 않음<br/>
+                    <strong>예측:</strong> 충전하면 역반응이 일어나 다시 전류가 흐를 것<br/>
+                    <strong>실험:</strong> 외부 전원으로 충전하여 가설 검증
+                </p>
+            </div>
+        </div>
+        
+        <!-- 3. Physical vs Meta-Physical -->
+        <div id="physical-vs-meta" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">과학자들이 세상을 이해하는 두 가지 관점</div>
+            
+            <div class="worlds-container">
+                <div class="world physical-world">
+                    <div class="world-title">물리적 세계</div>
+                    <p style="text-align: center; margin-bottom: 15px; color: #7f8c8d;">우리가 직접 관찰할 수 있는 현상들</p>
+                    
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">👀 물 끓이기 예시</h4>
+                    <ul class="world-list">
+                        <li class="world-item">물이 부글부글 끓는 모습</li>
+                        <li class="world-item">수증기가 올라오는 현상</li>
+                        <li class="world-item">온도계가 100°C를 가리킴</li>
+                    </ul>
+                    
+                    <h4 style="color: #2c3e50; margin-bottom: 10px; margin-top: 15px;">⚡ 전기화학 예시</h4>
+                    <ul class="world-list">
+                        <li class="world-item">배터리에서 전류가 흐름</li>
+                        <li class="world-item">금속이 녹슬어가는 모습</li>
+                        <li class="world-item">전기도금으로 반짝해짐</li>
+                    </ul>
+                </div>
+                
+                <div class="world meta-world">
+                    <div class="world-title">메타-물리적 세계</div>
+                    <p style="text-align: center; margin-bottom: 15px; color: #7f8c8d;">이론으로 설명하는 보이지 않는 세계</p>
+                    
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">🧪 물 끓이기 설명</h4>
+                    <ul class="world-list">
+                        <li class="world-item">물 분자들이 빨리 움직임</li>
+                        <li class="world-item">분자 간 힘이 약해져서 기체가 됨</li>
+                        <li class="world-item">에너지가 분자 운동으로 전환</li>
+                    </ul>
+                    
+                    <h4 style="color: #2c3e50; margin-bottom: 10px; margin-top: 15px;">🔋 전기화학 설명</h4>
+                    <ul class="world-list">
+                        <li class="world-item">전자가 이동한다</li>
+                        <li class="world-item">이온들이 움직인다</li>
+                        <li class="world-item">화학반응이 일어난다</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="background: rgba(108, 92, 231, 0.1); border: 2px solid #6c5ce7; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: center; color: #2c3e50;">
+                <strong>핵심 포인트:</strong> 과학자들은 관찰 가능한 현상을 통해 보이지 않는 세계를 추론하고,<br/>
+                이론을 통해 새로운 현상을 예측합니다. 이것이 바로 과학적 방법의 핵심입니다!
+            </div>
+        </div>
+        
+        <!-- 4. Electrochemical Cell -->
+        <div id="electrochemical-cell" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">전기화학 셀의 기본 구조와 원리</div>
+            
+            <div class="cell-diagram">
+                <div class="electrode anode"></div>
+                <div class="electrode cathode"></div>
+                <div class="electrode-label anode-label">애노드 (Anode)<br/>산화 반응</div>
+                <div class="electrode-label cathode-label">캐소드 (Cathode)<br/>환원 반응</div>
+                <div class="electrolyte">
+                    <div style="font-weight: bold; color: #2980b9;">전해질 (Electrolyte)</div>
+                    <div style="font-size: 12px; color: #7f8c8d;">이온들이 움직이는 매개체</div>
+                </div>
+                <div class="wire"></div>
+                <div style="position: absolute; top: 5px; left: 50%; transform: translateX(-50%); color: #e67e22; font-size: 12px; font-weight: bold;">전자 흐름 (e⁻) →</div>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.9); border-radius: 20px; border: 2px solid #6c5ce7; font-weight: bold; color: #2c3e50; font-size: 18px;">
+                전기화학 셀 = 전극 | 전해질 | 전극
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-top: 20px; gap: 20px;">
+                <div style="flex: 1; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; color: white; background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div>🔥 산화 반응 (Oxidation)</div>
+                    <div style="font-size: 14px; margin-top: 10px;">전자를 잃는 반응<br/>M → M⁺ + e⁻</div>
+                </div>
+                <div style="flex: 1; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; color: white; background: linear-gradient(135deg, #3498db, #2980b9);">
+                    <div>❄️ 환원 반응 (Reduction)</div>
+                    <div style="font-size: 14px; margin-top: 10px;">전자를 얻는 반응<br/>X + e⁻ → X⁻</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. Double Layer -->
+        <div id="double-layer" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">전기화학 이중층 (Electrochemical Double Layer) 구조</div>
+            
+            <div class="double-layer-container">
+                <div class="dl-electrode">
+                    <div style="font-size: 16px;">⚡</div>
+                    <div>금속 전극</div>
+                    <div style="font-size: 10px; margin-top: 5px;">δ- 전하</div>
+                </div>
+                
+                <div class="layer-boundary layer1"></div>
+                <div class="layer-boundary layer2"></div>
+                <div class="layer-boundary layer3"></div>
+                
+                <div class="layer-label label1">Compact Layer<br/>(IHP)</div>
+                <div class="layer-label label2">Stern Layer<br/>(OHP)</div>
+                <div class="layer-label label3">Diffuse Layer</div>
+                <div class="layer-label label4">Bulk Solution</div>
+                
+                <!-- Simplified ions representation -->
+                <div style="position: absolute; top: 60px; left: 22%; color: #e74c3c; font-weight: bold; font-size: 14px;">Na⁺</div>
+                <div style="position: absolute; top: 120px; left: 24%; color: #e74c3c; font-weight: bold; font-size: 14px;">K⁺</div>
+                <div style="position: absolute; top: 180px; left: 23%; color: #e74c3c; font-weight: bold; font-size: 14px;">Na⁺</div>
+                
+                <div style="position: absolute; top: 80px; left: 36%; color: #e74c3c; font-weight: bold; font-size: 12px;">Na⁺</div>
+                <div style="position: absolute; top: 140px; left: 38%; color: #3498db; font-weight: bold; font-size: 12px;">Cl⁻</div>
+                <div style="position: absolute; top: 200px; left: 37%; color: #e74c3c; font-weight: bold; font-size: 12px;">K⁺</div>
+                
+                <div style="position: absolute; top: 100px; left: 52%; color: #27ae60; font-weight: bold; font-size: 10px;">○</div>
+                <div style="position: absolute; top: 160px; left: 54%; color: #27ae60; font-weight: bold; font-size: 10px;">○</div>
+                <div style="position: absolute; top: 220px; left: 53%; color: #27ae60; font-weight: bold; font-size: 10px;">○</div>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 5px solid #3498db;">
+                <h3 style="color: #2c3e50; margin-bottom: 15px;">🔬 이중층의 형성 과정</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 14px; line-height: 1.6;">
+                    <div>
+                        <p style="color: #2c3e50;"><strong>1. Compact Layer (IHP):</strong> 양이온들이 전극 표면에 직접 흡착</p>
+                        <p style="color: #2c3e50;"><strong>2. Stern Layer (OHP):</strong> 물 분자에 둘러싸인 수화된 이온들</p>
+                    </div>
+                    <div>
+                        <p style="color: #2c3e50;"><strong>3. Diffuse Layer:</strong> 이온 농도가 점점 감소하는 영역</p>
+                        <p style="color: #2c3e50;"><strong>4. Bulk Solution:</strong> 전기적 중성을 유지하는 일반 용액</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 6. Concert Analogy -->
+        <div id="concert-analogy" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">콘서트장 비유로 이해하는 전기화학 이중층</div>
+            
+            <div style="display: flex; gap: 30px; margin: 20px 0;">
+                <div style="flex: 1; background: linear-gradient(135deg, #fff3cd, #ffeaa7); border: 3px solid #fdcb6e; border-radius: 15px; padding: 20px;">
+                    <h3 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">🎤 콘서트장 상황</h3>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 48px;">🎤</div>
+                        <div style="font-weight: bold; color: #2c3e50;">인기 가수</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #2c3e50;">
+                        <li style="margin: 8px 0;">😍 최전열: 열성적인 팬들</li>
+                        <li style="margin: 8px 0;">😊 앞자리: 일반 관객들</li>
+                        <li style="margin: 8px 0;">🙂 뒷자리: 여유있는 관객들</li>
+                        <li style="margin: 8px 0;">😐 일반석: 무관심한 사람들</li>
+                    </ul>
+                </div>
+                
+                <div style="flex: 1; background: linear-gradient(135deg, #d1ecf1, #74b9ff); border: 3px solid #0984e3; border-radius: 15px; padding: 20px;">
+                    <h3 style="text-align: center; color: #2c3e50; margin-bottom: 15px;">⚡ 전기화학 시스템</h3>
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 48px;">⚡</div>
+                        <div style="font-weight: bold; color: #2c3e50;">음전하 전극</div>
+                    </div>
+                    <ul style="list-style: none; padding: 0; font-size: 14px; color: #2c3e50;">
+                        <li style="margin: 8px 0;">🔴 IHP: 직접 흡착된 양이온들</li>
+                        <li style="margin: 8px 0;">🔵 OHP: 수화된 이온들</li>
+                        <li style="margin: 8px 0;">🟡 확산층: 농도가 감소하는 영역</li>
+                        <li style="margin: 8px 0;">⚪ 벌크: 전기적 중성 영역</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #ff7675, #fd79a8); border-radius: 15px; color: white; text-align: center;">
+                <h3 style="margin-bottom: 15px;">💡 핵심 인사이트</h3>
+                <p style="line-height: 1.6;">
+                    콘서트장에서 인기 가수 주변에 팬들이 몰리는 것처럼, 
+                    전기화학에서도 하전된 전극 주변에 반대 전하를 가진 이온들이 몰립니다. 
+                    <br/><br/>
+                    <strong>거리가 가까울수록 더 강한 인력을 받고, 멀어질수록 그 영향이 약해지죠!</strong>
+                </p>
+            </div>
+        </div>
+        
+        <!-- 7. Mass Transport -->
+        <div id="mass-transport" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">물질이동의 세 가지 방식</div>
+            
+            <div class="transport-grid">
+                <div class="transport-card diffusion-card">
+                    <div class="transport-title">🌊 확산 (Diffusion)</div>
+                    <div class="transport-desc">농도 차이로 인한 자연스러운 이동</div>
+                    <ul class="transport-features">
+                        <li class="transport-feature">농도 기울기가 구동력</li>
+                        <li class="transport-feature">무작위적 분자 운동</li>
+                        <li class="transport-feature">Fick의 법칙을 따름</li>
+                        <li class="transport-feature">온도에 의존적</li>
+                    </ul>
+                </div>
+                
+                <div class="transport-card migration-card">
+                    <div class="transport-title">⚡ 이동 (Migration)</div>
+                    <div class="transport-desc">전기장의 힘으로 인한 이온 이동</div>
+                    <ul class="transport-features">
+                        <li class="transport-feature">전기장이 구동력</li>
+                        <li class="transport-feature">하전 입자만 영향받음</li>
+                        <li class="transport-feature">이온의 이동도에 의존</li>
+                        <li class="transport-feature">전류 흐름과 직결</li>
+                    </ul>
+                </div>
+                
+                <div class="transport-card convection-card">
+                    <div class="transport-title">🌀 대류 (Convection)</div>
+                    <div class="transport-desc">유체의 흐름으로 인한 물질 이동</div>
+                    <ul class="transport-features">
+                        <li class="transport-feature">유체 흐름이 구동력</li>
+                        <li class="transport-feature">교반, 온도차 등이 원인</li>
+                        <li class="transport-feature">가장 빠른 물질 이동</li>
+                        <li class="transport-feature">실험에서 제어 필요</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #2ecc71, #27ae60); border-radius: 15px; color: white; text-align: center;">
+                <h3 style="margin-bottom: 15px;">🔄 실제 전기화학 시스템에서는...</h3>
+                <p style="margin-bottom: 15px;">세 가지 물질이동 방식이 동시에 일어납니다!</p>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 15px 0;">
+                    <div style="font-size: 18px; font-weight: bold; font-family: 'Courier New', monospace; margin-bottom: 8px;">J총 = J확산 + J이동 + J대류</div>
+                    <div style="font-size: 12px; opacity: 0.9;">전체 물질 플럭스 = 확산 + 이동 + 대류의 합</div>
+                </div>
+                
+                <p style="font-size: 12px; margin-top: 15px; opacity: 0.9;">
+                    💡 <strong>실험 팁:</strong> 정밀한 전기화학 측정을 위해서는 대류를 최소화하고, 
+                    확산과 이동의 기여도를 정확히 분석해야 합니다!
+                </p>
+            </div>
+        </div>
+        
+        <!-- 8. Overpotential -->
+        <div id="overpotential" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">과전압(Overpotential) - 전기화학의 핵심 개념</div>
+            
+            <div class="overpotential-analogy">
+                <div class="analogy-box door-analogy">
+                    <div class="analogy-title">🚪 일상생활의 비유</div>
+                    <div class="analogy-icon">🚪🔐</div>
+                    <div class="analogy-steps">
+                        <div class="analogy-step">문을 열기 위한 최소한의 힘</div>
+                        <div class="analogy-step">문고리를 돌리는 추가 에너지</div>
+                        <div class="analogy-step">문이 열리는 순간</div>
+                        <div class="analogy-step">원하는 만큼 문을 여는 과정</div>
+                    </div>
+                </div>
+                
+                <div style="font-size: 32px; color: #6c5ce7;">⚡</div>
+                
+                <div class="analogy-box ec-analogy">
+                    <div class="analogy-title">⚗️ 전기화학 반응</div>
+                    <div class="analogy-icon">🔋⚡</div>
+                    <div class="analogy-steps">
+                        <div class="analogy-step">반응의 평형 전위</div>
+                        <div class="analogy-step">반응 시작을 위한 추가 전압</div>
+                        <div class="analogy-step">반응이 시작되는 순간</div>
+                        <div class="analogy-step">원하는 반응 속도 달성</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin: 30px 0; padding: 20px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 15px; color: white; text-align: center;">
+                <h3 style="margin-bottom: 15px;">과전압의 정의</h3>
+                <div style="font-size: 20px; font-weight: bold; font-family: 'Courier New', monospace; margin: 10px 0;">η = E적용 - E평형</div>
+                <div style="font-size: 12px; margin-top: 10px; opacity: 0.9;">
+                    η: 과전압 | E적용: 실제 적용 전압 | E평형: 평형 전위<br/>
+                    과전압이 클수록 더 많은 에너지가 필요하지만 반응 속도는 빨라집니다
+                </div>
+            </div>
+            
+            <div class="overpotential-types">
+                <div class="overpotential-type activation">
+                    <div class="type-title">⚡ 활성화 과전압</div>
+                    <div class="type-desc">전기화학 반응이 시작되기 위해 필요한 활성화 에너지</div>
+                    <div class="type-example">예: 수소 발생 반응에서 H⁺ + e⁻ → ½H₂</div>
+                </div>
+                
+                <div class="overpotential-type concentration">
+                    <div class="type-title">🌊 농도 과전압</div>
+                    <div class="type-desc">반응물질의 농도 변화로 인해 생기는 추가 전압</div>
+                    <div class="type-example">예: 전극 표면 근처에서 반응물질 고갈</div>
+                </div>
+                
+                <div class="overpotential-type resistance">
+                    <div class="type-title">🔌 저항 과전압</div>
+                    <div class="type-desc">전해질과 전극의 전기적 저항으로 인한 전압 강하</div>
+                    <div class="type-example">예: 옴의 법칙 V = IR에 따른 손실</div>
+                </div>
+            </div>
+            
+            <div style="background: rgba(108, 92, 231, 0.1); border: 2px solid #6c5ce7; border-radius: 10px; padding: 15px; margin: 15px 0; text-align: center; color: #2c3e50;">
+                <strong>핵심 포인트:</strong> 과전압은 전기화학 반응의 속도를 결정하는 핵심 요소입니다.<br/>
+                작은 과전압으로도 반응을 제어할 수 있어서 전기화학이 강력한 도구가 됩니다!
+            </div>
+        </div>
+        
+        <!-- 9. Roadmap -->
+        <div id="roadmap" class="content-area">
+            <button class="back-button" onclick="showIndex()">← 목록으로</button>
+            <div class="content-title">전기화학 학습 여정 로드맵</div>
+            
+            <div class="current-highlight">
+                <h3 style="margin-bottom: 10px;">🏁 현재 위치: 제0장 - 전기화학을 들어가면서</h3>
+                <p>전기화학의 세계에 첫 발을 내딛었습니다! 과학적 방법론과 이중층 개념을 배웠어요.</p>
+            </div>
+            
+            <div class="roadmap-container">
+                <div class="roadmap-path"></div>
+                
+                <div class="milestone">
+                    <div class="milestone-content ch0">
+                        <div class="milestone-icon ch0-icon">0</div>
+                        <div class="milestone-title">전기화학을 들어가면서</div>
+                        <div class="milestone-subtitle">미래 에너지로 가는 길</div>
+                        <div class="milestone-features">
+                            <div class="milestone-feature">✅ 과학적 방법론</div>
+                            <div class="milestone-feature">✅ 물리적 vs 메타-물리적</div>
+                            <div class="milestone-feature">✅ 이중층 구조</div>
+                            <div class="milestone-feature">✅ 과전압 개념</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="milestone">
+                    <div class="milestone-content ch1">
+                        <div class="milestone-icon ch1-icon">1</div>
+                        <div class="milestone-title">기본 용어와 개념</div>
+                        <div class="milestone-subtitle">전위, 전류, 그리고 이들의 관계</div>
+                        <div class="milestone-features">
+                            <div class="milestone-feature">전극 전위</div>
+                            <div class="milestone-feature">Nernst 방정식</div>
+                            <div class="milestone-feature">갈바닉 셀</div>
+                            <div class="milestone-feature">표준 전극 전위</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="milestone">
+                    <div class="milestone-content ch2">
+                        <div class="milestone-icon ch2-icon">2</div>
+                        <div class="milestone-title">전극 반응의 열역학</div>
+                        <div class="milestone-subtitle">에너지와 자발성의 법칙</div>
+                        <div class="milestone-features">
+                            <div class="milestone-feature">Gibbs 자유에너지</div>
+                            <div class="milestone-feature">활동도와 농도</div>
+                            <div class="milestone-feature">온도와 압력</div>
+                            <div class="milestone-feature">평형상수</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 15px; color: white; text-align: center;">
+                <h3 style="margin-bottom: 15px;">🌟 전기화학 학습의 핵심 메시지</h3>
+                <p style="line-height: 1.6;">
+                    전기화학은 단순히 이론을 배우는 것이 아닙니다. 
+                    <strong>작은 전자의 움직임이 어떻게 세상을 바꿀 수 있는지</strong>를 이해하는 것입니다.
+                    <br/><br/>
+                    🚀 <em>함께 전기화학의 세계를 탐험하며 미래의 에너지 혁신가가 되어봅시다!</em>
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>전기화학 0장 시각자료 모음 | 클릭으로 탐색하는 인터랙티브 학습 자료</p>
+        </div>
+    </div>
+
+    <script>
+        function showContent(contentId) {
+            // Hide index
+            document.getElementById('indexGrid').style.display = 'none';
+            
+            // Hide all content areas
+            const contentAreas = document.querySelectorAll('.content-area');
+            contentAreas.forEach(area => {
+                area.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(contentId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function showIndex() {
+            // Hide all content areas
+            const contentAreas = document.querySelectorAll('.content-area');
+            contentAreas.forEach(area => {
+                area.classList.remove('active');
+            });
+            
+            // Show index
+            document.getElementById('indexGrid').style.display = 'grid';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                showIndex();
+            }
+        });
+        
+        console.log('🎓 전기화학 시각자료 인덱스가 준비되었습니다!');
+        console.log('📋 조작법:');
+        console.log('  • 카드 클릭: 해당 시각자료 보기');
+        console.log('  • 목록으로 버튼: 인덱스로 돌아가기');
+        console.log('  • ESC 키: 인덱스로 돌아가기');
+    </script>
+</body>
+</html>
