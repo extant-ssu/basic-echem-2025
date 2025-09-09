@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 강의 - 메인 페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            padding: 40px 0;
+        }
+        
+        .main-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 3px 3px 6px rgba(0,0,0,0.4), 0 0 20px rgba(255,255,255,0.2); }
+            to { text-shadow: 3px 3px 6px rgba(0,0,0,0.4), 0 0 30px rgba(255,255,255,0.4); }
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .course-info {
+            font-size: 16px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .chapter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: #6c5ce7;
+        }
+        
+        .chapter-card:hover::before {
+            left: 100%;
+        }
+        
+        .chapter-card.available:hover {
+            border-color: #00b894;
+        }
+        
+        .chapter-card.coming-soon {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        
+        .chapter-card.coming-soon:hover {
+            transform: translateY(-5px);
+            border-color: #fdcb6e;
+        }
+        
+        .chapter-number {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chapter-0 .chapter-number {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+        }
+        
+        .chapter-1 .chapter-number {
+            background: linear-gradient(135deg, #e84393, #fd79a8);
+        }
+        
+        .chapter-2 .chapter-number {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+        }
+        
+        .chapter-3 .chapter-number {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+        
+        .chapter-4 .chapter-number {
+            background: linear-gradient(135deg, #00cec9, #00b894);
+        }
+        
+        .chapter-5 .chapter-number {
+            background: linear-gradient(135deg, #55a3ff, #3d5afe);
+        }
+        
+        .chapter-6 .chapter-number {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+        }
+        
+        .chapter-7 .chapter-number {
+            background: linear-gradient(135deg, #fdcb6e, #f39c12);
+        }
+        
+        .chapter-8 .chapter-number {
+            background: linear-gradient(135deg, #e17055, #d63031);
+        }
+        
+        .chapter-9 .chapter-number {
+            background: linear-gradient(135deg, #00b894, #00a085);
+        }
+        
+        .chapter-10 .chapter-number {
+            background: linear-gradient(135deg, #6c5ce7, #5f3dc4);
+        }
+        
+        .chapter-11 .chapter-number {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+        }
+        
+        .chapter-12 .chapter-number {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+        }
+        
+        .chapter-13 .chapter-number {
+            background: linear-gradient(135deg, #45b7d1, #96ceb4);
+        }
+        
+        .chapter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .chapter-description {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-status {
+            text-align: center;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .status-available {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+        
+        .status-coming-soon {
+            background: linear-gradient(135deg, #fdcb6e, #f39c12);
+            color: white;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 6px;
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            width: 7.14%; /* 1/14 * 100% */
+            background: linear-gradient(90deg, #00b894, #74b9ff);
+            border-radius: 3px;
+            animation: progress-glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes progress-glow {
+            from { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+            to { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+        }
+        
+        .footer {
+            background: rgba(0,0,0,0.2);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+        
+        .footer-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 36px;
+            }
+            
+            .chapters-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chapter-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="main-title">전기화학 강의</div>
+            <div class="subtitle">Electrochemistry Course</div>
+            <div class="course-info">미래 에너지로 가는 길 - 전자의 움직임으로 세상을 바꾸는 과학</div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div style="color: white; font-size: 14px; opacity: 0.8;">
+                강의 진행률: 1/14 (7.1%)
+            </div>
+        </div>
+        
+        <div class="chapters-grid">
+            <!-- Chapter 0 - Available -->
+            <div class="chapter-card chapter-0 available pulse" onclick="openChapter('lecture note Ch 0.html')">
+                <div class="chapter-number">0</div>
+                <div class="chapter-title">전기화학을 들어가면서</div>
+                <div class="chapter-description">
+                    과학적 방법론, 물리적 vs 메타-물리적 세계, 이중층 구조, 과전압 개념 등 전기화학의 기초 개념들을 시각적으로 학습합니다.
+                </div>
+                <div class="chapter-status status-available">강의 자료 이용 가능</div>
+            </div>
+            
+            <!-- Chapter 1 - Coming Soon -->
+            <div class="chapter-card chapter-1 coming-soon">
+                <div class="chapter-number">1</div>
+                <div class="chapter-title">기본 용어와 개념</div>
+                <div class="chapter-description">
+                    전극 전위, Nernst 방정식, 갈바닉 셀, 표준 전극 전위 등 전기화학의 핵심 용어와 기본 개념들을 다룹니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 2 - Coming Soon -->
+            <div class="chapter-card chapter-2 coming-soon">
+                <div class="chapter-number">2</div>
+                <div class="chapter-title">전극 반응의 열역학</div>
+                <div class="chapter-description">
+                    Gibbs 자유에너지, 활동도와 농도, 온도와 압력, 평형상수 등 전기화학 반응의 열역학적 원리를 학습합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 3 - Coming Soon -->
+            <div class="chapter-card chapter-3 coming-soon">
+                <div class="chapter-number">3</div>
+                <div class="chapter-title">전극/전해질 계면</div>
+                <div class="chapter-description">
+                    전기화학적 이중층, 계면 구조, 흡착 현상 등 전극과 전해질 사이의 계면에서 일어나는 현상들을 탐구합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 4 - Coming Soon -->
+            <div class="chapter-card chapter-4 coming-soon">
+                <div class="chapter-number">4</div>
+                <div class="chapter-title">전극 반응 속도론</div>
+                <div class="chapter-description">
+                    Butler-Volmer 방정식, 활성화 에너지, 반응 메커니즘 등 전극 반응의 속도론적 특성을 이해합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 5 - Coming Soon -->
+            <div class="chapter-card chapter-5 coming-soon">
+                <div class="chapter-number">5</div>
+                <div class="chapter-title">물질 이동 현상</div>
+                <div class="chapter-description">
+                    확산, 이동, 대류의 세 가지 물질 이동 방식과 이들이 전기화학 반응에 미치는 영향을 분석합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 6 - Coming Soon -->
+            <div class="chapter-card chapter-6 coming-soon">
+                <div class="chapter-number">6</div>
+                <div class="chapter-title">전기화학 측정법 I</div>
+                <div class="chapter-description">
+                    순환전압전류법, 선형주사전압전류법 등 기본적인 전기화학 측정 기법들의 원리와 응용을 학습합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 7 - Coming Soon -->
+            <div class="chapter-card chapter-7 coming-soon">
+                <div class="chapter-number">7</div>
+                <div class="chapter-title">전기화학 측정법 II</div>
+                <div class="chapter-description">
+                    전기화학 임피던스 분광법, 크로노법 등 고급 측정 기법들과 데이터 해석 방법을 다룹니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 8 - Coming Soon -->
+            <div class="chapter-card chapter-8 coming-soon">
+                <div class="chapter-number">8</div>
+                <div class="chapter-title">전기분해와 전착</div>
+                <div class="chapter-description">
+                    전기분해 반응, 전착 과정, Faraday 법칙 등 전기 에너지를 이용한 화학 반응의 원리와 응용을 학습합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 9 - Coming Soon -->
+            <div class="chapter-card chapter-9 coming-soon">
+                <div class="chapter-number">9</div>
+                <div class="chapter-title">부식과 방식</div>
+                <div class="chapter-description">
+                    금속 부식의 전기화학적 메커니즘과 다양한 방식 기법들의 원리 및 실제 응용 사례를 탐구합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 10 - Coming Soon -->
+            <div class="chapter-card chapter-10 coming-soon">
+                <div class="chapter-number">10</div>
+                <div class="chapter-title">배터리와 연료전지</div>
+                <div class="chapter-description">
+                    1차 전지, 2차 전지, 연료전지의 작동 원리와 성능 특성, 그리고 차세대 에너지 저장 기술을 다룹니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 11 - Coming Soon -->
+            <div class="chapter-card chapter-11 coming-soon">
+                <div class="chapter-number">11</div>
+                <div class="chapter-title">센서와 바이오전기화학</div>
+                <div class="chapter-description">
+                    전기화학 센서의 설계 원리, 바이오센서, 생체 내 전기화학적 현상 등을 학습합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 12 - Coming Soon -->
+            <div class="chapter-card chapter-12 coming-soon">
+                <div class="chapter-number">12</div>
+                <div class="chapter-title">환경 전기화학</div>
+                <div class="chapter-description">
+                    수질정화, 대기정화, 탄소포집 등 환경 문제 해결을 위한 전기화학 기술들의 원리와 응용을 탐구합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+            
+            <!-- Chapter 13 - Coming Soon -->
+            <div class="chapter-card chapter-13 coming-soon">
+                <div class="chapter-number">13</div>
+                <div class="chapter-title">미래 전기화학 기술</div>
+                <div class="chapter-description">
+                    양자점, 나노전기화학, 인공광합성, 차세대 에너지 변환 기술 등 전기화학의 미래를 조망합니다.
+                </div>
+                <div class="chapter-status status-coming-soon">준비 중</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-title">전기화학 - 미래를 여는 열쇠</div>
+            <div class="footer-text">
+                작은 전자의 움직임이 어떻게 세상을 바꿀 수 있는지 함께 탐구해보세요.<br/>
+                각 장별 강의 자료가 준비되는 대로 순차적으로 업데이트됩니다.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openChapter(filename) {
+            // 이용 가능한 장만 열기
+            if (filename) {
+                window.open(filename, '_blank');
+            }
+        }
+        
+        // 준비 중인 카드 클릭 시 메시지
+        document.querySelectorAll('.coming-soon').forEach(card => {
+            card.addEventListener('click', function() {
+                alert('해당 강의 자료는 현재 준비 중입니다. 곧 업데이트될 예정이니 조금만 기다려주세요!');
+            });
+        });
+        
+        // 페이지 로드 시 환영 메시지
+        window.addEventListener('load', function() {
+            console.log('🎓 전기화학 강의 메인 페이지에 오신 것을 환영합니다!');
+            console.log('📚 현재 0장 강의 자료가 이용 가능합니다.');
+            console.log('🔬 각 장별 자료가 준비되는 대로 업데이트됩니다.');
+        });
+        
+        // 간단한 키보드 네비게이션
+        document.addEventListener('keydown', function(event) {
+            if (event.key === '0') {
+                openChapter('0장 강의 보충자료.html');
+            }
+        });
+    </script>
+</body>
+</html>
