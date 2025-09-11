@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Born 모델 - 이온과 용매의 상호작용</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ff6b6b;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.4em;
+            font-style: italic;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff6b6b;
+        }
+        
+        .theory-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .equation {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3em;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .visual-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .visual-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .visual-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .visual-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .explanation {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            border-left: 4px solid #3498db;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .research-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .key-points {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .key-points h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .key-points ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .interactive-demo {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .visual-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>1. Born 모델</h1>
+            <p class="subtitle">이온과 용매의 상호작용 - 수화의 비밀을 풀다</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="nextSection()">다음: Debye-Hückel 모델 →</a>
+        </div>
+        
+        <!-- 1. 이론적 배경 -->
+        <div class="section">
+            <h2 class="section-title">🧠 이론적 배경: 이온이 물에 녹는다는 것의 진짜 의미</h2>
+            
+            <div class="theory-box">
+                <h3>🤔 근본적 질문: 소금이 물에 녹으면 무슨 일이 일어날까?</h3>
+                <p><strong>겉으로 보기에는:</strong> 소금이 사라져요. 마치 마법처럼!</p>
+                <p><strong>실제로는:</strong> 엄청난 에너지 변화가 일어나고 있습니다!</p>
+                
+                <div class="explanation">
+                    이온이 고체 상태에서 용액으로 이동하는 과정은 단순한 물리적 혼합이 아닙니다. 
+                    <span class="highlight">격자 에너지를 잃고 수화 에너지를 얻는</span> 복잡한 에너지 교환 과정입니다.
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🎯 Born 모델의 핵심 아이디어</h3>
+                <p>Max Born(1882-1970)은 노벨물리학상 수상자로, 양자역학의 아버지 중 한 명입니다. 
+                그는 <strong>"이온이 진공에서 용매로 이동할 때의 에너지 변화를 어떻게 계산할 수 있을까?"</strong>라는 질문에서 시작했습니다.</p>
+                
+                <div class="key-points">
+                    <h4>💡 Born 모델의 가정들</h4>
+                    <ul>
+                        <li><strong>이온은 점전하:</strong> 모든 전하가 중심에 집중</li>
+                        <li><strong>용매는 연속체:</strong> 분자 구조 무시, 유전상수만 고려</li>
+                        <li><strong>구형 대칭:</strong> 이온 주변이 완전한 구 형태</li>
+                        <li><strong>선형 응답:</strong> 전기장에 대한 용매의 선형 반응</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. Born 에너지 방정식 -->
+        <div class="section">
+            <h2 class="section-title">⚡ Born 에너지 방정식의 물리적 의미</h2>
+            
+            <div class="equation">
+                ΔG<sub>solv</sub> = -N<sub>A</sub> · (1/8πε₀) · [(ze)²/r] · [1 - 1/ε<sub>s</sub>]
+            </div>
+            
+            <div class="theory-box">
+                <h3>📊 방정식 해부하기</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="background: #ff6b6b; color: white; padding: 15px; border-radius: 10px;">
+                        <strong>ze:</strong> 이온의 전하<br>
+                        <small>전하가 클수록 에너지 변화 큼</small>
+                    </div>
+                    <div style="background: #74b9ff; color: white; padding: 15px; border-radius: 10px;">
+                        <strong>r:</strong> 이온의 반지름<br>
+                        <small>작을수록 에너지 변화 큼 (1/r 관계)</small>
+                    </div>
+                    <div style="background: #00b894; color: white; padding: 15px; border-radius: 10px;">
+                        <strong>ε<sub>s</sub>:</strong> 용매의 유전상수<br>
+                        <small>물 = 78.49 (매우 큰 값)</small>
+                    </div>
+                    <div style="background: #fdcb6e; color: white; padding: 15px; border-radius: 10px;">
+                        <strong>N<sub>A</sub>:</strong> 아보가드로 수<br>
+                        <small>몰 단위로 변환</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="explanation">
+                <strong>🔍 물리적 해석:</strong> Born 에너지는 이온이 자신의 전기장을 통해 용매를 분극시키는 데 필요한 에너지입니다. 
+                이온이 작고 전하가 클수록, 그리고 용매의 유전상수가 클수록 더 많은 에너지를 방출합니다.
+            </div>
+        </div>
+        
+        <!-- 3. 시각화 섹션 -->
+        <div class="section">
+            <h2 class="section-title">🎨 이온 수화 구조의 시각화</h2>
+            
+            <div class="visual-container">
+                <div class="visual-item">
+                    <div class="visual-title">Li⁺ 이온의 수화 구조</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- 중심 Li+ 이온 -->
+                        <circle cx="200" cy="150" r="20" fill="#ff6b6b" stroke="#333" stroke-width="2"/>
+                        <text x="200" y="155" text-anchor="middle" fill="white" font-weight="bold" font-size="14">Li⁺</text>
+                        
+                        <!-- Primary solvation shell -->
+                        <circle cx="200" cy="150" r="80" fill="none" stroke="#3498db" stroke-width="3" stroke-dasharray="5,5"/>
+                        <text x="280" y="100" font-size="12" fill="#3498db" font-weight="bold">1차 수화층</text>
+                        
+                        <!-- 용매 분자들 (물) -->
+                        <g>
+                            <!-- 위쪽 물 분자들 -->
+                            <circle cx="170" cy="100" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <circle cx="230" cy="100" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <text x="170" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                            <text x="230" y="105" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                            
+                            <!-- 아래쪽 물 분자들 -->
+                            <circle cx="170" cy="200" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <circle cx="230" cy="200" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <text x="170" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                            <text x="230" y="205" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                            
+                            <!-- 좌우 물 분자들 -->
+                            <circle cx="130" cy="150" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <circle cx="270" cy="150" r="15" fill="#74b9ff" opacity="0.8" stroke="#333"/>
+                            <text x="130" y="155" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                            <text x="270" y="155" text-anchor="middle" fill="white" font-size="12" font-weight="bold">H₂O</text>
+                        </g>
+                        
+                        <!-- Secondary solvation shell -->
+                        <circle cx="200" cy="150" r="130" fill="none" stroke="#95a5a6" stroke-width="2" stroke-dasharray="3,3"/>
+                        <text x="320" y="220" font-size="12" fill="#95a5a6" font-weight="bold">2차 수화층</text>
+                        
+                        <!-- 정전기적 인력 표시 -->
+                        <g stroke="#e74c3c" stroke-width="2" opacity="0.7">
+                            <line x1="185" y1="135" x2="175" y2="125"/>
+                            <line x1="215" y1="135" x2="225" y2="125"/>
+                            <line x1="185" y1="165" x2="175" y2="175"/>
+                            <line x1="215" y1="165" x2="225" y2="175"/>
+                        </g>
+                        
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>핵심 포인트:</strong>
+                        <ul>
+                            <li><span class="highlight">1차 수화층:</span> Li⁺에 직접 결합된 4-6개의 물 분자</li>
+                            <li><span class="highlight">2차 수화층:</span> 1차 수화층과 수소결합한 물 분자들</li>
+                            <li><span class="highlight">정전기적 인력:</span> Li⁺의 강한 양전하가 물의 산소 원자를 끌어당김</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="visual-item">
+                    <div class="visual-title">이온 크기와 수화 에너지</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- 그래프 축 -->
+                        <line x1="50" y1="250" x2="350" y2="250" stroke="#333" stroke-width="2"/>
+                        <line x1="50" y1="250" x2="50" y2="50" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- 축 레이블 -->
+                        <text x="200" y="280" text-anchor="middle" font-size="14" font-weight="bold">이온 반지름 (Å)</text>
+                        <text x="25" y="150" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90 25 150)">|수화 에너지|</text>
+                        
+                        <!-- 곡선 그리기 (1/r 관계) -->
+                        <path d="M 70 70 Q 120 80 150 100 Q 200 130 250 160 Q 300 190 330 220" 
+                              stroke="#e74c3c" stroke-width="4" fill="none"/>
+                        
+                        <!-- 이온들 표시 -->
+                        <g font-size="12" font-weight="bold">
+                            <circle cx="70" cy="70" r="6" fill="#ff6b6b"/>
+                            <text x="70" y="45" text-anchor="middle" fill="#e74c3c">Li⁺</text>
+                            <text x="70" y="35" text-anchor="middle" fill="#666" font-size="10">0.60Å</text>
+                            
+                            <circle cx="120" cy="90" r="6" fill="#74b9ff"/>
+                            <text x="120" y="115" text-anchor="middle" fill="#0984e3">Na⁺</text>
+                            <text x="120" y="125" text-anchor="middle" fill="#666" font-size="10">0.95Å</text>
+                            
+                            <circle cx="180" cy="130" r="6" fill="#00b894"/>
+                            <text x="180" y="155" text-anchor="middle" fill="#00b894">K⁺</text>
+                            <text x="180" y="165" text-anchor="middle" fill="#666" font-size="10">1.33Å</text>
+                            
+                            <circle cx="250" cy="180" r="6" fill="#fdcb6e"/>
+                            <text x="250" y="205" text-anchor="middle" fill="#e17055">Cs⁺</text>
+                            <text x="250" y="215" text-anchor="middle" fill="#666" font-size="10">1.67Å</text>
+                        </g>
+                        
+                        <!-- 수화 에너지 값들 표시 -->
+                        <g font-size="10" fill="#666">
+                            <text x="90" y="70" text-anchor="start">-506 kJ/mol</text>
+                            <text x="140" y="90" text-anchor="start">-409 kJ/mol</text>
+                            <text x="200" y="130" text-anchor="start">-321 kJ/mol</text>
+                            <text x="270" y="180" text-anchor="start">-264 kJ/mol</text>
+                        </g>
+                        
+                        <!-- 격자 -->
+                        <g stroke="#ddd" stroke-width="1">
+                            <line x1="50" y1="200" x2="350" y2="200"/>
+                            <line x1="50" y1="150" x2="350" y2="150"/>
+                            <line x1="50" y1="100" x2="350" y2="100"/>
+                            <line x1="100" y1="50" x2="100" y2="250"/>
+                            <line x1="200" y1="50" x2="200" y2="250"/>
+                            <line x1="300" y1="50" x2="300" y2="250"/>
+                        </g>
+                        
+                        <!-- 1/r 관계 표시 -->
+                        <text x="300" y="70" font-size="14" font-weight="bold" fill="#e74c3c">∝ 1/r</text>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>주요 관찰:</strong>
+                        <ul>
+                            <li><span class="highlight">Li⁺가 가장 작지만 수화 에너지가 가장 큼</span></li>
+                            <li>이온 크기가 절반이 되면 수화 에너지는 2배가 됨</li>
+                            <li>이것이 리튬이온 배터리의 <strong>높은 에너지 밀도</strong>의 비밀!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 최신 연구 동향 -->
+        <div class="section">
+            <h2 class="section-title">🔬 최신 연구 동향: Born 모델의 현대적 응용</h2>
+            
+            <div class="research-highlight">
+                <h3>🌟 2023년 Nature Energy 연구</h3>
+                <p><strong>주제:</strong> X-ray 분광법을 이용한 Li⁺ 수화 구조 직접 관찰</p>
+                <p><strong>발견:</strong> Li⁺ 주변에 4-6개의 용매 분자가 규칙적으로 배열됨을 실험적으로 확인</p>
+                <p><strong>의미:</strong> Born 모델의 예측이 실제와 매우 잘 일치함을 증명</p>
+            </div>
+            
+            <div class="research-highlight">
+                <h3>🌟 2024년 Science 연구</h3>
+                <p><strong>주제:</strong> 전고체 배터리에서의 Li⁺ 수화층 인공 디자인</p>
+                <p><strong>성과:</strong> Born 모델을 기반으로 수화층을 인위적으로 설계하여 이온 전도도 10배 향상</p>
+                <p><strong>응용:</strong> 차세대 배터리 기술의 이론적 기반 제공</p>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🎯 실제 배터리에서의 Born 효과</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px;">
+                        <strong>에너지 밀도:</strong><br>
+                        Li⁺의 작은 크기 → 높은 수화 에너지 → 높은 전압
+                    </div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px;">
+                        <strong>이온 전도도:</strong><br>
+                        수화층 두께가 이온 이동 속도에 직접 영향
+                    </div>
+                    <div style="background: #f8d7da; padding: 15px; border-radius: 8px;">
+                        <strong>전해질 설계:</strong><br>
+                        Born 반지름을 조절하여 최적 전해질 개발
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 실습과 응용 -->
+        <div class="section">
+            <h2 class="section-title">💡 실습과 응용</h2>
+            
+            <div class="interactive-demo">
+                <h3>🧪 가상 실험: Born 에너지 계산</h3>
+                <p><strong>문제:</strong> Li⁺와 Na⁺의 수화 에너지를 Born 모델로 계산하고 실험값과 비교해보세요.</p>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <p><strong>주어진 값:</strong></p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>Li⁺ 반지름: 0.60 Å, 실험값: -506 kJ/mol</li>
+                        <li>Na⁺ 반지름: 0.95 Å, 실험값: -409 kJ/mol</li>
+                        <li>물의 유전상수: 78.49</li>
+                    </ul>
+                </div>
+                
+                <p><strong>예상 결과:</strong> Born 모델이 실험값을 약 ±10% 오차 내에서 예측</p>
+            </div>
+            
+            <div class="key-points">
+                <h4>🎯 핵심 포인트 정리</h4>
+                <ul>
+                    <li><strong>Born 모델은 이온-용매 상호작용의 정전기적 측면을 설명</strong></li>
+                    <li><strong>수화 에너지는 이온 크기에 역비례 (1/r 관계)</strong></li>
+                    <li><strong>Li⁺의 작은 크기가 높은 에너지 밀도의 핵심</strong></li>
+                    <li><strong>현대 배터리 기술에서 여전히 중요한 설계 원리</strong></li>
+                    <li><strong>실험과 이론이 잘 일치하는 성공적인 모델</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 다음 단계 -->
+        <div class="section">
+            <h2 class="section-title">🚀 다음 단계: Debye-Hückel 모델</h2>
+            <div class="theory-box">
+                <h3>🔗 연결고리</h3>
+                <p>Born 모델은 <strong>개별 이온</strong>의 수화를 다뤘습니다. 하지만 실제 전해질 용액에서는 
+                <span class="highlight">수많은 이온들이 함께 존재</span>합니다!</p>
+                
+                <p><strong>다음 질문:</strong> 이온들이 서로 어떻게 영향을 주고받을까요? 
+                이것이 바로 Debye-Hückel 모델이 해결하는 문제입니다.</p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="nextSection()">다음: Debye-Hückel 모델 →</a>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('메인 네비게이션 페이지로 돌아갑니다.');
+            // 실제로는 window.location.href = 'main_navigation.html';
+        }
+        
+        function nextSection() {
+            alert('Debye-Hückel 모델 섹션으로 이동합니다.');
+            // 실제로는 window.location.href = 'debye_huckel_section.html';
+        }
+        
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

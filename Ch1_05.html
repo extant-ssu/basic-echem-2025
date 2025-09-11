@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025년 최신 배터리 기술</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px;
+        }
+        .breakthrough-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .breakthrough-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 3px solid;
+            transition: transform 0.3s ease;
+        }
+        .breakthrough-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .mercedes-card {
+            border-color: #00b894;
+        }
+        .chicago-card {
+            border-color: #fd79a8;
+        }
+        .card-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .mercedes-card .card-title {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .chicago-card .card-title {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .card-subtitle {
+            font-size: 16px;
+            color: #636e72;
+            font-weight: 500;
+        }
+        .achievement-box {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid;
+        }
+        .mercedes-card .achievement-box {
+            border-left-color: #00b894;
+        }
+        .chicago-card .achievement-box {
+            border-left-color: #fd79a8;
+        }
+        .achievement-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .mercedes-card .stat-item {
+            border-color: #00cec9;
+        }
+        .chicago-card .stat-item {
+            border-color: #fdcb6e;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #636e72;
+            font-weight: 500;
+        }
+        .battery-diagram {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .battery-visual {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(90deg, #fd79a8 0%, #fdcb6e 100%);
+            border-radius: 15px;
+            position: relative;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .mercedes-card .battery-visual {
+            background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+        }
+        .battery-terminal {
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: #333;
+            border-radius: 5px;
+            top: -10px;
+        }
+        .battery-terminal.positive {
+            right: -10px;
+        }
+        .battery-terminal.negative {
+            left: -10px;
+        }
+        .innovation-list {
+            list-style: none;
+            padding: 0;
+        }
+        .innovation-list li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .mercedes-card .innovation-list li {
+            border-left-color: #00b894;
+        }
+        .chicago-card .innovation-list li {
+            border-left-color: #fd79a8;
+        }
+        .timeline-section {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+        .timeline-title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .timeline-item {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .timeline-date {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #fdcb6e;
+        }
+        .timeline-event {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .comparison-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .table-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .table-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 1px solid #eee;
+        }
+        .table-cell {
+            padding: 20px;
+            text-align: center;
+            border-right: 1px solid #eee;
+        }
+        .table-cell:last-child {
+            border-right: none;
+        }
+        .table-cell.header {
+            background: #f8f9ff;
+            font-weight: bold;
+            color: #2d3436;
+        }
+        .improvement {
+            color: #00b894;
+            font-weight: bold;
+        }
+        .revolutionary {
+            color: #fd79a8;
+            font-weight: bold;
+        }
+        .future-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .future-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 20px;
+        }
+        .future-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .future-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .future-item h4 {
+            margin: 0 0 10px 0;
+            color: #fd79a8;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗⚡ 2025년 배터리 혁명</h1>
+            <p>세계를 바꾸는 두 가지 획기적 기술</p>
+        </div>
+        
+        <div class="content">
+            <div class="breakthrough-grid">
+                <!-- 메르세데스-벤츠 전고체 배터리 -->
+                <div class="breakthrough-card mercedes-card">
+                    <div class="card-header">
+                        <div class="card-title">🏎️ 메르세데스-벤츠</div>
+                        <div class="card-subtitle">Factorial Energy 협력</div>
+                    </div>
+                    
+                    <div class="battery-diagram">
+                        <h4 style="margin: 0 0 15px 0; color: #2d3436;">전고체 배터리 (Solid-State)</h4>
+                        <div class="battery-visual">
+                            <div class="battery-terminal negative"></div>
+                            <div>🔋 FEST 기술</div>
+                            <div class="battery-terminal positive"></div>
+                        </div>
+                        <p style="margin: 0; color: #636e72; font-size: 14px;">
+                            리튬 메탈 + 고체 전해질
+                        </p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">749</div>
+                            <div class="stat-label">마일 주행</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25%</div>
+                            <div class="stat-label">에너지 증가</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">1,000</div>
+                            <div class="stat-label">km 예상 주행거리</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">450</div>
+                            <div class="stat-label">Wh/kg 에너지밀도</div>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-box">
+                        <div class="achievement-title">🎯 주요 성과</div>
+                        <ul class="innovation-list">
+                            <li><strong>세계 최초:</strong> 실차 로드 테스트 성공</li>
+                            <li><strong>기록 달성:</strong> 749마일 무충전 주행</li>
+                            <li><strong>F1 기술:</strong> Mercedes-AMG HPP 협력</li>
+                            <li><strong>안전성:</strong> 화재 위험 대폭 감소</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="achievement-box">
+                        <div class="achievement-title">⚙️ 핵심 기술</div>
+                        <ul class="innovation-list">
+                            <li><strong>공압 작동기:</strong> 부피 변화 대응</li>
+                            <li><strong>패시브 냉각:</strong> 에너지 효율 향상</li>
+                            <li><strong>유연한 구조:</strong> 다양한 구성 가능</li>
+                            <li><strong>2020년대 말:</strong> 양산 목표</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 시카고 대학 나트륨 배터리 -->
+                <div class="breakthrough-card chicago-card">
+                    <div class="card-header">
+                        <div class="card-title">🏫 시카고 대학교</div>
+                        <div class="card-subtitle">Y. Shirley Meng 교수팀</div>
+                    </div>
+                    
+                    <div class="battery-diagram">
+                        <h4 style="margin: 0 0 15px 0; color: #2d3436;">아노드 없는 나트륨 배터리</h4>
+                        <div class="battery-visual">
+                            <div class="battery-terminal negative"></div>
+                            <div>🧂 Na+ 이온</div>
+                            <div class="battery-terminal positive"></div>
+                        </div>
+                        <p style="margin: 0; color: #636e72; font-size: 14px;">
+                            아노드 제거 + 나트륨 기반
+                        </p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number">1000X</div>
+                            <div class="stat-label">리튬 대비 풍부함</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">아노드 (제거)</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">수백</div>
+                            <div class="stat-label">사이클 안정성</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">20,000</div>
+                            <div class="stat-label">ppm 지각 함량</div>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-box">
+                        <div class="achievement-title">🌍 환경적 장점</div>
+                        <ul class="innovation-list">
+                            <li><strong>바다에 풍부:</strong> 무한 공급 가능</li>
+                            <li><strong>친환경 채굴:</strong> 환경 파괴 최소화</li>
+                            <li><strong>지정학적 독립:</strong> 특정 국가 의존도 감소</li>
+                            <li><strong>저비용:</strong> 대량 생산 시 경제성</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="achievement-box">
+                        <div class="achievement-title">🔬 혁신 기술</div>
+                        <ul class="innovation-list">
+                            <li><strong>알루미늄 분말:</strong> 액체처럼 흐르는 고체</li>
+                            <li><strong>고압 성형:</strong> 고체-액체 접촉 구현</li>
+                            <li><strong>Nature Energy:</strong> 2024년 7월 발표</li>
+                            <li><strong>특허 출원:</strong> 상용화 준비</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="comparison-table">
+                <div class="table-header">📊 기술별 성능 비교</div>
+                <div class="table-row">
+                    <div class="table-cell header">특성</div>
+                    <div class="table-cell header">전고체 배터리</div>
+                    <div class="table-cell header">나트륨 배터리</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell header">에너지 밀도</div>
+                    <div class="table-cell improvement">450 Wh/kg ⬆</div>
+                    <div class="table-cell">~리튬 수준</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell header">안전성</div>
+                    <div class="table-cell improvement">매우 높음 ⬆</div>
+                    <div class="table-cell improvement">높음 ⬆</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell header">원료 비용</div>
+                    <div class="table-cell">중간</div>
+                    <div class="table-cell revolutionary">매우 낮음 ⬇</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell header">환경 영향</div>
+                    <div class="table-cell improvement">개선됨</div>
+                    <div class="table-cell revolutionary">매우 친환경 ⬇</div>
+                </div>
+                <div class="table-row">
+                    <div class="table-cell header">상용화 시기</div>
+                    <div class="table-cell">2020년대 말</div>
+                    <div class="table-cell">연구 단계</div>
+                </div>
+            </div>
+            
+            <div class="timeline-section">
+                <div class="timeline-title">🗓️ 2025년 배터리 혁신 타임라인</div>
+                <div class="timeline-grid">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025년 2월</div>
+                        <div class="timeline-event">
+                            메르세데스-벤츠 전고체 배터리 EQS 로드 테스트 시작. 
+                            세계 최초 실차 적용 성공.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024년 7월</div>
+                        <div class="timeline-event">
+                            시카고 대학 아노드 없는 나트륨 전고체 배터리 
+                            Nature Energy 논문 발표.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025년 9월</div>
+                        <div class="timeline-event">
+                            메르세데스 EQS 749마일 무충전 주행 기록 달성. 
+                            독일→스웨덴 실증 성공.
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026년 예정</div>
+                        <div class="timeline-event">
+                            Stellantis, Factorial 전고체 배터리 탑재 
+                            전기 Dodge Charger 출시 계획.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="future-box">
+                <div class="future-title">🔮 미래 전망: 배터리가 바꿀 세상</div>
+                <div class="future-grid">
+                    <div class="future-item">
+                        <h4>🚗 교통 혁명</h4>
+                        <p>1,000km 무충전 주행으로 전기차가 주류가 되는 시대</p>
+                    </div>
+                    <div class="future-item">
+                        <h4>🌱 탄소 중립</h4>
+                        <p>대용량 ESS로 재생에너지 저장 및 안정적 공급</p>
+                    </div>
+                    <div class="future-item">
+                        <h4>💰 경제성</h4>
+                        <p>나트륨 배터리로 저비용 에너지 저장 시대 도래</p>
+                    </div>
+                    <div class="future-item">
+                        <h4>🔒 에너지 안보</h4>
+                        <p>지정학적 위험 없는 안정적 배터리 공급망 구축</p>
+                    </div>
+                </div>
+                
+                <p style="margin: 30px 0 0 0; font-size: 18px; font-weight: bold; color: #2d3436;">
+                    "2030년까지 배터리 기술은 우리가 상상하는 것보다 훨씬 빠르게 발전할 것입니다"
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

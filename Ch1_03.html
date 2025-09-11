@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>갈바닉 셀 vs 전해 셀</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+        .cell-section {
+            padding: 50px;
+            min-height: 1000px;
+        }
+        .galvanic {
+            background: linear-gradient(135deg, #e8f5e8 0%, #f0fff0 100%);
+            border-right: 4px solid #00b894;
+        }
+        .electrolytic {
+            background: linear-gradient(135deg, #fff0e6 0%, #ffeee6 100%);
+        }
+        .section-title {
+            font-size: 26px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .galvanic .section-title {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .electrolytic .section-title {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .cell-diagram {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            position: relative;
+            height: 500px;
+            border: 4px solid;
+        }
+        .galvanic .cell-diagram {
+            border-color: #00b894;
+        }
+        .electrolytic .cell-diagram {
+            border-color: #fd79a8;
+        }
+        .beaker-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 250px;
+            margin: 80px 40px 40px 40px;
+        }
+        .half-cell {
+            position: relative;
+            width: 140px;
+        }
+        .beaker {
+            width: 140px;
+            height: 180px;
+            border: 4px solid #333;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            background: #f8f9ff;
+        }
+        .solution {
+            width: 100%;
+            height: 140px;
+            border-radius: 0 0 21px 21px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .zn-solution {
+            background: linear-gradient(to top, #81c784 0%, #c8e6c9 100%);
+            color: #2e7d32;
+        }
+        .cu-solution {
+            background: linear-gradient(to top, #1976d2 0%, #64b5f6 100%);
+        }
+        .electrode {
+            position: absolute;
+            width: 18px;
+            height: 170px;
+            left: 61px;
+            top: 5px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            writing-mode: vertical-rl;
+            border: 2px solid #333;
+        }
+        .zn-electrode {
+            background: linear-gradient(to bottom, #757575 0%, #424242 100%);
+        }
+        .cu-electrode {
+            background: linear-gradient(to bottom, #e53935 0%, #f44336 100%);
+        }
+        .salt-bridge {
+            position: absolute;
+            top: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 30px;
+            background: linear-gradient(90deg, #7b1fa2 0%, #9c27b0 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 8px 20px rgba(123, 31, 162, 0.4);
+            z-index: 20;
+            border: 2px solid #4a148c;
+        }
+        .external-circuit {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            height: 50px;
+            border: 4px solid #333;
+            border-bottom: none;
+            border-radius: 25px 25px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            z-index: 25;
+        }
+        .wire-connection {
+            position: absolute;
+            width: 6px;
+            height: 70px;
+            background: #333;
+            border-radius: 3px;
+            top: 70px;
+            z-index: 15;
+        }
+        .wire-left {
+            left: 100px;
+        }
+        .wire-right {
+            right: 100px;
+        }
+        .component {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 30;
+        }
+        .galvanic .component {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .electrolytic .component {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .electron-flow {
+            position: absolute;
+            top: 35px;
+            font-size: 20px;
+            color: #ffeb3b;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            z-index: 35;
+            animation: electronFlow 3s linear infinite;
+        }
+        @keyframes electronFlow {
+            0% { left: 120px; opacity: 0.6; transform: scale(0.8); }
+            25% { left: 160px; opacity: 1; transform: scale(1.2); }
+            50% { left: 220px; opacity: 1; transform: scale(1.2); }
+            75% { left: 280px; opacity: 1; transform: scale(1.2); }
+            100% { left: 320px; opacity: 0.6; transform: scale(0.8); }
+        }
+        .electrode-labels {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 40px 10px 40px;
+            font-weight: bold;
+        }
+        .electrode-label {
+            padding: 10px 20px;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .anode-label {
+            background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+        }
+        .cathode-label {
+            background: linear-gradient(135deg, #00bcd4 0%, #26c6da 100%);
+        }
+        .energy-flow {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+        }
+        .galvanic .energy-flow {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .electrolytic .energy-flow {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .equation-box {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 18px;
+            border: 3px solid;
+        }
+        .galvanic .equation-box {
+            border-color: #00b894;
+            color: #00b894;
+        }
+        .electrolytic .equation-box {
+            border-color: #fd79a8;
+            color: #fd79a8;
+        }
+        .info-box {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-left: 6px solid;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        .galvanic .info-box {
+            border-left-color: #00b894;
+        }
+        .electrolytic .info-box {
+            border-left-color: #fd79a8;
+        }
+        .info-title {
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #2d3436;
+        }
+        .info-list {
+            list-style: none;
+            padding: 0;
+        }
+        .info-list li {
+            margin: 10px 0;
+            padding: 12px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid;
+            line-height: 1.6;
+        }
+        .galvanic .info-list li {
+            border-left-color: #00b894;
+        }
+        .electrolytic .info-list li {
+            border-left-color: #fd79a8;
+        }
+        .key-differences {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .differences-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+        .difference-item {
+            background: rgba(255,255,255,0.15);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ 갈바닉 셀 vs 전해 셀</h1>
+            <p>에너지 생산자 vs 에너지 소비자</p>
+        </div>
+        
+        <div class="comparison-grid">
+            <!-- 갈바닉 셀 -->
+            <div class="cell-section galvanic">
+                <div class="section-title">🔋 갈바닉 셀 (Galvanic Cell)</div>
+                
+                <div class="cell-diagram">
+                    <div class="beaker-container">
+                        <div class="half-cell">
+                            <div class="beaker">
+                                <div class="solution zn-solution">
+                                    <div>ZnSO₄</div>
+                                    <div>(1M)</div>
+                                </div>
+                                <div class="electrode zn-electrode">Zn</div>
+                            </div>
+                        </div>
+                        <div class="half-cell">
+                            <div class="beaker">
+                                <div class="solution cu-solution">
+                                    <div>CuSO₄</div>
+                                    <div>(1M)</div>
+                                </div>
+                                <div class="electrode cu-electrode">Cu</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="salt-bridge">염다리 (KNO₃)</div>
+                    
+                    <div class="external-circuit">
+                        <div class="component">부하 (전구)</div>
+                    </div>
+                    
+                    <div class="electron-flow">⚡ e⁻</div>
+                    
+                    <div class="wire-connection wire-left"></div>
+                    <div class="wire-connection wire-right"></div>
+                    
+                    <div class="electrode-labels">
+                        <span class="electrode-label anode-label">Anode (-)</span>
+                        <span class="electrode-label cathode-label">Cathode (+)</span>
+                    </div>
+                </div>
+                
+                <div class="energy-flow">
+                    🔄 화학 에너지 → 전기 에너지
+                </div>
+                
+                <div class="equation-box">
+                    Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)<br>
+                    E°cell = +1.10 V (자발적)
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">⚡ 특징</div>
+                    <ul class="info-list">
+                        <li><strong>자발적 반응:</strong> 에너지 방출 (ΔG < 0)</li>
+                        <li><strong>전압:</strong> 양수 (E° > 0)</li>
+                        <li><strong>전자 흐름:</strong> Anode → Cathode</li>
+                        <li><strong>목적:</strong> 전기 생산</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">🔬 반쪽 반응</div>
+                    <ul class="info-list">
+                        <li><strong>Anode (산화):</strong> Zn → Zn²⁺ + 2e⁻</li>
+                        <li><strong>Cathode (환원):</strong> Cu²⁺ + 2e⁻ → Cu</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">🏠 실생활 예시</div>
+                    <ul class="info-list">
+                        <li>건전지 (AA, AAA, 9V)</li>
+                        <li>자동차 배터리 (납산)</li>
+                        <li>스마트폰 배터리 (리튬이온)</li>
+                        <li>노트북 배터리</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 전해 셀 -->
+            <div class="cell-section electrolytic">
+                <div class="section-title">🔌 전해 셀 (Electrolytic Cell)</div>
+                
+                <div class="cell-diagram">
+                    <div class="beaker-container">
+                        <div class="half-cell">
+                            <div class="beaker">
+                                <div class="solution cu-solution">
+                                    <div>CuSO₄</div>
+                                    <div>(1M)</div>
+                                </div>
+                                <div class="electrode cu-electrode">Cu</div>
+                            </div>
+                        </div>
+                        <div class="half-cell">
+                            <div class="beaker">
+                                <div class="solution zn-solution">
+                                    <div>ZnSO₄</div>
+                                    <div>(1M)</div>
+                                </div>
+                                <div class="electrode zn-electrode">Zn</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="salt-bridge">전해질</div>
+                    
+                    <div class="external-circuit">
+                        <div class="component">전원 공급</div>
+                    </div>
+                    
+                    <div class="electron-flow" style="animation-direction: reverse;">⚡ e⁻</div>
+                    
+                    <div class="wire-connection wire-left"></div>
+                    <div class="wire-connection wire-right"></div>
+                    
+                    <div class="electrode-labels">
+                        <span class="electrode-label anode-label">Anode (+)</span>
+                        <span class="electrode-label cathode-label">Cathode (-)</span>
+                    </div>
+                </div>
+                
+                <div class="energy-flow">
+                    🔌 전기 에너지 → 화학 에너지
+                </div>
+                
+                <div class="equation-box">
+                    Cu(s) + Zn²⁺(aq) → Cu²⁺(aq) + Zn(s)<br>
+                    E°cell = -1.10 V (비자발적)
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">🔌 특징</div>
+                    <ul class="info-list">
+                        <li><strong>비자발적 반응:</strong> 에너지 소비 (ΔG > 0)</li>
+                        <li><strong>전압:</strong> 외부 전원 필요</li>
+                        <li><strong>전자 흐름:</strong> 외부에서 강제</li>
+                        <li><strong>목적:</strong> 화학적 변화</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">🔬 반쪽 반응</div>
+                    <ul class="info-list">
+                        <li><strong>Anode (산화):</strong> Cu → Cu²⁺ + 2e⁻</li>
+                        <li><strong>Cathode (환원):</strong> Zn²⁺ + 2e⁻ → Zn</li>
+                    </ul>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-title">🏭 실생활 예시</div>
+                    <ul class="info-list">
+                        <li>전기도금 (금도금, 크롬도금)</li>
+                        <li>알루미늄 제련 (Hall-Héroult 공정)</li>
+                        <li>물의 전기분해 (수소 생산)</li>
+                        <li>배터리 충전 과정</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-differences">
+            <h2 style="margin: 0 0 20px 0;">🔑 핵심 차이점</h2>
+            <div class="differences-grid">
+                <div class="difference-item">
+                    <strong>🔋 갈바닉 셀</strong><br>
+                    <span style="font-size: 16px; opacity: 0.9;">
+                        "전기를 만드는 화학"<br>
+                        자발적 → 에너지 생산<br>
+                        Anode는 음극(-)
+                    </span>
+                </div>
+                <div class="difference-item">
+                    <strong>🔌 전해 셀</strong><br>
+                    <span style="font-size: 16px; opacity: 0.9;">
+                        "화학을 만드는 전기"<br>
+                        강제적 → 에너지 소비<br>
+                        Anode는 양극(+)
+                    </span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding: 25px; background: rgba(255,255,255,0.2); border-radius: 15px; backdrop-filter: blur(10px);">
+                <h3 style="margin: 0 0 15px 0;">⚠️ 중요한 주의사항</h3>
+                <p style="margin: 0; font-size: 18px; line-height: 1.6;">
+                    <strong>Anode</strong>는 항상 산화가 일어나는 전극이고, <strong>Cathode</strong>는 항상 환원이 일어나는 전극입니다.<br>
+                    갈바닉 셀에서는 Anode가 음극(-), 전해 셀에서는 Anode가 양극(+)이 됩니다!
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

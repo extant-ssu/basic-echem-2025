@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아연-구리 산화환원반응</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px;
+        }
+        .experiment-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 30px 0;
+        }
+        .experiment-box {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid;
+            text-align: center;
+        }
+        .experiment-a {
+            border-color: #00b894;
+        }
+        .experiment-b {
+            border-color: #e17055;
+        }
+        .exp-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .experiment-a .exp-title {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .experiment-b .exp-title {
+            background: linear-gradient(135deg, #e17055 0%, #fd79a8 100%);
+        }
+        .beaker {
+            width: 120px;
+            height: 150px;
+            margin: 20px auto;
+            border: 4px solid #333;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .solution {
+            width: 100%;
+            border-radius: 0 0 16px 16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: all 3s ease;
+        }
+        .copper-solution {
+            background: linear-gradient(to top, #0984e3 0%, #74b9ff 100%);
+            height: 120px;
+        }
+        .copper-solution.fading {
+            background: linear-gradient(to top, #b2dfdb 0%, #e0f2f1 100%);
+            color: #333;
+        }
+        .metal-strip {
+            position: absolute;
+            width: 20px;
+            height: 140px;
+            left: 50px;
+            top: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            writing-mode: vertical-rl;
+        }
+        .zinc-strip {
+            background: linear-gradient(to bottom, #636e72 0%, #2d3436 100%);
+        }
+        .zinc-strip.reacting {
+            animation: dissolve 4s ease-in-out infinite;
+        }
+        .silver-strip {
+            background: linear-gradient(to bottom, #ddd6fe 0%, #c084fc 100%);
+        }
+        @keyframes dissolve {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(0.95); }
+        }
+        .copper-deposit {
+            position: absolute;
+            bottom: 20px;
+            left: 45px;
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(45deg, #d63031 0%, #fd79a8 100%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: deposit 4s ease-in-out infinite;
+        }
+        @keyframes deposit {
+            0%, 40% { opacity: 0; transform: scale(0); }
+            60%, 100% { opacity: 1; transform: scale(1); }
+        }
+        .reaction-equation {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
+        }
+        .half-reactions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .half-reaction {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border: 3px solid;
+            text-align: center;
+        }
+        .oxidation {
+            border-color: #fd79a8;
+        }
+        .reduction {
+            border-color: #00cec9;
+        }
+        .reaction-type {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+        }
+        .oxidation .reaction-type {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .reduction .reaction-type {
+            background: linear-gradient(135deg, #00cec9 0%, #00b894 100%);
+        }
+        .electron-flow {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 20px;
+            color: #6c5ce7;
+        }
+        .electron-animation {
+            display: inline-block;
+            animation: moveElectron 2s linear infinite;
+        }
+        @keyframes moveElectron {
+            0% { transform: translateX(-20px); }
+            100% { transform: translateX(20px); }
+        }
+        .observation-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 5px solid #fd79a8;
+        }
+        .observation-title {
+            font-weight: bold;
+            font-size: 20px;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+        .observation-list {
+            list-style: none;
+            padding: 0;
+        }
+        .observation-list li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #fd79a8;
+            color: #2d3436;
+        }
+        .start-button {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px;
+            transition: transform 0.2s;
+        }
+        .start-button:hover {
+            transform: scale(1.05);
+        }
+        .no-reaction {
+            opacity: 0.6;
+            position: relative;
+        }
+        .no-reaction::after {
+            content: '❌ 반응 없음';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 아연-구리 산화환원반응 실험</h1>
+            <p>왜 어떤 반응은 일어나고 어떤 반응은 안 일어날까?</p>
+        </div>
+        
+        <div class="content">
+            <div class="experiment-container">
+                <div class="experiment-box experiment-a">
+                    <div class="exp-title">🧪 실험 A: 아연 + 황산구리</div>
+                    <div class="beaker" id="beakerA">
+                        <div class="solution copper-solution" id="solutionA">
+                            CuSO₄<br>(1M)
+                        </div>
+                        <div class="metal-strip zinc-strip" id="zincStrip">Zn</div>
+                        <div class="copper-deposit" id="copperDeposit"></div>
+                    </div>
+                    <button class="start-button" onclick="startReactionA()">⚡ 반응 시작</button>
+                    <div style="margin-top: 20px; font-weight: bold; color: #00b894;">
+                        ✅ 반응 일어남!
+                    </div>
+                </div>
+                
+                <div class="experiment-box experiment-b">
+                    <div class="exp-title">🧪 실험 B: 은 + 황산구리</div>
+                    <div class="beaker no-reaction">
+                        <div class="solution copper-solution">
+                            CuSO₄<br>(1M)
+                        </div>
+                        <div class="metal-strip silver-strip">Ag</div>
+                    </div>
+                    <button class="start-button" style="background: #636e72; cursor: not-allowed;" disabled>❌ 반응 없음</button>
+                    <div style="margin-top: 20px; font-weight: bold; color: #e17055;">
+                        ❌ 반응 안 일어남
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reaction-equation">
+                <strong>실험 A 전체 반응:</strong><br>
+                Zn(s) + Cu²⁺(aq) → Zn²⁺(aq) + Cu(s)
+            </div>
+            
+            <div class="half-reactions">
+                <div class="half-reaction oxidation">
+                    <div class="reaction-type">🔥 산화 반응 (Anode)</div>
+                    <div style="font-size: 18px; margin: 15px 0;">
+                        Zn(s) → Zn²⁺(aq) + 2e⁻
+                    </div>
+                    <div style="color: #fd79a8; font-weight: bold;">
+                        아연이 전자를 잃음
+                    </div>
+                </div>
+                
+                <div class="half-reaction reduction">
+                    <div class="reaction-type">❄️ 환원 반응 (Cathode)</div>
+                    <div style="font-size: 18px; margin: 15px 0;">
+                        Cu²⁺(aq) + 2e⁻ → Cu(s)
+                    </div>
+                    <div style="color: #00cec9; font-weight: bold;">
+                        구리 이온이 전자를 받음
+                    </div>
+                </div>
+            </div>
+            
+            <div class="electron-flow">
+                <strong>전자의 흐름:</strong>
+                <br>Zn → <span class="electron-animation">⚡ e⁻ e⁻ ⚡</span> → Cu²⁺
+            </div>
+            
+            <div class="observation-box">
+                <div class="observation-title">🔍 관찰되는 현상</div>
+                <ul class="observation-list">
+                    <li><strong>아연 막대:</strong> 점점 녹아들어가며 표면이 거칠어짐</li>
+                    <li><strong>용액 색깔:</strong> 파란색 → 무색으로 변화</li>
+                    <li><strong>구리 석출:</strong> 아연 막대 표면에 붉은 구리가 달라붙음</li>
+                    <li><strong>온도 변화:</strong> 발열반응으로 온도 상승</li>
+                </ul>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; margin: 30px 0;">
+                <h3 style="margin: 0 0 15px 0;">🤔 왜 이런 차이가 날까요?</h3>
+                <p style="margin: 0; font-size: 18px;">
+                    <strong>환원 전위</strong>의 차이 때문입니다!<br>
+                    Cu²⁺/Cu > Ag⁺/Ag > Zn²⁺/Zn<br>
+                    <span style="font-size: 16px; opacity: 0.9;">높은 환원 전위를 가진 것이 낮은 것으로부터 전자를 빼앗아옵니다</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function startReactionA() {
+            const solution = document.getElementById('solutionA');
+            const zincStrip = document.getElementById('zincStrip');
+            const copperDeposit = document.getElementById('copperDeposit');
+            
+            // 용액 색깔 변화
+            solution.classList.add('fading');
+            solution.innerHTML = 'ZnSO₄<br>(무색)';
+            
+            // 아연 막대 반응
+            zincStrip.classList.add('reacting');
+            
+            // 구리 석출
+            copperDeposit.style.animation = 'deposit 4s ease-in-out infinite';
+            
+            // 버튼 비활성화
+            event.target.disabled = true;
+            event.target.style.background = '#636e72';
+            event.target.style.cursor = 'not-allowed';
+            event.target.innerHTML = '⚡ 반응 진행 중...';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배터리 응용 - 실제 전지에서의 이온</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.4em;
+            font-style: italic;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .theory-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .battery-demo {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .visual-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .visual-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .visual-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .visual-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .explanation {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            border-left: 4px solid #667eea;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .research-highlight {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .key-points {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .key-points h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .future-tech {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .tech-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-top: 5px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .tech-card:nth-child(1) { border-top-color: #ff6b6b; }
+        .tech-card:nth-child(2) { border-top-color: #74b9ff; }
+        .tech-card:nth-child(3) { border-top-color: #00b894; }
+        .tech-card:nth-child(4) { border-top-color: #fdcb6e; }
+        
+        .performance-metrics {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid;
+        }
+        
+        .summary-card:nth-child(1) { border-top-color: #ff6b6b; }
+        .summary-card:nth-child(2) { border-top-color: #74b9ff; }
+        .summary-card:nth-child(3) { border-top-color: #00b894; }
+        .summary-card:nth-child(4) { border-top-color: #fdcb6e; }
+        
+        @media (max-width: 768px) {
+            .visual-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .future-tech {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>5. 배터리 응용</h1>
+            <p class="subtitle">실제 전지에서의 이온 - 이론에서 실용화까지</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="prevSection()">← 이전: Kohlrausch 법칙</a>
+        </div>
+        
+        <!-- 1. 리튬이온 배터리 구조 -->
+        <div class="section">
+            <h2 class="section-title">🔋 리튬이온 배터리: 이론이 현실이 되다</h2>
+            
+            <div class="battery-demo">
+                <div style="color: white;">
+                    <h3 style="margin-top: 0; text-align: center; font-size: 1.6em;">🎯 모든 이론의 집합체</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin: 20px 0;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>Born 모델</strong><br>
+                            Li⁺의 작은 크기<br>
+                            → 높은 에너지 밀도
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>Debye-Hückel</strong><br>
+                            이온 분위기 효과<br>
+                            → 농도 최적화
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>이온 이동</strong><br>
+                            확산과 전도<br>
+                            → 출력 특성
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; text-align: center;">
+                            <strong>Kohlrausch 법칙</strong><br>
+                            운반수 최적화<br>
+                            → 효율 향상
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="visual-container">
+                <div class="visual-item">
+                    <div class="visual-title">리튬이온 배터리 구조</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- 음극 (Anode) -->
+                        <rect x="30" y="60" width="50" height="180" fill="#2c3e50" stroke="#333" stroke-width="2"/>
+                        <text x="55" y="45" text-anchor="middle" font-weight="bold" fill="#2c3e50" font-size="14">음극</text>
+                        <text x="55" y="270" text-anchor="middle" font-size="11">흑연/Li metal</text>
+                        
+                        <!-- 전해질 -->
+                        <rect x="80" y="60" width="240" height="180" fill="#e8f4f8" stroke="#74b9ff" stroke-width="2"/>
+                        <text x="200" y="45" text-anchor="middle" font-weight="bold" fill="#74b9ff" font-size="14">전해질</text>
+                        <text x="200" y="270" text-anchor="middle" font-size="11">1M LiPF₆ in EC/DMC</text>
+                        
+                        <!-- 양극 (Cathode) -->
+                        <rect x="320" y="60" width="50" height="180" fill="#e74c3c" stroke="#333" stroke-width="2"/>
+                        <text x="345" y="45" text-anchor="middle" font-weight="bold" fill="#e74c3c" font-size="14">양극</text>
+                        <text x="345" y="270" text-anchor="middle" font-size="11">LiCoO₂/LiFePO₄</text>
+                        
+                        <!-- Li+ 이온들의 이동 (방전 시) -->
+                        <g fill="#ff6b6b" stroke="#333">
+                            <circle cx="110" cy="90" r="5"/>
+                            <text x="110" y="95" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                            
+                            <circle cx="150" cy="120" r="5"/>
+                            <text x="150" y="125" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                            
+                            <circle cx="190" cy="100" r="5"/>
+                            <text x="190" y="105" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                            
+                            <circle cx="230" cy="140" r="5"/>
+                            <text x="230" y="145" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                            
+                            <circle cx="270" cy="110" r="5"/>
+                            <text x="270" y="115" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                            
+                            <circle cx="290" cy="160" r="5"/>
+                            <text x="290" y="165" text-anchor="middle" fill="white" font-size="8" font-weight="bold">Li⁺</text>
+                        </g>
+                        
+                        <!-- PF₆⁻ 이온들 -->
+                        <g fill="#74b9ff" stroke="#333">
+                            <circle cx="130" cy="180" r="4"/>
+                            <text x="130" y="184" text-anchor="middle" fill="white" font-size="6">PF₆⁻</text>
+                            
+                            <circle cx="170" cy="200" r="4"/>
+                            <text x="170" y="204" text-anchor="middle" fill="white" font-size="6">PF₆⁻</text>
+                            
+                            <circle cx="210" cy="190" r="4"/>
+                            <text x="210" y="194" text-anchor="middle" fill="white" font-size="6">PF₆⁻</text>
+                            
+                            <circle cx="250" cy="200" r="4"/>
+                            <text x="250" y="204" text-anchor="middle" fill="white" font-size="6">PF₆⁻</text>
+                        </g>
+                        
+                        <!-- 방전시 Li+ 이동 방향 -->
+                        <g stroke="#ff6b6b" stroke-width="3" fill="#ff6b6b">
+                            <path d="M 95 95 L 125 95 M 120 90 L 125 95 L 120 100"/>
+                            <path d="M 135 125 L 165 125 M 160 120 L 165 125 L 160 130"/>
+                            <path d="M 175 105 L 205 105 M 200 100 L 205 105 L 200 110"/>
+                            <path d="M 215 145 L 245 145 M 240 140 L 245 145 L 240 150"/>
+                            <path d="M 255 115 L 285 115 M 280 110 L 285 115 L 280 120"/>
+                            <path d="M 275 165 L 305 165 M 300 160 L 305 165 L 300 170"/>
+                        </g>
+                        
+                        <!-- 외부 회로 (간단히) -->
+                        <path d="M 55 50 Q 200 10 345 50" stroke="#333" stroke-width="3" fill="none"/>
+                        <text x="200" y="25" text-anchor="middle" font-size="12" font-weight="bold">전자 흐름</text>
+                        
+                        <!-- 운반수 정보 -->
+                        <rect x="90" y="280" width="220" height="30" fill="#fff3cd" stroke="#feca57" rx="5"/>
+                        <text x="200" y="298" text-anchor="middle" font-size="12" font-weight="bold" fill="#856404">
+                            운반수: t(Li⁺) ≈ 0.4, t(PF₆⁻) ≈ 0.6
+                        </text>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>핵심 관찰:</strong>
+                        <ul>
+                            <li><span class="highlight">Li⁺는 음극에서 양극으로 이동</span></li>
+                            <li>전자는 외부 회로를 통해 반대 방향 이동</li>
+                            <li>PF₆⁻의 운반수가 더 크다는 것이 문제!</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="visual-item">
+                    <div class="visual-title">온도에 따른 성능 변화</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- 축 -->
+                        <line x1="50" y1="250" x2="350" y2="250" stroke="#333" stroke-width="2"/>
+                        <line x1="50" y1="250" x2="50" y2="50" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- 축 레이블 -->
+                        <text x="200" y="280" text-anchor="middle" font-size="14" font-weight="bold">온도 (°C)</text>
+                        <text x="25" y="150" text-anchor="middle" font-size="14" font-weight="bold" transform="rotate(-90 25 150)">상대 성능</text>
+                        
+                        <!-- 이온 전도도 곡선 -->
+                        <path d="M 70 220 Q 120 180 150 160 Q 200 140 250 130 Q 300 125 330 120" 
+                              stroke="#74b9ff" stroke-width="4" fill="none"/>
+                        
+                        <!-- 용량 곡선 -->
+                        <path d="M 70 230 Q 120 200 150 180 Q 200 160 250 150 Q 280 145 330 140" 
+                              stroke="#00b894" stroke-width="4" fill="none"/>
+                        
+                        <!-- 수명 곡선 (역U자형) -->
+                        <path d="M 70 200 Q 150 100 200 90 Q 250 100 330 180" 
+                              stroke="#e74c3c" stroke-width="4" fill="none"/>
+                        
+                        <!-- 최적 온도 영역 -->
+                        <rect x="140" y="60" width="120" height="190" fill="#00b894" opacity="0.15"/>
+                        <text x="200" y="55" text-anchor="middle" font-size="12" font-weight="bold" fill="#00b894">최적 온도 영역</text>
+                        
+                        <!-- 온도 구간 표시 -->
+                        <g font-size="11" fill="#666">
+                            <text x="90" y="265">-20</text>
+                            <text x="140" y="265">0</text>
+                            <text x="190" y="265">25</text>
+                            <text x="240" y="265">40</text>
+                            <text x="290" y="265">60</text>
+                        </g>
+                        
+                        <!-- 범례 -->
+                        <g transform="translate(60, 80)">
+                            <line x1="0" y1="0" x2="25" y2="0" stroke="#74b9ff" stroke-width="3"/>
+                            <text x="30" y="5" font-size="12" font-weight="bold">이온 전도도</text>
+                            
+                            <line x1="0" y1="20" x2="25" y2="20" stroke="#00b894" stroke-width="3"/>
+                            <text x="30" y="25" font-size="12" font-weight="bold">방전 용량</text>
+                            
+                            <line x1="0" y1="40" x2="25" y2="40" stroke="#e74c3c" stroke-width="3"/>
+                            <text x="30" y="45" font-size="12" font-weight="bold">배터리 수명</text>
+                        </g>
+                        
+                        <!-- 경고 구역 -->
+                        <text x="90" y="240" font-size="10" fill="#e74c3c" font-weight="bold">저온: 확산 ↓</text>
+                        <text x="300" y="200" font-size="10" fill="#e74c3c" font-weight="bold">고온: 분해 ↑</text>
+                        
+                        <!-- 격자 -->
+                        <g stroke="#ddd" stroke-width="1">
+                            <line x1="50" y1="200" x2="350" y2="200"/>
+                            <line x1="50" y1="150" x2="350" y2="150"/>
+                            <line x1="50" y1="100" x2="350" y2="100"/>
+                            <line x1="100" y1="50" x2="100" y2="250"/>
+                            <line x1="200" y1="50" x2="200" y2="250"/>
+                            <line x1="300" y1="50" x2="300" y2="250"/>
+                        </g>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>온도 관리의 중요성:</strong>
+                        <ul>
+                            <li><span class="highlight">25-40°C:</span> 최적 성능 구간</li>
+                            <li><strong>저온:</strong> 이온 확산 속도 감소</li>
+                            <li><strong>고온:</strong> 전해질 분해와 수명 단축</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. 운반수와 농도 분극 -->
+        <div class="section">
+            <h2 class="section-title">⚖️ 운반수 문제: 배터리의 아킬레스건</h2>
+            
+            <div class="theory-box">
+                <h3>🎯 운반수(Transference Number)의 중요성</h3>
+                
+                <div class="performance-metrics">
+                    <h4 style="margin-top: 0; text-align: center;">현재 리튬이온 배터리의 한계</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h5 style="margin-top: 0;">현실</h5>
+                            <ul>
+                                <li>t(Li⁺) ≈ 0.4</li>
+                                <li>t(PF₆⁻) ≈ 0.6</li>
+                                <li>Li⁺보다 음이온이 더 많이 기여!</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                            <h5 style="margin-top: 0;">이상</h5>
+                            <ul>
+                                <li>t(Li⁺) = 1.0</li>
+                                <li>t(PF₆⁻) = 0.0</li>
+                                <li>Li⁺만 전류에 기여!</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="text-align: center; font-weight: bold;">
+                        결과: 농도 분극 → 성능 저하 → 수명 단축
+                    </p>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>💡 농도 분극 메커니즘</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                    <ol>
+                        <li><strong>충전 시:</strong> Li⁺가 음극으로 이동하지만 PF₆⁻도 반대로 이동</li>
+                        <li><strong>결과:</strong> 전해질 내부에 농도 불균형 발생</li>
+                        <li><strong>문제:</strong> 내부 저항 증가, 전압 강하, 덴드라이트 성장</li>
+                        <li><strong>해결책:</strong> 단일 이온 전도체 개발!</li>
+                    </ol>
+                </div>
+                
+                <div class="research-highlight">
+                    <h3>🌟 2023년 Nature 연구</h3>
+                    <p><strong>주제:</strong> 단일 이온 전도체(Single-Ion Conductor) 개발</p>
+                    <p><strong>성과:</strong> Li⁺의 운반수를 0.95 이상으로 향상</p>
+                    <p><strong>방법:</strong> 음이온을 고분자 주쇄에 고정</p>
+                    <p><strong>결과:</strong> 농도 분극 거의 완전 제거, 고속 충전 가능</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3. 전해질 설계와 최적화 -->
+        <div class="section">
+            <h2 class="section-title">⚗️ 전해질 설계: 이론을 실용화하다</h2>
+            
+            <div class="theory-box">
+                <h3>🧪 전형적인 리튬이온 배터리 전해질</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>성분</th>
+                            <th>역할</th>
+                            <th>농도/비율</th>
+                            <th>이론적 근거</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>LiPF₆</strong></td>
+                            <td>리튬염</td>
+                            <td>1.0 M</td>
+                            <td>Kohlrausch 법칙: 최적 이온 전도도</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EC (에틸렌 카보네이트)</strong></td>
+                            <td>주용매</td>
+                            <td>30-40%</td>
+                            <td>Born 모델: 높은 유전상수 (ε=89)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DMC (디메틸 카보네이트)</strong></td>
+                            <td>보조용매</td>
+                            <td>40-50%</td>
+                            <td>점도 감소, 이온 이동도 향상</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EMC/DEC</strong></td>
+                            <td>보조용매</td>
+                            <td>10-20%</td>
+                            <td>온도 특성 최적화</td>
+                        </tr>
+                        <tr>
+                            <td><strong>VC (비닐렌 카보네이트)</strong></td>
+                            <td>첨가제</td>
+                            <td>1-5%</td>
+                            <td>SEI 형성 촉진</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🔬 설계 원리별 분석</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: #e8f4f8; padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #2c3e50; margin-top: 0;">Born 모델 적용</h4>
+                        <ul>
+                            <li>EC의 높은 유전상수 (89)</li>
+                            <li>Li⁺ 이온의 효율적 용매화</li>
+                            <li>이온쌍 형성 억제</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #fff3e0; padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #856404; margin-top: 0;">Debye-Hückel 고려</h4>
+                        <ul>
+                            <li>1M 농도에서 최적 활성도</li>
+                            <li>이온 분위기 효과 최소화</li>
+                            <li>전도도와 안정성의 균형</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: #f3e5f5; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <h4 style="color: #4a148c; margin-top: 0;">🎯 종합적 최적화</h4>
+                    <p>각 성분의 비율은 <span class="highlight">이온 전도도, 전기화학적 안정성, 
+                    온도 특성, SEI 형성</span> 등을 모두 고려하여 결정됩니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 최신 연구 동향과 미래 기술 -->
+        <div class="section">
+            <h2 class="section-title">🚀 미래 기술: 전기화학 이론의 새로운 도전</h2>
+            
+            <div class="future-tech">
+                <div class="tech-card">
+                    <h4 style="color: #ff6b6b; margin-top: 0;">🧊 전고체 배터리</h4>
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>목표 이온 전도도:</strong> >10⁻³ S/cm
+                    </div>
+                    <p><strong>장점:</strong></p>
+                    <ul>
+                        <li>높은 안전성 (화재 위험 없음)</li>
+                        <li>넓은 전압창 (5V 이상)</li>
+                        <li>높은 에너지 밀도</li>
+                    </ul>
+                    <p><strong>과제:</strong></p>
+                    <ul>
+                        <li>낮은 이온 전도도</li>
+                        <li>계면 저항 문제</li>
+                        <li>기계적 접촉 불량</li>
+                    </ul>
+                    
+                    <div class="research-highlight">
+                        <h4 style="margin-top: 0;">🏆 최고 기록 (2024)</h4>
+                        <p>황화물계 전해질: 2.5×10⁻² S/cm<br>
+                        (액체 전해질 수준 달성!)</p>
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <h4 style="color: #74b9ff; margin-top: 0;">🔋 리튬-황 배터리</h4>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>이론 에너지 밀도:</strong> 2600 Wh/kg
+                    </div>
+                    <p><strong>장점:</strong></p>
+                    <ul>
+                        <li>황이 풍부하고 저렴</li>
+                        <li>매우 높은 이론 용량</li>
+                        <li>환경 친화적</li>
+                    </ul>
+                    <p><strong>과제:</strong></p>
+                    <ul>
+                        <li>폴리황화물 셔틀링</li>
+                        <li>전해질 특수 설계 필요</li>
+                        <li>수명 문제</li>
+                    </ul>
+                    
+                    <div class="explanation">
+                        <strong>이론 연결:</strong> Born 모델을 이용해 폴리황화물의 
+                        용매화 에너지를 계산하여 전해질 설계
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <h4 style="color: #00b894; margin-top: 0;">🌿 나트륨이온 배터리</h4>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>Na⁺ 이온 반지름:</strong> 0.95 Å (Li⁺: 0.60 Å)
+                    </div>
+                    <p><strong>장점:</strong></p>
+                    <ul>
+                        <li>나트륨이 풍부하고 저렴</li>
+                        <li>리튬 의존도 감소</li>
+                        <li>대용량 저장에 적합</li>
+                    </ul>
+                    <p><strong>과제:</strong></p>
+                    <ul>
+                        <li>Na⁺가 Li⁺보다 큼</li>
+                        <li>낮은 에너지 밀도</li>
+                        <li>전해질 재설계 필요</li>
+                    </ul>
+                    
+                    <div class="explanation">
+                        <strong>Born 모델 적용:</strong> Na⁺의 큰 크기로 인한 
+                        낮은 수화 에너지가 전압 감소의 원인
+                    </div>
+                </div>
+                
+                <div class="tech-card">
+                    <h4 style="color: #fdcb6e; margin-top: 0;">🌊 플로우 배터리</h4>
+                    <div style="background: #fff8e1; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                        <strong>활성 물질:</strong> 액체 전해질에 용해
+                    </div>
+                    <p><strong>장점:</strong></p>
+                    <ul>
+                        <li>독립적 출력/용량 설계</li>
+                        <li>긴 수명 (20년 이상)</li>
+                        <li>대용량 저장에 최적</li>
+                    </ul>
+                    <p><strong>과제:</strong></p>
+                    <ul>
+                        <li>낮은 에너지 밀도</li>
+                        <li>복잡한 시스템</li>
+                        <li>높은 초기 투자</li>
+                    </ul>
+                    
+                    <div class="explanation">
+                        <strong>전해질 역할:</strong> 활성 물질의 운반체이자 
+                        이온 전도체의 이중 역할
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 전체 강의 종합 정리 -->
+        <div class="section">
+            <h2 class="section-title">🎯 전체 강의 종합 정리</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h4 style="color: #ff6b6b; margin-top: 0;">Born 모델</h4>
+                    <p><strong>핵심:</strong> 이온-용매 상호작용</p>
+                    <p><strong>공식:</strong> ΔG ∝ z²/r</p>
+                    <p><strong>응용:</strong> Li⁺의 높은 에너지 밀도 설명</p>
+                    <p><strong>현실:</strong> 전해질 용매 선택의 기준</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4 style="color: #74b9ff; margin-top: 0;">Debye-Hückel 모델</h4>
+                    <p><strong>핵심:</strong> 이온 분위기와 활성도</p>
+                    <p><strong>공식:</strong> log γ± ∝ √I</p>
+                    <p><strong>응용:</strong> 전해질 농도 최적화</p>
+                    <p><strong>현실:</strong> 1M LiPF₆의 이론적 근거</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4 style="color: #00b894; margin-top: 0;">이온의 움직임</h4>
+                    <p><strong>핵심:</strong> 확산, 이동, 대류</p>
+                    <p><strong>공식:</strong> ⟨x²⟩ = 2Dt</p>
+                    <p><strong>응용:</strong> 배터리 출력 특성 결정</p>
+                    <p><strong>현실:</strong> 온도 관리의 중요성</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h4 style="color: #fdcb6e; margin-top: 0;">Kohlrausch 법칙</h4>
+                    <p><strong>핵심:</strong> 이온의 독립적 기여</p>
+                    <p><strong>공식:</strong> Λ° = Σλ°ᵢ</p>
+                    <p><strong>응용:</strong> 운반수와 전도도 예측</p>
+                    <p><strong>현실:</strong> 단일 이온 전도체 개발</p>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🎓 학습 성과와 미래 전망</h3>
+                
+                <div class="key-points">
+                    <h4>📚 이론적 성취</h4>
+                    <ul>
+                        <li><strong>미시적 이해:</strong> 이온과 용매 분자 수준의 상호작용 파악</li>
+                        <li><strong>거시적 예측:</strong> 전해질의 성능을 이론으로 예측 가능</li>
+                        <li><strong>설계 원리:</strong> 새로운 배터리 시스템의 설계 지침 확립</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <h4>🔬 실용적 응용</h4>
+                    <ul>
+                        <li><strong>전해질 최적화:</strong> 성분과 농도의 과학적 근거</li>
+                        <li><strong>성능 예측:</strong> 온도, 농도 변화에 따른 성능 변화 예측</li>
+                        <li><strong>문제 해결:</strong> 농도 분극, 덴드라이트 등의 근본 원인 이해</li>
+                    </ul>
+                </div>
+                
+                <div class="research-highlight">
+                    <h3>🌟 앞으로의 도전과제</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; color: white;">
+                        <div>
+                            <h4 style="color: white; margin-top: 0;">이론적 도전</h4>
+                            <ul>
+                                <li>고농도 전해질의 새로운 이론</li>
+                                <li>고체 전해질의 이온 전도 메커니즘</li>
+                                <li>계면 현상의 정량적 모델링</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 style="color: white; margin-top: 0;">실용적 목표</h4>
+                            <ul>
+                                <li>1000 Wh/kg 에너지 밀도</li>
+                                <li>10분 이내 급속 충전</li>
+                                <li>20년 이상 수명 보장</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 마무리 -->
+        <div class="section">
+            <h2 class="section-title">🎉 강의 마무리</h2>
+            
+            <div class="battery-demo">
+                <div style="color: white; text-align: center;">
+                    <h3 style="margin-top: 0; font-size: 1.8em;">
+                        "이온들의 춤이 우리의 미래를 움직입니다"
+                    </h3>
+                    
+                    <p style="font-size: 1.2em; line-height: 1.8; margin: 30px 0;">
+                        우리가 오늘 배운 <strong>보이지 않는 이온들의 움직임</strong>이 
+                        스마트폰, 전기차, 에너지 저장 시스템의 핵심입니다.<br><br>
+                        
+                        <span style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 10px; display: inline-block;">
+                            Born 모델 → Debye-Hückel 이론 → 이온 이동 → Kohlrausch 법칙
+                        </span><br><br>
+                        
+                        이 모든 이론이 하나로 합쳐져 <strong>리튬이온 배터리</strong>라는 
+                        현대 문명의 핵심 기술을 만들어냅니다.
+                    </p>
+                    
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 15px; margin: 30px 0;">
+                        <h4 style="margin-top: 0;">🚀 여러분의 미래</h4>
+                        <p>여러분이 배운 이 지식으로 더 나은 배터리를, 더 깨끗한 에너지를, 
+                        더 지속 가능한 미래를 만들어 주시기 바랍니다!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3 style="text-align: center; color: #2c3e50;">📝 추천 추가 학습</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <strong>📖 다음 강의</strong><br>
+                        전극반응과 Butler-Volmer 방정식
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <strong>🔬 실험</strong><br>
+                        전도도 측정과 Kohlrausch 법칙 검증
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <strong>💻 시뮬레이션</strong><br>
+                        분자동역학을 이용한 이온 확산
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+                        <strong>📚 논문 읽기</strong><br>
+                        Nature Energy, Science 최신 배터리 연구
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="prevSection()">← 이전: Kohlrausch 법칙</a>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('메인 네비게이션 페이지로 돌아갑니다.');
+            // 실제로는 window.location.href = 'main_navigation.html';
+        }
+        
+        function prevSection() {
+            alert('Kohlrausch 법칙 섹션으로 이동합니다.');
+            // 실제로는 window.location.href = 'kohlrausch_law_section.html';
+        }
+        
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

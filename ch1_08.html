@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전류-전압 관계와 배터리 작동</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin: 40px 0;
+        }
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 3px solid #6c5ce7;
+            position: relative;
+        }
+        .chart-area {
+            width: 100%;
+            height: 500px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            position: relative;
+            border: 4px solid #333;
+            margin: 30px 0;
+        }
+        .axis {
+            position: absolute;
+            background: #000;
+            z-index: 10;
+        }
+        .x-axis {
+            bottom: 80px;
+            left: 100px;
+            right: 50px;
+            height: 4px;
+        }
+        .y-axis {
+            left: 100px;
+            top: 40px;
+            bottom: 80px;
+            width: 4px;
+        }
+        .axis-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+        .x-arrow {
+            right: -15px;
+            top: -8px;
+            border-left: 15px solid #000;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+        }
+        .y-arrow {
+            left: -8px;
+            top: -15px;
+            border-bottom: 15px solid #000;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+        }
+        .axis-label {
+            position: absolute;
+            font-weight: bold;
+            color: #2d3436;
+            font-size: 20px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+        .x-label {
+            bottom: 30px;
+            right: 20px;
+        }
+        .y-label {
+            top: 10px;
+            left: 20px;
+        }
+        .grid-line {
+            position: absolute;
+            background: rgba(153, 153, 153, 0.2);
+            z-index: 5;
+        }
+        .grid-x {
+            height: 1px;
+            left: 100px;
+            right: 50px;
+        }
+        .grid-y {
+            width: 1px;
+            top: 40px;
+            bottom: 80px;
+        }
+        .axis-tick {
+            position: absolute;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .x-tick {
+            bottom: 50px;
+            transform: translateX(-50%);
+        }
+        .y-tick {
+            left: 60px;
+            transform: translateY(-50%);
+        }
+        .curve {
+            position: absolute;
+            stroke-width: 5;
+            fill: none;
+            z-index: 8;
+        }
+        .ohm-curve {
+            stroke: #e74c3c;
+        }
+        .electrochemical-curve {
+            stroke: #6c5ce7;
+        }
+        .curve-legend {
+            position: absolute;
+            top: 60px;
+            right: 70px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            border: 3px solid #333;
+            z-index: 15;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .legend-color {
+            width: 30px;
+            height: 5px;
+            margin-right: 15px;
+            border-radius: 3px;
+        }
+        .explanation-box {
+            background: #f3e5f5;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+            border: 4px solid #9c27b0;
+        }
+        .explanation-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 25px 0;
+        }
+        .comparison-item {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 3px solid;
+        }
+        .ohm-item {
+            border-color: #e74c3c;
+        }
+        .electrochemical-item {
+            border-color: #6c5ce7;
+        }
+        .item-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+        }
+        .ohm-item .item-title {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        .electrochemical-item .item-title {
+            background: linear-gradient(135deg, #6c5ce7 0%, #5b4cdb 100%);
+        }
+        .equation-box {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 18px;
+            border: 2px solid #ddd;
+        }
+        .theory-explanation {
+            background: linear-gradient(135deg, #2196f3 0%, #21cbf3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 30px 0;
+        }
+        .theory-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .butler-volmer {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+        }
+        .reasons-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+        .reasons-list li {
+            background: rgba(255,255,255,0.15);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            border-left: 5px solid #fff;
+        }
+        .battery-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .battery-state {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border: 3px solid;
+            text-align: center;
+        }
+        .discharge-state {
+            border-color: #fd79a8;
+        }
+        .charge-state {
+            border-color: #00b894;
+        }
+        .state-title {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .discharge-state .state-title {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .charge-state .state-title {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .battery-visual {
+            width: 200px;
+            height: 120px;
+            margin: 20px auto;
+            border: 4px solid #333;
+            border-radius: 15px;
+            position: relative;
+            background: linear-gradient(90deg, #ddd 0%, #888 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 18px;
+        }
+        .battery-level {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            border-radius: 11px;
+            transition: width 2s ease;
+        }
+        .discharge-level {
+            background: linear-gradient(90deg, #fd79a8 0%, #fdcb6e 100%);
+            width: 65%;
+        }
+        .charge-level {
+            background: linear-gradient(90deg, #00b894 0%, #00cec9 100%);
+            width: 90%;
+        }
+        .battery-terminal {
+            position: absolute;
+            width: 15px;
+            height: 30px;
+            background: #333;
+            border-radius: 3px;
+            top: -8px;
+        }
+        .positive-terminal {
+            right: -8px;
+        }
+        .negative-terminal {
+            left: -8px;
+        }
+        .interactive-controls {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .control-button {
+            background: white;
+            color: #6c5ce7;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        .control-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .active {
+            background: #fd79a8 !important;
+            color: white !important;
+        }
+        .current-display {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .battery-theory-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 20px;
+            padding: 35px;
+            margin: 40px 0;
+            border: 4px solid #e91e63;
+        }
+        .battery-theory-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .theory-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        .theory-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border: 3px solid;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .charge-theory {
+            border-color: #00b894;
+        }
+        .discharge-theory {
+            border-color: #fd79a8;
+        }
+        .theory-section-title {
+            font-size: 20px;
+            font-weight: bold;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .charge-theory .theory-section-title {
+            background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+        }
+        .discharge-theory .theory-section-title {
+            background: linear-gradient(135deg, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .theory-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .theory-points li {
+            background: #f8f9ff;
+            margin: 12px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid;
+            line-height: 1.6;
+        }
+        .charge-theory .theory-points li {
+            border-left-color: #00b894;
+        }
+        .discharge-theory .theory-points li {
+            border-left-color: #fd79a8;
+        }
+        .danger-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .safety-box {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 전류-전압 관계와 배터리 작동</h1>
+            <p>전기화학의 옴의 법칙과 실제 배터리 동작 원리</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-title">📈 i = f(E) 관계: 전기화학의 옴의 법칙</div>
+                
+                <div class="chart-container">
+                    <h3 style="text-align: center; margin: 0 0 20px 0; color: #2d3436;">
+                        전류 vs 전압 곡선 비교
+                    </h3>
+                    
+                    <div class="chart-area">
+                        <!-- 격자선 -->
+                        <div class="grid-line grid-x" style="bottom: 140px;"></div>
+                        <div class="grid-line grid-x" style="bottom: 200px;"></div>
+                        <div class="grid-line grid-x" style="bottom: 260px;"></div>
+                        <div class="grid-line grid-x" style="bottom: 320px;"></div>
+                        <div class="grid-line grid-x" style="bottom: 380px;"></div>
+                        <div class="grid-line grid-y" style="left: 180px;"></div>
+                        <div class="grid-line grid-y" style="left: 260px;"></div>
+                        <div class="grid-line grid-y" style="left: 340px;"></div>
+                        <div class="grid-line grid-y" style="left: 420px;"></div>
+                        <div class="grid-line grid-y" style="left: 500px;"></div>
+                        
+                        <!-- 축 -->
+                        <div class="x-axis">
+                            <div class="axis-arrow x-arrow"></div>
+                        </div>
+                        <div class="y-axis">
+                            <div class="axis-arrow y-arrow"></div>
+                        </div>
+                        
+                        <!-- 축 라벨 -->
+                        <div class="axis-label x-label">전압 (V)</div>
+                        <div class="axis-label y-label">전류 (A)</div>
+                        
+                        <!-- 축 눈금 -->
+                        <div class="axis-tick x-tick" style="left: 180px;">0.5</div>
+                        <div class="axis-tick x-tick" style="left: 260px;">1.0</div>
+                        <div class="axis-tick x-tick" style="left: 340px;">1.5</div>
+                        <div class="axis-tick x-tick" style="left: 420px;">2.0</div>
+                        <div class="axis-tick x-tick" style="left: 500px;">2.5</div>
+                        <div class="axis-tick y-tick" style="top: 380px;">1</div>
+                        <div class="axis-tick y-tick" style="top: 320px;">2</div>
+                        <div class="axis-tick y-tick" style="top: 260px;">3</div>
+                        <div class="axis-tick y-tick" style="top: 200px;">4</div>
+                        <div class="axis-tick y-tick" style="top: 140px;">5</div>
+                        
+                        <!-- SVG로 곡선 그리기 -->
+                        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 8;">
+                            <!-- 옴의 법칙 (직선) -->
+                            <line x1="100" y1="420" x2="500" y2="140" 
+                                  class="curve ohm-curve" stroke-dasharray="12,6"/>
+                            
+                            <!-- 전기화학 관계 (Butler-Volmer 지수함수형 곡선) -->
+                            <path d="M 100 420 L 150 400 Q 200 350 250 300 Q 300 230 350 180 Q 400 150 450 130 L 500 120" 
+                                  class="curve electrochemical-curve"/>
+                        </svg>
+                        
+                        <div class="curve-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #e74c3c;"></div>
+                                <span>옴의 법칙 (V = IR)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #6c5ce7;"></div>
+                                <span>전기화학 반응</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="explanation-box">
+                    <div class="explanation-title">🔍 왜 전기화학 곡선은 지수함수 형태인가?</div>
+                    <div class="comparison-grid">
+                        <div class="comparison-item ohm-item">
+                            <div class="item-title">🔍 옴의 법칙 (선형)</div>
+                            <div class="equation-box">V = I × R</div>
+                            <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                                <li><strong>저항이 일정</strong></li>
+                                <li>전압에 정비례하여 전류 증가</li>
+                                <li>단순한 전기 전도</li>
+                                <li>물리적 장애물만 존재</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="comparison-item electrochemical-item">
+                            <div class="item-title">⚡ 전기화학 반응 (지수함수)</div>
+                            <div class="equation-box">i = i₀[e^(αnFη/RT) - e^(-(1-α)nFη/RT)]</div>
+                            <ul style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                                <li><strong>활성화 에너지 필요</strong></li>
+                                <li>농도 및 반응 속도 의존성</li>
+                                <li>복잡한 화학 과정</li>
+                                <li>Butler-Volmer 방정식</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="theory-explanation">
+                    <div class="theory-title">🧪 Butler-Volmer 방정식: 전기화학의 핵심</div>
+                    
+                    <div class="butler-volmer">
+                        <h4 style="margin: 0 0 15px 0; color: #fff;">📊 방정식 해석:</h4>
+                        <div style="font-family: 'Courier New', monospace; font-size: 18px; font-weight: bold; margin: 15px 0;">
+                            i = i₀[exp(αnFη/RT) - exp(-(1-α)nFη/RT)]
+                        </div>
+                        <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+                            <li><strong>i₀:</strong> 교환 전류 밀도 (반응 활성도)</li>
+                            <li><strong>α:</strong> 전달계수 (보통 0.5)</li>
+                            <li><strong>η:</strong> 과전압 (E - E°)</li>
+                            <li><strong>n:</strong> 전자 전달 개수</li>
+                            <li><strong>F:</strong> 패러데이 상수</li>
+                            <li><strong>R:</strong> 기체 상수, <strong>T:</strong> 절대온도</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 style="margin: 20px 0 15px 0;">⚡ 지수함수적 증가의 이유:</h4>
+                    <ul class="reasons-list">
+                        <li><strong>🔋 활성화 장벽:</strong> 전기화학 반응에는 활성화 에너지가 필요하므로, 낮은 전압에서는 전류가 거의 흐르지 않음</li>
+                        <li><strong>🌊 농도 분극:</strong> 전극 근처 이온 농도 변화로 인해 전압이 증가해야 더 많은 전류가 흐름</li>
+                        <li><strong>⚡ 전자 전달:</strong> 전극-전해질 계면에서의 전자 전달 과정이 온도에 민감한 지수함수 관계</li>
+                        <li><strong>🔬 질량 전달:</strong> 반응 속도가 이온의 확산과 대류에 의해 제한됨</li>
+                    </ul>
+                    
+                    <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center;">
+                        <h4 style="margin: 0 0 10px 0;">🎯 실용적 의미</h4>
+                        <p style="margin: 0; font-size: 18px; font-weight: bold;">
+                            전압을 조금만 높여도 전류가 급격히 증가!<br>
+                            → 정밀한 전압 제어가 필수
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="section-title">🔋 배터리 작동: 갈바닉 ↔ 전해 모드</div>
+                
+                <div class="interactive-controls">
+                    <h3 style="margin: 0 0 15px 0;">⚡ 배터리 모드 선택</h3>
+                    <button class="control-button active" id="dischargeBtn" onclick="showDischarge()">
+                        🔋 방전 모드 (갈바닉)
+                    </button>
+                    <button class="control-button" id="chargeBtn" onclick="showCharge()">
+                        🔌 충전 모드 (전해)
+                    </button>
+                    <div class="current-display" id="currentDisplay">
+                        전류 방향: Anode → Cathode
+                    </div>
+                </div>
+                
+                <div class="battery-demo" id="batteryDemo">
+                    <div class="battery-state discharge-state">
+                        <div class="state-title">🔋 방전 (갈바닉 모드)</div>
+                        
+                        <div class="battery-visual">
+                            <div class="battery-level discharge-level"></div>
+                            <div class="battery-terminal negative-terminal"></div>
+                            <div class="battery-terminal positive-terminal"></div>
+                            <div style="position: relative; z-index: 10;">Li-ion</div>
+                        </div>
+                        
+                        <div style="margin: 15px 0; font-weight: bold; color: #fd79a8;">
+                            65% 충전 상태
+                        </div>
+                        
+                        <div style="background: #f8f9ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <strong>에너지 변환:</strong><br>
+                            화학 에너지 → 전기 에너지<br>
+                            <span style="color: #fd79a8; font-weight: bold;">자발적 반응 (ΔG < 0)</span>
+                        </div>
+                        
+                        <div style="background: #f8f9ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <strong>전류-전압 특성:</strong><br>
+                            Butler-Volmer 방정식 적용<br>
+                            <span style="color: #6c5ce7; font-weight: bold;">비선형 지수함수 관계</span>
+                        </div>
+                    </div>
+                    
+                    <div class="battery-state charge-state">
+                        <div class="state-title">🔌 충전 (전해 모드)</div>
+                        
+                        <div class="battery-visual">
+                            <div class="battery-level charge-level"></div>
+                            <div class="battery-terminal negative-terminal"></div>
+                            <div class="battery-terminal positive-terminal"></div>
+                            <div style="position: relative; z-index: 10;">Li-ion</div>
+                        </div>
+                        
+                        <div style="margin: 15px 0; font-weight: bold; color: #00b894;">
+                            90% 충전 상태
+                        </div>
+                        
+                        <div style="background: #f8f9ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <strong>에너지 변환:</strong><br>
+                            전기 에너지 → 화학 에너지<br>
+                            <span style="color: #00b894; font-weight: bold;">강제적 반응 (ΔG > 0)</span>
+                        </div>
+                        
+                        <div style="background: #f8f9ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
+                            <strong>전압 제어:</strong><br>
+                            과전압 필요 (η > 0)<br>
+                            <span style="color: #6c5ce7; font-weight: bold;">정밀한 전압 관리 필수</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 새로 추가된 배터리 충전 제한 이론 섹션 -->
+            <div class="section">
+                <div class="battery-theory-box">
+                    <div class="battery-theory-title">🔬 배터리 충전 제한의 이론적 배경</div>
+                    <div style="text-align: center; margin-bottom: 25px; font-size: 18px; color: #555;">
+                        왜 방전은 65%까지, 충전은 90%까지만 표시할까요?
+                    </div>
+                    
+                    <div class="theory-grid">
+                        <div class="theory-section charge-theory">
+                            <div class="theory-section-title">🔌 충전 90% 제한의 근거</div>
+                            <ul class="theory-points">
+                                <li><strong>전극 구조 안정성:</strong> 리튬이온이 과도하게 삽입되면 전극 결정 구조가 불안정해짐</li>
+                                <li><strong>리튬 석출 방지:</strong> 흑연 음극에서 100% 충전 시 리튬 플레이팅 위험 증가</li>
+                                <li><strong>덴드라이트 방지:</strong> 리튬 석출이 덴드라이트를 형성하여 내부 단락 가능성</li>
+                                <li><strong>전해질 분해 방지:</strong> 높은 전압(4.2V 이상)에서 전해질 산화 분해</li>
+                                <li><strong>SEI 층 보호:</strong> 과도한 SEI 성장으로 인한 성능 저하 방지</li>
+                                <li><strong>수명 연장:</strong> 80-90% 충전 제한으로 사이클 수명 2-3배 증가</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="theory-section discharge-theory">
+                            <div class="theory-section-title">🔋 방전 65% 표시의 의미</div>
+                            <ul class="theory-points">
+                                <li><strong>실용적 운용 상태:</strong> 일반적인 사용 패턴에서 흔히 보는 상태</li>
+                                <li><strong>안전 구간:</strong> 과방전 위험으로부터 충분히 멀리 떨어진 상태</li>
+                                <li><strong>성능 안정 구간:</strong> 전압 강하가 심하지 않은 구간</li>
+                                <li><strong>과방전 방지:</strong> 2.5-3.0V 이하 방전 시 영구 손상 가능</li>
+                                <li><strong>농도 분극 최소:</strong> 극심한 농도 분극이 일어나기 전 상태</li>
+                                <li><strong>실용적 표시:</strong> 사용자에게 친숙한 배터리 잔량</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="danger-box">
+                        <h4 style="margin: 0 0 10px 0;">⚠️ 100% 충전의 위험성</h4>
+                        <p style="margin: 0; line-height: 1.6;">
+                            리튬이온 배터리를 100%까지 충전하면 전극 재료의 기계적 스트레스 증가, 
+                            전해질 분해 촉진, 가스 발생으로 인한 팽창 등의 문제가 발생할 수 있습니다.
+                        </p>
+                    </div>
+                    
+                    <div class="safety-box">
+                        <h4 style="margin: 0 0 10px 0;">✅ BMS의 역할</h4>
+                        <p style="margin: 0; line-height: 1.6;">
+                            현대 배터리 관리 시스템(BMS)은 Butler-Volmer 방정식의 비선형성을 고려하여 
+                            안전한 충방전 구간에서만 배터리를 운용하도록 제어합니다.
+                        </p>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.8); padding: 25px; border-radius: 15px; margin: 25px 0; text-align: center;">
+                        <h4 style="margin: 0 0 15px 0; color: #2d3436;">🔗 Butler-Volmer 방정식과의 연관성</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left;">
+                            <div>
+                                <strong style="color: #00b894;">충전 말기:</strong><br>
+                                과전압이 급격히 증가하여<br>
+                                부반응 가능성 증가
+                            </div>
+                            <div>
+                                <strong style="color: #fd79a8;">방전 말기:</strong><br>
+                                농도 분극이 심해져서<br>
+                                전압 급락 현상 발생
+                            </div>
+                        </div>
+                        <p style="margin: 20px 0 0 0; font-size: 16px; font-weight: bold; color: #6c5ce7;">
+                            따라서 65%/90% 설정은 전기화학 이론이 실제 기술에 적용된 안전한 운용 구간입니다.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); color: white; padding: 30px; border-radius: 15px; margin: 30px 0; text-align: center;">
+                <h3 style="margin: 0 0 20px 0;">🎯 핵심 포인트</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                        <h4 style="margin: 0 0 10px 0; color: #fdcb6e;">📈 지수함수 관계</h4>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                            전압 조금 증가 → 전류 급격 증가<br>
+                            Butler-Volmer 방정식
+                        </p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                        <h4 style="margin: 0 0 10px 0; color: #fdcb6e;">🔋 정밀 제어</h4>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                            BMS의 중요성<br>
+                            과충전/과방전 방지
+                        </p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                        <h4 style="margin: 0 0 10px 0; color: #fdcb6e;">⚡ 활성화 에너지</h4>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                            반응 개시 임계전압<br>
+                            온도 의존성 존재
+                        </p>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.15); padding: 20px; border-radius: 10px; backdrop-filter: blur(10px);">
+                        <h4 style="margin: 0 0 10px 0; color: #fdcb6e;">🔬 이론적 근거</h4>
+                        <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                            65%/90% 제한은<br>
+                            전기화학 이론의 실제 적용
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showDischarge() {
+            // 버튼 상태 변경
+            document.getElementById('dischargeBtn').classList.add('active');
+            document.getElementById('chargeBtn').classList.remove('active');
+            
+            // 전류 표시 변경
+            document.getElementById('currentDisplay').textContent = '전류 방향: Anode → Cathode (방전)';
+            
+            // 배터리 레벨 변경
+            const dischargeLevels = document.querySelectorAll('.discharge-level');
+            const chargeLevels = document.querySelectorAll('.charge-level');
+            
+            dischargeLevels.forEach(level => level.style.width = '65%');
+            chargeLevels.forEach(level => level.style.width = '65%');
+        }
+        
+        function showCharge() {
+            // 버튼 상태 변경
+            document.getElementById('chargeBtn').classList.add('active');
+            document.getElementById('dischargeBtn').classList.remove('active');
+            
+            // 전류 표시 변경
+            document.getElementById('currentDisplay').textContent = '전류 방향: 충전기 → Cathode → Anode (충전)';
+            
+            // 배터리 레벨 변경
+            const dischargeLevels = document.querySelectorAll('.discharge-level');
+            const chargeLevels = document.querySelectorAll('.charge-level');
+            
+            dischargeLevels.forEach(level => level.style.width = '90%');
+            chargeLevels.forEach(level => level.style.width = '90%');
+        }
+        
+        // 자동 전환 데모
+        setInterval(() => {
+            const isDischargeActive = document.getElementById('dischargeBtn').classList.contains('active');
+            if (isDischargeActive) {
+                showCharge();
+            } else {
+                showDischarge();
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

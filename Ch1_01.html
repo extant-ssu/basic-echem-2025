@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>물과 전자의 흐름 비교</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 40px;
+        }
+        .water-side, .electron-side {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid;
+        }
+        .water-side {
+            border-color: #4facfe;
+        }
+        .electron-side {
+            border-color: #feca57;
+        }
+        .side-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-align: center;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .water-side .side-title {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        .electron-side .side-title {
+            background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
+        }
+        .diagram {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .tank, .battery {
+            width: 150px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border: 3px solid #333;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .tank {
+            background: linear-gradient(to bottom, #87ceeb 0%, #4169e1 100%);
+            color: white;
+        }
+        .battery {
+            background: linear-gradient(to right, #ff6b6b 0%, #4ecdc4 100%);
+            color: white;
+        }
+        .battery::before {
+            content: '⊖';
+            position: absolute;
+            left: -15px;
+            top: 35px;
+            font-size: 20px;
+            background: #333;
+            color: white;
+            width: 10px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .battery::after {
+            content: '⊕';
+            position: absolute;
+            right: -15px;
+            top: 35px;
+            font-size: 20px;
+            background: #333;
+            color: white;
+            width: 10px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pipe, .wire {
+            width: 20px;
+            height: 80px;
+            margin: 0 auto;
+            border-radius: 10px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pipe {
+            background: linear-gradient(to bottom, #6c5ce7 0%, #74b9ff 100%);
+        }
+        .wire {
+            background: linear-gradient(to bottom, #fd79a8 0%, #fdcb6e 100%);
+        }
+        .flow-arrow {
+            position: absolute;
+            font-size: 24px;
+            animation: flow 2s infinite;
+        }
+        @keyframes flow {
+            0%, 100% { transform: translateY(-10px); opacity: 0.5; }
+            50% { transform: translateY(10px); opacity: 1; }
+        }
+        .turbine, .light {
+            width: 100px;
+            height: 100px;
+            margin: 20px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            animation: rotate 3s linear infinite;
+        }
+        .turbine {
+            background: linear-gradient(45deg, #6c5ce7 0%, #fd79a8 100%);
+            color: white;
+        }
+        .light {
+            background: radial-gradient(circle, #fff700 0%, #ffa500 100%);
+            color: #333;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #fff700; }
+            to { box-shadow: 0 0 30px #ffa500, 0 0 40px #fff700; }
+        }
+        .concept-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .water-side .concept-box {
+            border-left-color: #4facfe;
+        }
+        .electron-side .concept-box {
+            border-left-color: #feca57;
+        }
+        .concept-title {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+        .concept-desc {
+            color: #636e72;
+            line-height: 1.6;
+        }
+        .formula-box {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a8e6cf 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.3);
+        }
+        .key-insight {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌊 물의 흐름 vs ⚡ 전자의 흐름</h1>
+            <p>전기화학의 기본 개념을 물의 비유로 이해하기</p>
+        </div>
+        
+        <div class="comparison">
+            <div class="water-side">
+                <div class="side-title">🌊 물의 세계</div>
+                
+                <div class="diagram">
+                    <div class="tank">높은 물탱크</div>
+                    <div class="pipe">
+                        <div class="flow-arrow">💧</div>
+                    </div>
+                    <div class="turbine">⚙️</div>
+                    <div style="margin-top: 10px; font-weight: bold;">물레방아</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">💧 수압 (Water Pressure)</div>
+                    <div class="concept-desc">물이 높은 곳에서 낮은 곳으로 흐르려는 힘</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">🌊 유량 (Flow Rate)</div>
+                    <div class="concept-desc">단위 시간당 흐르는 물의 양</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">🚰 저항 (Pipe Resistance)</div>
+                    <div class="concept-desc">파이프의 좁은 부분이나 막힘</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">⚙️ 출력 (Power Output)</div>
+                    <div class="concept-desc">물레방아가 돌면서 하는 일</div>
+                </div>
+            </div>
+            
+            <div class="electron-side">
+                <div class="side-title">⚡ 전자의 세계</div>
+                
+                <div class="diagram">
+                    <div class="battery">배터리</div>
+                    <div class="wire">
+                        <div class="flow-arrow">⚡</div>
+                    </div>
+                    <div class="light">💡</div>
+                    <div style="margin-top: 10px; font-weight: bold;">전구</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">⚡ 전압 (Voltage)</div>
+                    <div class="concept-desc">전자를 밀어내는 "전기적 압력"</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">🔌 전류 (Current)</div>
+                    <div class="concept-desc">단위 시간당 흐르는 전자의 양</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">🛑 저항 (Electrical Resistance)</div>
+                    <div class="concept-desc">전자의 흐름을 방해하는 요소</div>
+                </div>
+                
+                <div class="concept-box">
+                    <div class="concept-title">💡 출력 (Electrical Power)</div>
+                    <div class="concept-desc">전구가 켜지면서 하는 일</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding: 0 40px 40px;">
+            <div class="formula-box">
+                💧 수압 × 유량 = 수력 ≈ ⚡ 전압 × 전류 = 전력<br>
+                <span style="font-size: 16px; opacity: 0.9;">Power = Pressure × Flow = Voltage × Current</span>
+            </div>
+            
+            <div class="key-insight">
+                🔑 핵심 인사이트: 높은 곳에서 낮은 곳으로 흐르는 것은 물이나 전자나 같다!<br>
+                <span style="font-size: 16px; opacity: 0.9;">에너지는 항상 높은 전위에서 낮은 전위로 흐른다</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

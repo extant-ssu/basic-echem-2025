@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 강의 2장 - 전지 전해질과 이온 이동</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 3em;
+            background: linear-gradient(45deg, #3498db, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.3em;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .course-overview {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .overview-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .overview-content {
+            font-size: 1.1em;
+            line-height: 1.8;
+            text-align: center;
+        }
+        
+        .navigation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .nav-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .nav-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+        
+        .nav-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.4em;
+        }
+        
+        .nav-card p {
+            margin: 0;
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .nav-card .duration {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        
+        .learning-objectives {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .objectives-title {
+            font-size: 1.4em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .objectives-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .objective-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            line-height: 1.5;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>제2장: 전지 전해질과 이온 이동</h1>
+        <p class="subtitle">보이지 않는 이온들의 춤</p>
+        
+        <div class="course-overview">
+            <h2 class="overview-title">🎯 강의 개요</h2>
+            <div class="overview-content">
+                전기화학의 핵심인 <span class="highlight">이온과 용매의 상호작용</span>, <span class="highlight">이온들 간의 복잡한 관계</span>, 
+                그리고 <span class="highlight">이온들의 3가지 움직임</span>을 체계적으로 학습합니다.<br>
+                이론과 실제 배터리 응용을 연결하여 현대 전기화학의 핵심 개념을 이해합니다.
+            </div>
+        </div>
+        
+        <div class="navigation-grid">
+            <a href="#" class="nav-card" onclick="openSection('born_model')">
+                <h3>1️⃣ Born 모델</h3>
+                <p>이온과 용매의 상호작용<br>• 이온 수화의 비밀<br>• Born 에너지 방정식<br>• 리튬이온의 특별함</p>
+                <span class="duration">⏱️ 30분</span>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="openSection('debye_huckel')">
+                <h3>2️⃣ Debye-Hückel 모델</h3>
+                <p>이온들 간의 복잡한 관계<br>• 이온 분위기 개념<br>• 활성도와 이온 강도<br>• Debye 길이의 의미</p>
+                <span class="duration">⏱️ 40분</span>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="openSection('ion_movement')">
+                <h3>3️⃣ 이온의 움직임</h3>
+                <p>3가지 이동 메커니즘<br>• 확산: 농도 기울기<br>• 이동: 전기장<br>• 대류: 용액 흐름</p>
+                <span class="duration">⏱️ 25분</span>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="openSection('kohlrausch_law')">
+                <h3>4️⃣ Kohlrausch 법칙</h3>
+                <p>이온의 독립적 기여<br>• 전기전도도의 비밀<br>• 몰전도도와 농도<br>• 운반수의 중요성</p>
+                <span class="duration">⏱️ 30분</span>
+            </a>
+            
+            <a href="#" class="nav-card" onclick="openSection('battery_application')">
+                <h3>5️⃣ 배터리 응용</h3>
+                <p>실제 전지에서의 이온<br>• 리튬이온 배터리<br>• 온도 효과<br>• 최신 연구 동향</p>
+                <span class="duration">⏱️ 20분</span>
+            </a>
+        </div>
+        
+        <div class="learning-objectives">
+            <h3 class="objectives-title">📚 학습 목표</h3>
+            <div class="objectives-list">
+                <div class="objective-item">
+                    <strong>Born 모델 이해:</strong> 이온-용매 상호작용의 에너지적 관점을 습득하고 실제 배터리 성능과 연결
+                </div>
+                <div class="objective-item">
+                    <strong>Debye-Hückel 이론:</strong> 이온 분위기 개념을 통해 실제 전해질 용액의 비이상적 거동 설명
+                </div>
+                <div class="objective-item">
+                    <strong>이온 이동 메커니즘:</strong> 확산, 이동, 대류의 차이점과 각각의 물리적 의미 파악
+                </div>
+                <div class="objective-item">
+                    <strong>전기전도도 이론:</strong> Kohlrausch 법칙을 통한 이온의 독립적 기여 이해
+                </div>
+                <div class="objective-item">
+                    <strong>실제 응용:</strong> 이론을 실제 리튬이온 배터리 설계와 최적화에 적용
+                </div>
+                <div class="objective-item">
+                    <strong>최신 연구 동향:</strong> 전고체 배터리, 단일 이온 전도체 등 차세대 기술 이해
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            "이온들의 움직임을 이해하는 것은 전기화학의 심장을 이해하는 것입니다.<br>
+            보이지 않는 세계에서 일어나는 이 놀라운 현상들이 우리 일상의 모든 전자기기를 가능하게 합니다."
+        </div>
+    </div>
+
+    <script>
+        function openSection(sectionName) {
+            // 각 섹션별 HTML 파일로 이동
+            const sectionFiles = {
+                'born_model': 'Ch2_01.html',
+                'debye_huckel': 'Ch2_02.html', 
+                'ion_movement': 'Ch2_03.html',
+                'kohlrausch_law': 'Ch2_04.html',
+                'battery_application': 'Ch2_05.html'
+            };
+            
+            const fileName = sectionFiles[sectionName];
+            if (fileName) {
+                window.location.href = fileName;
+            } else {
+                alert('해당 섹션을 찾을 수 없습니다.');
+            }
+        }
+    </script>
+</body>
+</html>

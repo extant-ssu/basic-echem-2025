@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 강의 네비게이션</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        .header p {
+            margin: 0;
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .chapter-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border: 3px solid #6c5ce7;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .chapter-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            border-color: #a29bfe;
+        }
+        
+        .chapter-number {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        
+        .chapter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .chapter-description {
+            color: #636e72;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .chapter-topics {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .chapter-topics strong {
+            color: #6c5ce7;
+        }
+        
+        .footer {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .footer h3 {
+            margin: 0 0 15px 0;
+            color: #2d3436;
+        }
+        
+        .footer p {
+            margin: 0;
+            color: #636e72;
+            line-height: 1.6;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        .chapter-card:nth-child(1) { animation-delay: 0.1s; }
+        .chapter-card:nth-child(2) { animation-delay: 0.2s; }
+        .chapter-card:nth-child(3) { animation-delay: 0.3s; }
+        .chapter-card:nth-child(4) { animation-delay: 0.4s; }
+        .chapter-card:nth-child(5) { animation-delay: 0.5s; }
+        .chapter-card:nth-child(6) { animation-delay: 0.6s; }
+        .chapter-card:nth-child(7) { animation-delay: 0.7s; }
+        .chapter-card:nth-child(8) { animation-delay: 0.8s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-in">
+            <h1>전기화학 통합 강의</h1>
+            <p>Chapter 1: 전기화학의 기초부터 최신 기술까지 - 각 챕터를 클릭하여 시작하세요</p>
+        </div>
+        
+        <div class="chapters-grid">
+            <a href="Ch1_01.html" class="chapter-card fade-in">
+                <div class="chapter-number">1</div>
+                <div class="chapter-title">물과 전자의 흐름 비교</div>
+                <div class="chapter-description">
+                    전기화학의 기본 개념을 물의 비유로 이해하기
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 수압과 전압, 유량과 전류, 저항의 개념, 에너지 흐름의 원리
+                </div>
+            </a>
+            
+            <a href="Ch1_02.html" class="chapter-card fade-in">
+                <div class="chapter-number">2</div>
+                <div class="chapter-title">아연-구리 산화환원반응 실험</div>
+                <div class="chapter-description">
+                    실험을 통해 산화환원반응의 원리 학습
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 산화와 환원, 전자 이동, 반응성 차이, 환원 전위의 개념
+                </div>
+            </a>
+            
+            <a href="Ch1_03.html" class="chapter-card fade-in">
+                <div class="chapter-number">3</div>
+                <div class="chapter-title">갈바닉 셀 vs 전해 셀</div>
+                <div class="chapter-description">
+                    에너지 생산자와 소비자의 차이점 비교
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 자발적 vs 비자발적 반응, 에너지 변환, 전극의 역할, 실생활 응용
+                </div>
+            </a>
+            
+            <a href="Ch1_04.html" class="chapter-card fade-in">
+                <div class="chapter-number">4</div>
+                <div class="chapter-title">표준 환원 전위표</div>
+                <div class="chapter-description">
+                    전자를 끌어당기는 힘의 척도와 반응 예측
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 표준 수소 전극, 산화제와 환원제, 전지 전압 계산, 반응 자발성 판단
+                </div>
+            </a>
+            
+            <a href="Ch1_05.html" class="chapter-card fade-in">
+                <div class="chapter-number">5</div>
+                <div class="chapter-title">2025년 최신 배터리 기술</div>
+                <div class="chapter-description">
+                    세계를 바꾸는 혁신적 배터리 기술 동향
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 메르세데스 전고체 배터리, 시카고대 나트륨 배터리, 미래 전망과 혁신
+                </div>
+            </a>
+            
+            <a href="Ch1_06.html" class="chapter-card fade-in">
+                <div class="chapter-number">6</div>
+                <div class="chapter-title">전기화학 셀 구조와 전하 균형</div>
+                <div class="chapter-description">
+                    전자와 이온의 완벽한 협력 시스템
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 염다리의 역할, 전하 균형, 이온 이동, 완전한 회로 형성
+                </div>
+            </a>
+            
+            <a href="Ch1_07.html" class="chapter-card fade-in">
+                <div class="chapter-number">7</div>
+                <div class="chapter-title">과전압 (Overpotential)</div>
+                <div class="chapter-description">
+                    이론과 현실의 차이 - 실제 전지에서 일어나는 일
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 저항 손실, 농도 분극, 활성화 장벽, 실용적 의미와 개선 방법
+                </div>
+            </a>
+            
+            <a href="Ch1_08.html" class="chapter-card fade-in">
+                <div class="chapter-number">8</div>
+                <div class="chapter-title">전류-전압 관계와 배터리 작동</div>
+                <div class="chapter-description">
+                    Butler-Volmer 방정식과 실제 배터리 동작 원리
+                </div>
+                <div class="chapter-topics">
+                    <strong>주요 내용:</strong> 지수함수 관계, 옴의 법칙과의 차이, 충방전 모드, BMS의 중요성
+                </div>
+            </a>
+        </div>
+        
+        <div class="footer fade-in">
+            <h3>강의 사용법</h3>
+            <p>
+                각 챕터 카드를 클릭하면 해당 주제의 상세 강의로 이동합니다.<br>
+                모든 챕터는 인터랙티브 요소와 애니메이션을 포함하여 생동감 있는 학습 경험을 제공합니다.<br>
+                각 챕터 완료 후 브라우저의 '뒤로 가기' 버튼을 클릭하여 이 메인 화면으로 돌아올 수 있습니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

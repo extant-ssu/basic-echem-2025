@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kohlrausch 법칙 - 이온의 독립적 기여</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', 'Apple Gothic', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #fd79a8;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fd79a8, #e84393);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.4em;
+            font-style: italic;
+        }
+        
+        .navigation {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .nav-button {
+            background: linear-gradient(45degree, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            margin: 40px 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #fd79a8;
+        }
+        
+        .theory-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #fd79a8;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .equation {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3em;
+            text-align: center;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .visual-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .visual-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .visual-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .visual-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        svg {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .explanation {
+            background: #e8f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+            border-left: 4px solid #fd79a8;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .research-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .key-points {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .key-points h4 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: #fd79a8;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .conductivity-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .conductivity-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid;
+        }
+        
+        .conductivity-card:nth-child(1) { border-top-color: #ff6b6b; }
+        .conductivity-card:nth-child(2) { border-top-color: #74b9ff; }
+        .conductivity-card:nth-child(3) { border-top-color: #00b894; }
+        
+        .demo-box {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .historical-note {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #ff7675;
+        }
+        
+        .nernst-einstein {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #4caf50;
+        }
+        
+        @media (max-width: 768px) {
+            .visual-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .conductivity-types {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>4. Kohlrausch 법칙</h1>
+            <p class="subtitle">이온의 독립적 기여 - 전기전도도의 비밀</p>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="prevSection()">← 이전: 이온의 움직임</a>
+            <a href="#" class="nav-button" onclick="nextSection()">다음: 배터리 응용 →</a>
+        </div>
+        
+        <!-- 1. 역사적 배경 -->
+        <div class="section">
+            <h2 class="section-title">📚 Friedrich Kohlrausch의 천재적 발견 (1900년)</h2>
+            
+            <div class="historical-note">
+                <h3>👨‍🔬 Friedrich Kohlrausch (1840-1910)</h3>
+                <p><strong>독일의 물리학자</strong>로, 정밀한 전기 측정으로 유명합니다. 
+                그는 수많은 전해질의 전기전도도를 측정하면서 놀라운 규칙성을 발견했습니다.</p>
+                
+                <div class="explanation">
+                    <strong>🔍 Kohlrausch의 관찰:</strong>
+                    <ul>
+                        <li>KCl과 NaCl의 한계 몰전도도 차이: 23.4 S·cm²·mol⁻¹</li>
+                        <li>KBr과 NaBr의 한계 몰전도도 차이: 23.4 S·cm²·mol⁻¹</li>
+                        <li>KI와 NaI의 한계 몰전도도 차이: 23.4 S·cm²·mol⁻¹</li>
+                    </ul>
+                    
+                    <p><strong>결론:</strong> <span class="highlight">음이온이 무엇이든 상관없이 K⁺와 Na⁺의 기여도 차이는 일정!</span></p>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>💡 Kohlrausch 법칙의 핵심 아이디어</h3>
+                <p><strong>"무한 희석에서 각 이온은 다른 이온과 독립적으로 전도에 기여한다"</strong></p>
+                
+                <div class="equation">
+                    Λ° = ν₊λ°₊ + ν₋λ°₋
+                </div>
+                
+                <div class="explanation">
+                    <strong>기호 설명:</strong>
+                    <ul>
+                        <li><strong>Λ°:</strong> 한계 몰전도도 (무한 희석에서)</li>
+                        <li><strong>ν₊, ν₋:</strong> 양이온과 음이온의 수</li>
+                        <li><strong>λ°₊, λ°₋:</strong> 개별 이온의 한계 이온전도도</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. 전기전도도의 종류 -->
+        <div class="section">
+            <h2 class="section-title">⚡ 전기전도도의 종류와 정의</h2>
+            
+            <div class="conductivity-types">
+                <div class="conductivity-card">
+                    <h4 style="color: #ff6b6b; margin-top: 0;">1️⃣ 비전도도 (σ)</h4>
+                    <div class="equation" style="background: #ff6b6b; font-size: 1.1em;">
+                        σ = L/(A×R)
+                    </div>
+                    <p><strong>단위:</strong> S·cm⁻¹ 또는 Ω⁻¹·cm⁻¹</p>
+                    <p><strong>의미:</strong> 용액 자체의 전도 능력</p>
+                    <p><strong>특징:</strong> 농도에 비례하여 증가</p>
+                </div>
+                
+                <div class="conductivity-card">
+                    <h4 style="color: #74b9ff; margin-top: 0;">2️⃣ 몰전도도 (Λₘ)</h4>
+                    <div class="equation" style="background: #74b9ff; font-size: 1.1em;">
+                        Λₘ = σ/C
+                    </div>
+                    <p><strong>단위:</strong> S·cm²·mol⁻¹</p>
+                    <p><strong>의미:</strong> 1몰당 전도 능력</p>
+                    <p><strong>특징:</strong> 농도 감소 시 증가</p>
+                </div>
+                
+                <div class="conductivity-card">
+                    <h4 style="color: #00b894; margin-top: 0;">3️⃣ 당량전도도 (Λ)</h4>
+                    <div class="equation" style="background: #00b894; font-size: 1.1em;">
+                        Λ = Λₘ/z
+                    </div>
+                    <p><strong>단위:</strong> S·cm²·equiv⁻¹</p>
+                    <p><strong>의미:</strong> 1당량당 전도 능력</p>
+                    <p><strong>특징:</strong> 전하 수를 고려한 정규화</p>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🧮 실제 계산 예시</h3>
+                <div style="background: #e8f4f8; padding: 20px; border-radius: 10px;">
+                    <p><strong>문제:</strong> 0.01 M NaCl 용액의 전도도가 0.00118 S·cm⁻¹일 때, 몰전도도는?</p>
+                    
+                    <p><strong>계산:</strong></p>
+                    <div class="equation" style="background: #74b9ff; font-size: 1.1em;">
+                        Λₘ = σ/C = 0.00118 / 0.01 = 118 S·cm²·mol⁻¹
+                    </div>
+                    
+                    <p><strong>해석:</strong> 이 농도에서 NaCl 1몰이 118 S·cm²의 전도 능력을 가짐</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3. 시각화 섹션 -->
+        <div class="section">
+            <h2 class="section-title">📊 몰전도도 vs 농도 관계</h2>
+            
+            <div class="visual-container">
+                <div class="visual-item">
+                    <div class="visual-title">강전해질 vs 약전해질</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- 축 -->
+                        <line x1="50" y1="250" x2="350" y2="250" stroke="#333" stroke-width="2"/>
+                        <line x1="50" y1="250" x2="50" y2="50" stroke="#333" stroke-width="2"/>
+                        
+                        <!-- 축 레이블 -->
+                        <text x="200" y="280" text-anchor="middle" font-size="13" font-weight="bold">√c (농도의 제곱근)</text>
+                        <text x="25" y="150" text-anchor="middle" font-size="13" font-weight="bold" transform="rotate(-90 25 150)">Λₘ</text>
+                        
+                        <!-- 강전해질 곡선 (거의 직선) -->
+                        <line x1="50" y1="80" x2="300" y2="160" stroke="#e74c3c" stroke-width="4"/>
+                        <text x="320" y="170" font-size="12" fill="#e74c3c" font-weight="bold">강전해질</text>
+                        <text x="320" y="185" font-size="10" fill="#666">NaCl, KCl, HCl</text>
+                        
+                        <!-- 약전해질 곡선 (급격한 증가) -->
+                        <path d="M 50 80 Q 80 90 120 110 Q 180 160 250 220 Q 280 240 300 245" 
+                              stroke="#74b9ff" stroke-width="4" fill="none"/>
+                        <text x="320" y="250" font-size="12" fill="#74b9ff" font-weight="bold">약전해질</text>
+                        <text x="320" y="265" font-size="10" fill="#666">CH₃COOH, NH₄OH</text>
+                        
+                        <!-- Λ°ₘ 표시 (y절편) -->
+                        <line x1="45" y1="80" x2="55" y2="80" stroke="#333" stroke-width="3"/>
+                        <text x="30" y="75" font-size="12" fill="#333" font-weight="bold">Λ°ₘ</text>
+                        
+                        <!-- 실험 데이터 점들 -->
+                        <g fill="#333">
+                            <!-- 강전해질 점들 -->
+                            <circle cx="80" cy="95" r="3"/>
+                            <circle cx="120" cy="110" r="3"/>
+                            <circle cx="160" cy="125" r="3"/>
+                            <circle cx="200" cy="135" r="3"/>
+                            <circle cx="240" cy="150" r="3"/>
+                            
+                            <!-- 약전해질 점들 -->
+                            <circle cx="80" cy="95" r="3"/>
+                            <circle cx="120" cy="115" r="3"/>
+                            <circle cx="160" cy="150" r="3"/>
+                            <circle cx="200" cy="190" r="3"/>
+                            <circle cx="240" cy="230" r="3"/>
+                        </g>
+                        
+                        <!-- Kohlrausch 식 표시 -->
+                        <text x="200" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="#e74c3c">
+                            Λₘ = Λ°ₘ - K√c
+                        </text>
+                        
+                        <!-- 격자 -->
+                        <g stroke="#ddd" stroke-width="1">
+                            <line x1="50" y1="200" x2="350" y2="200"/>
+                            <line x1="50" y1="150" x2="350" y2="150"/>
+                            <line x1="50" y1="100" x2="350" y2="100"/>
+                            <line x1="100" y1="50" x2="100" y2="250"/>
+                            <line x1="200" y1="50" x2="200" y2="250"/>
+                            <line x1="300" y1="50" x2="300" y2="250"/>
+                        </g>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>주요 관찰:</strong>
+                        <ul>
+                            <li><span class="highlight">강전해질:</span> 거의 선형적 감소</li>
+                            <li><span class="highlight">약전해질:</span> 희석시 급격한 증가</li>
+                            <li>외삽을 통해 Λ°ₘ 결정 가능 (강전해질만)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="visual-item">
+                    <div class="visual-title">이온의 독립적 기여</div>
+                    <svg viewBox="0 0 400 300">
+                        <!-- NaCl 분해 표시 -->
+                        <g transform="translate(50, 80)">
+                            <rect x="0" y="0" width="80" height="40" fill="#95a5a6" stroke="#333" stroke-width="2" rx="5"/>
+                            <text x="40" y="25" text-anchor="middle" font-weight="bold" font-size="14">NaCl</text>
+                        </g>
+                        
+                        <!-- 화살표 -->
+                        <path d="M 140 100 L 180 100 M 175 95 L 180 100 L 175 105" stroke="#333" stroke-width="3" fill="#333"/>
+                        <text x="160" y="90" text-anchor="middle" font-size="12" font-weight="bold">해리</text>
+                        
+                        <!-- Na+ 이온 -->
+                        <g transform="translate(200, 60)">
+                            <circle cx="20" cy="20" r="22" fill="#ff6b6b" stroke="#333" stroke-width="2"/>
+                            <text x="20" y="27" text-anchor="middle" font-weight="bold" fill="white" font-size="14">Na⁺</text>
+                            <text x="20" y="55" text-anchor="middle" font-size="11" font-weight="bold">λ°(Na⁺) = 50.1</text>
+                            <text x="20" y="68" text-anchor="middle" font-size="9" fill="#666">S·cm²·mol⁻¹</text>
+                        </g>
+                        
+                        <!-- + 기호 -->
+                        <text x="290" y="105" text-anchor="middle" font-size="24" font-weight="bold" fill="#2c3e50">+</text>
+                        
+                        <!-- Cl- 이온 -->
+                        <g transform="translate(310, 60)">
+                            <circle cx="20" cy="20" r="22" fill="#74b9ff" stroke="#333" stroke-width="2"/>
+                            <text x="20" y="27" text-anchor="middle" font-weight="bold" fill="white" font-size="14">Cl⁻</text>
+                            <text x="20" y="55" text-anchor="middle" font-size="11" font-weight="bold">λ°(Cl⁻) = 76.3</text>
+                            <text x="20" y="68" text-anchor="middle" font-size="9" fill="#666">S·cm²·mol⁻¹</text>
+                        </g>
+                        
+                        <!-- Kohlrausch 법칙 결과 -->
+                        <g transform="translate(50, 160)">
+                            <rect x="0" y="0" width="300" height="80" fill="#e8f4f8" stroke="#74b9ff" stroke-width="2" rx="10"/>
+                            <text x="150" y="25" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">Kohlrausch 법칙</text>
+                            <text x="150" y="45" text-anchor="middle" font-size="14" fill="#2c3e50">Λ°(NaCl) = λ°(Na⁺) + λ°(Cl⁻)</text>
+                            <text x="150" y="65" text-anchor="middle" font-size="14" fill="#e74c3c" font-weight="bold">= 50.1 + 76.3 = 126.4 S·cm²·mol⁻¹</text>
+                        </g>
+                        
+                        <!-- 실험값과 비교 -->
+                        <text x="200" y="270" text-anchor="middle" font-size="12" fill="#00b894" font-weight="bold">
+                            실험값: 126.5 S·cm²·mol⁻¹ (오차 < 0.1%!)
+                        </text>
+                    </svg>
+                    
+                    <div class="explanation">
+                        <strong>핵심 포인트:</strong>
+                        <ul>
+                            <li>각 이온은 <span class="highlight">독립적으로</span> 전도에 기여</li>
+                            <li>이론값과 실험값이 거의 완벽하게 일치</li>
+                            <li>다른 이온의 존재와 무관하게 기여도 일정</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 농도 의존성 -->
+        <div class="section">
+            <h2 class="section-title">📉 농도가 높아지면 전도도가 감소하는 이유</h2>
+            
+            <div class="theory-box">
+                <h3>🤔 역설적 현상</h3>
+                <p>직관적으로는 이온이 많을수록 전도도가 높아야 할 것 같은데, 
+                왜 <span class="highlight">몰전도도는 농도가 높아질수록 감소</span>할까요?</p>
+                
+                <div class="equation">
+                    Λ = Λ° - G√C
+                </div>
+                
+                <div class="explanation">
+                    <strong>Kohlrausch 농도 의존성 방정식</strong>
+                    <ul>
+                        <li><strong>G:</strong> Kohlrausch 상수 (전해질 종류에 따라 다름)</li>
+                        <li><strong>√C 의존성:</strong> Debye-Hückel 이론과 일치</li>
+                        <li><strong>음의 기울기:</strong> 농도 증가 시 몰전도도 감소</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🎯 감소 원인 분석</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="background: #ffebee; padding: 20px; border-radius: 10px; border: 2px solid #e74c3c;">
+                        <h4 style="color: #c62828; margin-top: 0;">1️⃣ 이온 분위기 효과</h4>
+                        <ul>
+                            <li>반대 전하 이온들이 이동을 방해</li>
+                            <li>전기장이 이온 분위기에 의해 차폐</li>
+                            <li>실효 전기장 감소</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 10px; border: 2px solid #2196f3;">
+                        <h4 style="color: #1565c0; margin-top: 0;">2️⃣ 이온쌍 형성</h4>
+                        <ul>
+                            <li>고농도에서 이온쌍 (ion pair) 생성</li>
+                            <li>전체적으로 중성이 되어 전도에 기여 못함</li>
+                            <li>실제 이온 농도 감소 효과</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="key-points">
+                    <h4>💡 실제 배터리에서의 의미</h4>
+                    <ul>
+                        <li><strong>전해질 농도 최적화:</strong> 너무 높으면 전도도 오히려 감소</li>
+                        <li><strong>일반적 최적 농도:</strong> 0.5 - 1.5 M 범위</li>
+                        <li><strong>LiPF₆ in EC/DMC:</strong> 1 M에서 최적 성능</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. Nernst-Einstein 관계식 -->
+        <div class="section">
+            <h2 class="section-title">🔗 Nernst-Einstein 관계식</h2>
+            
+            <div class="nernst-einstein">
+                <h3>⚡ 전도도와 확산계수의 연결</h3>
+                
+                <div class="equation">
+                    Λ = (zF)²(D₊ + D₋)/RT
+                </div>
+                
+                <div class="explanation">
+                    <strong>물리적 의미:</strong>
+                    <ul>
+                        <li><span class="highlight">전도도와 확산계수는 직접 연결</span></li>
+                        <li>같은 분자 운동에서 기인하는 두 현상</li>
+                        <li>Einstein 관계식 (D = ukT/ze)의 확장</li>
+                    </ul>
+                </div>
+                
+                <div class="demo-box">
+                    <h4>🧪 실용적 응용</h4>
+                    <p>전도도를 측정하면 확산계수를 계산할 수 있고,<br>
+                    확산계수를 알면 배터리 성능을 예측할 수 있습니다!</p>
+                </div>
+            </div>
+            
+            <div class="theory-box">
+                <h3>📊 전고체 배터리 개발의 핵심</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>전해질 종류</th>
+                            <th>이온 전도도 (S/cm)</th>
+                            <th>목표/현황</th>
+                            <th>주요 장단점</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>액체 전해질</td>
+                            <td>10⁻²</td>
+                            <td>현재 기준</td>
+                            <td>높은 전도도, 안전성 문제</td>
+                        </tr>
+                        <tr>
+                            <td>고분자 전해질</td>
+                            <td>10⁻⁵ ~ 10⁻⁴</td>
+                            <td>개선 필요</td>
+                            <td>안전성 우수, 낮은 전도도</td>
+                        </tr>
+                        <tr>
+                            <td>황화물계</td>
+                            <td>10⁻² (최고기록)</td>
+                            <td>상용화 근접</td>
+                            <td>높은 전도도, 가공성 문제</td>
+                        </tr>
+                        <tr>
+                            <td>산화물계</td>
+                            <td>10⁻⁴ ~ 10⁻³</td>
+                            <td>연구 단계</td>
+                            <td>안정성 우수, 계면 저항</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 6. H+와 OH-의 특별함 -->
+        <div class="section">
+            <h2 class="section-title">⚡ H⁺와 OH⁻의 특별한 이동도</h2>
+            
+            <div class="theory-box">
+                <h3>🤔 왜 H⁺와 OH⁻는 특별할까?</h3>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>이온</th>
+                            <th>한계 이온전도도<br>(S·cm²·mol⁻¹)</th>
+                            <th>상대적 크기</th>
+                            <th>특징</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #ffebee;">
+                            <td><strong>H⁺</strong></td>
+                            <td><strong>349.8</strong></td>
+                            <td>약 7배</td>
+                            <td>Grotthuss 메커니즘</td>
+                        </tr>
+                        <tr style="background: #e3f2fd;">
+                            <td><strong>OH⁻</strong></td>
+                            <td><strong>198.3</strong></td>
+                            <td>약 4배</td>
+                            <td>Grotthuss 메커니즘</td>
+                        </tr>
+                        <tr>
+                            <td>Li⁺</td>
+                            <td>38.7</td>
+                            <td>1배 (기준)</td>
+                            <td>일반 이온</td>
+                        </tr>
+                        <tr>
+                            <td>K⁺</td>
+                            <td>73.5</td>
+                            <td>1.9배</td>
+                            <td>일반 이온</td>
+                        </tr>
+                        <tr>
+                            <td>Cl⁻</td>
+                            <td>76.3</td>
+                            <td>2.0배</td>
+                            <td>일반 이온</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="explanation">
+                    <strong>Grotthuss 메커니즘:</strong>
+                    <ul>
+                        <li><span class="highlight">양성자 릴레이:</span> H⁺가 직접 움직이지 않고 양성자만 전달</li>
+                        <li><span class="highlight">수소결합 네트워크:</span> 물 분자들의 연결 고리 이용</li>
+                        <li><span class="highlight">결과:</span> 물리적 이동 없이도 전하 이동 가능</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="research-highlight">
+                <h3>🔬 2024년 Science Advances 연구</h3>
+                <p><strong>주제:</strong> 기계학습을 이용한 이온 전도도 예측</p>
+                <p><strong>방법:</strong> Kohlrausch 법칙을 기반으로 한 AI 모델 개발</p>
+                <p><strong>성과:</strong> 새로운 전해질의 이온 전도도를 99% 정확도로 예측</p>
+                <p><strong>의미:</strong> 차세대 배터리 전해질 개발 시간 대폭 단축 가능</p>
+            </div>
+        </div>
+        
+        <!-- 7. 실습 문제 -->
+        <div class="section">
+            <h2 class="section-title">💡 실습 문제와 응용</h2>
+            
+            <div class="demo-box">
+                <h3>🧪 계산 연습</h3>
+                <p><strong>문제:</strong> CH₃COOH의 한계 몰전도도를 Kohlrausch 법칙으로 계산하세요.</p>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+                    <p><strong>주어진 값:</strong></p>
+                    <ul>
+                        <li>λ°(H⁺) = 349.8 S·cm²·mol⁻¹</li>
+                        <li>λ°(CH₃COO⁻) = 40.9 S·cm²·mol⁻¹</li>
+                    </ul>
+                    
+                    <p><strong>해답:</strong></p>
+                    <p>Λ°(CH₃COOH) = λ°(H⁺) + λ°(CH₃COO⁻)</p>
+                    <p>= 349.8 + 40.9 = <strong>390.7 S·cm²·mol⁻¹</strong></p>
+                </div>
+                
+                <p><strong>실험값:</strong> 390.5 S·cm²·mol⁻¹ (오차 < 0.1%)</p>
+            </div>
+            
+            <div class="theory-box">
+                <h3>🎯 응용 분야</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; border: 2px solid #4caf50;">
+                        <strong>약전해질 분석:</strong><br>
+                        해리도와 해리상수 계산
+                    </div>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 8px; border: 2px solid #ff9800;">
+                        <strong>용해도 측정:</strong><br>
+                        난용성 염의 용해도 결정
+                    </div>
+                    <div style="background: #f3e5f5; padding: 15px; border-radius: 8px; border: 2px solid #9c27b0;">
+                        <strong>운반수 계산:</strong><br>
+                        각 이온의 전류 기여도
+                    </div>
+                    <div style="background: #e1f5fe; padding: 15px; border-radius: 8px; border: 2px solid #03a9f4;">
+                        <strong>전해질 설계:</strong><br>
+                        최적 전도도 조성 예측
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 8. 핵심 정리 -->
+        <div class="section">
+            <h2 class="section-title">🎯 핵심 포인트 정리</h2>
+            
+            <div class="key-points">
+                <h4>💡 Kohlrausch 법칙의 핵심</h4>
+                <ul>
+                    <li><strong>이온의 독립성:</strong> 각 이온은 다른 이온과 무관하게 전도에 기여</li>
+                    <li><strong>가법성:</strong> 전체 전도도 = 개별 이온 전도도의 합</li>
+                    <li><strong>예측 가능성:</strong> 새로운 전해질의 전도도 계산 가능</li>
+                </ul>
+            </div>
+            
+            <div class="key-points">
+                <h4>📊 농도 의존성</h4>
+                <ul>
+                    <li><strong>강전해질:</strong> √c에 선형적으로 감소</li>
+                    <li><strong>약전해질:</strong> 해리도 증가로 급격한 변화</li>
+                    <li><strong>최적 농도:</strong> 전도도와 안정성의 균형점</li>
+                </ul>
+            </div>
+            
+            <div class="key-points">
+                <h4>🔋 실용적 의미</h4>
+                <ul>
+                    <li><strong>배터리 설계:</strong> 이온 전도도 최적화의 이론적 기반</li>
+                    <li><strong>성능 예측:</strong> 새로운 전해질의 특성 미리 계산</li>
+                    <li><strong>품질 관리:</strong> 전해질 순도와 성능 관리</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 다음 단계 -->
+        <div class="section">
+            <h2 class="section-title">🚀 다음 단계: 배터리 응용</h2>
+            <div class="theory-box">
+                <h3>🔗 연결고리</h3>
+                <p>지금까지 배운 모든 이론들을 <strong>실제 배터리</strong>에 적용해보겠습니다!</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+                    <div style="background: #ffebee; padding: 15px; border-radius: 8px;">
+                        <strong>Born 모델</strong><br>
+                        → Li⁺의 수화 에너지
+                    </div>
+                    <div style="background: #e3f2fd; padding: 15px; border-radius: 8px;">
+                        <strong>Debye-Hückel</strong><br>
+                        → 활성도 계수
+                    </div>
+                    <div style="background: #e8f5e8; padding: 15px; border-radius: 8px;">
+                        <strong>이온 이동</strong><br>
+                        → 확산과 전도
+                    </div>
+                    <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                        <strong>Kohlrausch 법칙</strong><br>
+                        → 운반수와 전도도
+                    </div>
+                </div>
+                
+                <p><strong>최종 목표:</strong> 실제 리튬이온 배터리의 설계와 최적화!</p>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="#" class="nav-button" onclick="goBack()">🏠 메인으로</a>
+            <a href="#" class="nav-button" onclick="prevSection()">← 이전: 이온의 움직임</a>
+            <a href="#" class="nav-button" onclick="nextSection()">다음: 배터리 응용 →</a>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            alert('메인 네비게이션 페이지로 돌아갑니다.');
+            // 실제로는 window.location.href = 'main_navigation.html';
+        }
+        
+        function prevSection() {
+            alert('이온의 움직임 섹션으로 이동합니다.');
+            // 실제로는 window.location.href = 'ion_movement_section.html';
+        }
+        
+        function nextSection() {
+            alert('배터리 응용 섹션으로 이동합니다.');
+            // 실제로는 window.location.href = 'battery_application_section.html';
+        }
+        
+        // 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(30px)';
+                section.style.transition = 'all 0.6s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
