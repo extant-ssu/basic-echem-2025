@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전위차법의 응용 (Applications of Potentiometry)</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+        .intro-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .application-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid;
+            transition: transform 0.3s ease;
+        }
+        .application-card:hover {
+            transform: translateY(-5px);
+        }
+        .app1 { border-left-color: #e74c3c; }
+        .app2 { border-left-color: #f39c12; }
+        .app3 { border-left-color: #27ae60; }
+        .app4 { border-left-color: #8e44ad; }
+        .diagram-section {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .diagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .diagram-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .diagram-card:hover {
+            transform: scale(1.05);
+        }
+        .diagram-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-top: 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .diagram-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-decoration: none;
+            color: white;
+        }
+        .case-study {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        .measurement-table {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        tr:hover {
+            background-color: #e8f4fd;
+        }
+        .equation-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+        }
+        .advantages-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .advantage-card {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .limitations-section {
+            background: #ffe6e6;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #e74c3c;
+        }
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .reference-card {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .reference-card h4 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .reference-card a {
+            color: #fff3cd;
+            text-decoration: underline;
+        }
+        .reference-card a:hover {
+            color: white;
+            text-decoration: none;
+        }
+        .practical-tips {
+            background: #e8f5e8;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #27ae60;
+        }
+        .tips-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .tip-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        .icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>전위차법의 응용 (Applications of Potentiometry)</h1>
+        
+        <div class="intro-section">
+            <h2 style="margin-top: 0;">실제 분석에서의 전위차법</h2>
+            <p>전위차법은 다양한 분야에서 광범위하게 사용되는 전기화학적 분석 방법입니다. 
+            pH 측정부터 복잡한 이온 분석까지, 정확하고 신속한 정량분석을 가능하게 합니다.</p>
+        </div>
+
+        <div class="diagram-section">
+            <h2 style="color: #f39c12; text-align: center; margin-top: 0;">고품질 오픈소스 다이어그램 참조</h2>
+            <p style="text-align: center; margin-bottom: 25px;">
+                아래의 고품질 다이어그램들을 통해 전위차법의 실제 응용을 시각적으로 이해할 수 있습니다.
+            </p>
+            
+            <div class="diagram-grid">
+                <div class="diagram-card">
+                    <h4 style="color: #e74c3c;">OpenStax - pH 측정 시스템</h4>
+                    <p><strong>Figure 14.2:</strong> pH 미터와 Glass 전극</p>
+                    <p><strong>Figure 14.3:</strong> pH 적정 곡선</p>
+                    <p><strong>License:</strong> CC-BY 4.0</p>
+                    <a href="https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh" class="diagram-link" target="_blank">
+                        pH 측정 다이어그램 보기
+                    </a>
+                </div>
+                
+                <div class="diagram-card">
+                    <h4 style="color: #f39c12;">LibreTexts - 전기화학 센서</h4>
+                    <p><strong>Ch 15.4:</strong> 이온 선택성 전극</p>
+                    <p><strong>Ch 15.5:</strong> 전위차 적정</p>
+                    <p><strong>License:</strong> CC-BY-NC-SA 4.0</p>
+                    <a href="https://chem.libretexts.org/Bookshelves/Analytical_Chemistry/Analytical_Chemistry_2.1_(Harvey)/15%3A_Electrochemical_Methods/15.04%3A_Potentiometric_Electrodes" class="diagram-link" target="_blank">
+                        ISE 시스템 다이어그램 보기
+                    </a>
+                </div>
+                
+                <div class="diagram-card">
+                    <h4 style="color: #27ae60;">NIST - 전기화학 측정</h4>
+                    <p><strong>Reference:</strong> 표준 전극 시스템</p>
+                    <p><strong>Applications:</strong> 정밀 전위차 측정</p>
+                    <p><strong>License:</strong> Public Domain</p>
+                    <a href="https://www.nist.gov/pml/electrochemical-metrology" class="diagram-link" target="_blank">
+                        NIST 전기화학 참조
+                    </a>
+                </div>
+                
+                <div class="diagram-card">
+                    <h4 style="color: #8e44ad;">ResearchGate - 실제 장비</h4>
+                    <p><strong>논문:</strong> 현대적 전위차 분석기</p>
+                    <p><strong>이미지:</strong> 상용 ISE 시스템</p>
+                    <p><strong>License:</strong> CC-BY 4.0</p>
+                    <a href="https://www.researchgate.net/figure/Schematic-diagram-of-potentiometric-measurement-system-with-ion-selective-electrodes_fig2_340367891" class="diagram-link" target="_blank">
+                        실제 측정 장비 보기
+                    </a>
+                </div>
+                
+                <div class="diagram-card">
+                    <h4 style="color: #3498db;">Wikipedia - 전극 구조</h4>
+                    <p><strong>Glass electrode:</strong> 상세 구조도</p>
+                    <p><strong>ISE types:</strong> 다양한 전극 유형</p>
+                    <p><strong>License:</strong> CC-BY-SA 4.0</p>
+                    <a href="https://en.wikipedia.org/wiki/Glass_electrode" class="diagram-link" target="_blank">
+                        전극 구조도 보기
+                    </a>
+                </div>
+                
+                <div class="diagram-card">
+                    <h4 style="color: #e67e22;">MIT OCW - 고급 응용</h4>
+                    <p><strong>Course 10.626:</strong> 전기화학 에너지</p>
+                    <p><strong>Lecture notes:</strong> 실제 측정 사례</p>
+                    <p><strong>License:</strong> CC-BY-NC-SA 4.0</p>
+                    <a href="https://ocw.mit.edu/courses/10-626-electrochemical-energy-systems-spring-2014/pages/lecture-notes/" class="diagram-link" target="_blank">
+                        고급 응용 보기
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="applications-grid">
+            <div class="application-card app1">
+                <h3 style="color: #e74c3c; text-align: center;">pH 측정</h3>
+                <div class="equation-box">
+                    <strong>E = E° - 0.059 × pH (25°C)</strong>
+                </div>
+                <h4>측정 원리:</h4>
+                <ul>
+                    <li>Glass 전극의 막 전위 변화 이용</li>
+                    <li>H⁺ 이온 농도에 따른 선형 응답</li>
+                    <li>넓은 pH 범위 (0-14) 측정 가능</li>
+                </ul>
+                <h4>응용 분야:</h4>
+                <ul>
+                    <li>환경 분석 (토양, 수질)</li>
+                    <li>식품 품질 관리</li>
+                    <li>생명과학 연구</li>
+                    <li>화학 공정 모니터링</li>
+                </ul>
+            </div>
+            
+            <div class="application-card app2">
+                <h3 style="color: #f39c12; text-align: center;">이온 농도 측정</h3>
+                <div class="equation-box">
+                    <strong>E = constant ± 0.059 × log[ion]</strong>
+                </div>
+                <h4>이온 선택성 전극 (ISE):</h4>
+                <ul>
+                    <li>F⁻, Cl⁻, Br⁻, I⁻ 할로겐 이온</li>
+                    <li>Na⁺, K⁺, Ca²⁺, Mg²⁺ 금속 이온</li>
+                    <li>NO₃⁻, NH₄⁺ 질소 화합물</li>
+                </ul>
+                <h4>특징:</h4>
+                <ul>
+                    <li>선택적 이온 감응</li>
+                    <li>빠른 응답 속도</li>
+                    <li>넓은 농도 범위</li>
+                    <li>간단한 조작</li>
+                </ul>
+            </div>
+            
+            <div class="application-card app3">
+                <h3 style="color: #27ae60; text-align: center;">전위차 적정</h3>
+                <div class="equation-box">
+                    <strong>종점: ΔE/ΔV = 최대값</strong>
+                </div>
+                <h4>적정 유형:</h4>
+                <ul>
+                    <li>산-염기 적정</li>
+                    <li>침전 적정 (AgCl, BaSO₄)</li>
+                    <li>착화합물 적정 (EDTA)</li>
+                    <li>산화-환원 적정</li>
+                </ul>
+                <h4>장점:</h4>
+                <ul>
+                    <li>종점 검출의 객관성</li>
+                    <li>탁한 용액에서도 측정 가능</li>
+                    <li>자동화 가능</li>
+                    <li>높은 정밀도</li>
+                </ul>
+            </div>
+            
+            <div class="application-card app4">
+                <h3 style="color: #8e44ad; text-align: center;">품질 관리 응용</h3>
+                <div class="equation-box">
+                    <strong>실시간 모니터링</strong>
+                </div>
+                <h4>산업 응용:</h4>
+                <ul>
+                    <li>제약 공정 pH 관리</li>
+                    <li>식품 산도 측정</li>
+                    <li>폐수 처리 모니터링</li>
+                    <li>도금욕 관리</li>
+                </ul>
+                <h4>의료 응용:</h4>
+                <ul>
+                    <li>혈액 가스 분석</li>
+                    <li>전해질 측정</li>
+                    <li>임상 진단</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="case-study">
+            <h2 style="margin-top: 0; text-align: center;">실제 측정 사례</h2>
+            <div class="measurement-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>측정 대상</th>
+                            <th>사용 전극</th>
+                            <th>측정 범위</th>
+                            <th>정확도</th>
+                            <th>응용 분야</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>pH</td>
+                            <td>Glass 전극</td>
+                            <td>0 - 14</td>
+                            <td>±0.01 pH</td>
+                            <td>환경, 식품, 의료</td>
+                        </tr>
+                        <tr>
+                            <td>F⁻</td>
+                            <td>LaF₃ ISE</td>
+                            <td>10⁻⁶ - 1 M</td>
+                            <td>±2%</td>
+                            <td>치약, 음용수</td>
+                        </tr>
+                        <tr>
+                            <td>Cl⁻</td>
+                            <td>Ag/AgCl ISE</td>
+                            <td>10⁻⁵ - 1 M</td>
+                            <td>±3%</td>
+                            <td>해수, 생리식염수</td>
+                        </tr>
+                        <tr>
+                            <td>Na⁺</td>
+                            <td>Glass ISE</td>
+                            <td>10⁻⁶ - 1 M</td>
+                            <td>±5%</td>
+                            <td>임상, 토양분석</td>
+                        </tr>
+                        <tr>
+                            <td>Ca²⁺</td>
+                            <td>PVC 막 ISE</td>
+                            <td>10⁻⁶ - 10⁻¹ M</td>
+                            <td>±3%</td>
+                            <td>생체액, 경수</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="advantages-section">
+            <div class="advantage-card">
+                <h4><span class="icon">✓</span>장점</h4>
+                <ul>
+                    <li>빠른 측정 속도</li>
+                    <li>비파괴적 측정</li>
+                    <li>넓은 농도 범위</li>
+                    <li>자동화 가능</li>
+                    <li>상대적으로 저렴</li>
+                    <li>실시간 모니터링</li>
+                </ul>
+            </div>
+            
+            <div class="advantage-card">
+                <h4><span class="icon">⚠</span>한계</h4>
+                <ul>
+                    <li>전극 표면 오염</li>
+                    <li>온도 의존성</li>
+                    <li>간섭 이온의 영향</li>
+                    <li>정기적인 보정 필요</li>
+                    <li>전극 수명 제한</li>
+                    <li>pH 극값에서 오차</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="practical-tips">
+            <h2 style="color: #27ae60; text-align: center; margin-top: 0;">실험적 고려사항</h2>
+            <div class="tips-list">
+                <div class="tip-item">
+                    <h4 style="color: #27ae60;">전극 관리</h4>
+                    <ul>
+                        <li>사용 전후 증류수로 세척</li>
+                        <li>적절한 보관 용액 사용</li>
+                        <li>정기적인 보정 (일일/주간)</li>
+                        <li>표면 손상 방지</li>
+                    </ul>
+                </div>
+                
+                <div class="tip-item">
+                    <h4 style="color: #27ae60;">측정 조건</h4>
+                    <ul>
+                        <li>온도 보정 적용</li>
+                        <li>충분한 평형 시간</li>
+                        <li>교반 속도 일정</li>
+                        <li>시료량 충분</li>
+                    </ul>
+                </div>
+                
+                <div class="tip-item">
+                    <h4 style="color: #27ae60;">오차 최소화</h4>
+                    <ul>
+                        <li>표준 용액으로 보정</li>
+                        <li>간섭 이온 제거</li>
+                        <li>pH 버퍼링</li>
+                        <li>접촉부 점검</li>
+                    </ul>
+                </div>
+                
+                <div class="tip-item">
+                    <h4 style="color: #27ae60;">데이터 처리</h4>
+                    <ul>
+                        <li>검량선 작성</li>
+                        <li>통계적 평가</li>
+                        <li>이상값 제거</li>
+                        <li>불확도 계산</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="color: #2c3e50; text-align: center; margin-top: 0;">고품질 참고 자료 및 다이어그램</h2>
+            
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>OpenStax Chemistry 2e</h4>
+                    <p>• Chapter 14: 산-염기 평형과 pH</p>
+                    <p>• Figure 14.2-14.4: pH 미터 구조</p>
+                    <p><strong>License:</strong> CC-BY 4.0</p>
+                    <a href="https://openstax.org/books/chemistry-2e/pages/14-2-ph-and-poh" target="_blank">다이어그램 보기</a>
+                </div>
+                
+                <div class="reference-card">
+                    <h4>LibreTexts - 분석화학</h4>
+                    <p>• Ch 15: 전기화학적 방법</p>
+                    <p>• 전위차 적정 곡선</p>
+                    <p><strong>License:</strong> CC-BY-NC-SA 4.0</p>
+                    <a href="https://chem.libretexts.org/Bookshelves/Analytical_Chemistry/Analytical_Chemistry_2.1_(Harvey)/15%3A_Electrochemical_Methods" target="_blank">다이어그램 보기</a>
+                </div>
+                
+                <div class="reference-card">
+                    <h4>IUPAC 권고사항</h4>
+                    <p>• 전극 표준화 방법</p>
+                    <p>• 전위차 측정 표준</p>
+                    <p><strong>License:</strong> Open Access</p>
+                    <a href="https://iupac.org/what-we-do/recommendations/" target="_blank">표준 참조</a>
+                </div>
+                
+                <div class="reference-card">
+                    <h4>ResearchGate 논문</h4>
+                    <p>• 현대적 ISE 시스템</p>
+                    <p>• 실제 응용 사례</p>
+                    <p><strong>License:</strong> CC-BY 4.0</p>
+                    <a href="https://www.researchgate.net/topic/Ion-Selective-Electrodes" target="_blank">연구 논문 보기</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 25px;">
+                <p style="color: #7f8c8d; font-style: italic; margin: 0;">
+                    모든 참고 자료는 Creative Commons 또는 오픈 액세스 라이선스로 자유롭게 사용 가능합니다.
+                </p>
+            </div>
+        </div>
+
+        <div style="background: linear-gradient(135deg, #00b894, #00a085); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+            <h2 style="margin-top: 0;">전위차법의 미래 전망</h2>
+            <p style="margin-bottom: 0;">
+                마이크로전극, 나노센서, 무선 모니터링 시스템의 발달로 더욱 정밀하고 편리한 전위차 측정이 가능해지고 있습니다. 
+                IoT 기술과 결합하여 실시간 원격 분석 시스템으로 발전하고 있습니다.
+            </p>
+        </div>
+    </div>
+</body>
+</html>

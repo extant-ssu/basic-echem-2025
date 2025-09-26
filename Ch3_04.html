@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기준 전극의 종류와 구조</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+        .electrode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .electrode-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+        .electrode-card:hover {
+            transform: translateY(-5px);
+        }
+        .electrode-diagram {
+            position: relative;
+            height: 350px;
+            background: linear-gradient(to bottom, #ecf0f1 0%, #bdc3c7 100%);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            border: 2px solid #34495e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        /* Standard Hydrogen Electrode */
+        .she-electrode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: space-around;
+        }
+        .hydrogen-inlet {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+        .gas-line {
+            width: 3px;
+            height: 30px;
+            background: #3498db;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .pt-electrode {
+            width: 60px;
+            height: 120px;
+            background: linear-gradient(to bottom, #95a5a6, #7f8c8d);
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .pt-black {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            background: #2c3e50;
+            border-radius: 5px;
+        }
+        .solution-hcl {
+            width: 80%;
+            height: 80px;
+            background: rgba(231, 76, 60, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #c0392b;
+        }
+        
+        /* Ag/AgCl Electrode */
+        .agcl-electrode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: space-around;
+        }
+        .ag-wire {
+            width: 12px;
+            height: 140px;
+            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
+            border-radius: 6px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2c3e50;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .agcl-coating {
+            width: 25px;
+            height: 50px;
+            background: linear-gradient(to bottom, #ecf0f1, #bdc3c7);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        .kcl-solution {
+            width: 80%;
+            height: 100px;
+            background: rgba(52, 152, 219, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        /* Calomel Electrode */
+        .calomel-electrode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: space-around;
+        }
+        .pt-wire {
+            width: 10px;
+            height: 80px;
+            background: #7f8c8d;
+            border-radius: 5px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .hg-pool {
+            width: 70px;
+            height: 35px;
+            background: linear-gradient(to bottom, #bdc3c7, #7f8c8d);
+            border-radius: 35px;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .hg2cl2-paste {
+            width: 75px;
+            height: 45px;
+            background: linear-gradient(to bottom, #f1c40f, #f39c12);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .kcl-saturated {
+            width: 80%;
+            height: 90px;
+            background: rgba(52, 152, 219, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2980b9;
+            text-align: center;
+        }
+        
+        /* Mercury Sulfate Electrode */
+        .hg-sulfate-electrode {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            justify-content: space-around;
+        }
+        .hg2so4-layer {
+            width: 75px;
+            height: 45px;
+            background: linear-gradient(to bottom, #e74c3c, #c0392b);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .k2so4-solution {
+            width: 80%;
+            height: 90px;
+            background: rgba(241, 196, 15, 0.4);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f39c12;
+            text-align: center;
+        }
+        .reaction-equation {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .potential-table {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e8f4fd;
+        }
+        .advantages-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .advantage-card {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .advantage-card h4 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+        .potential-comparison {
+            position: relative;
+            height: 80px;
+            background: linear-gradient(to right, #ff7675, #fd79a8, #fdcb6e, #a29bfe, #74b9ff);
+            border-radius: 10px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            color: white;
+            font-weight: bold;
+        }
+        .electrode-point {
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+        .electrode-label {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .junction-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .junction-card {
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .porous-frit {
+            width: 100%;
+            height: 10px;
+            background: repeating-linear-gradient(
+                90deg,
+                #7f8c8d,
+                #7f8c8d 2px,
+                #bdc3c7 2px,
+                #bdc3c7 4px
+            );
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>기준 전극 (Reference Electrodes)</h1>
+        
+        <div style="background: linear-gradient(135deg, #ff7675, #fd79a8); color: white; padding: 25px; border-radius: 15px; margin: 30px 0; text-align: center;">
+            <h2 style="margin-top: 0;">고품질 오픈소스 다이어그램 참조</h2>
+            <p><strong>OpenStax Chemistry 2e</strong> - Figure 17.5 & 17.6</p>
+            <p>License: <strong>CC-BY 4.0</strong> (상업적 사용 가능)</p>
+            <a href="https://openstax.org/books/chemistry-2e/pages/17-3-electrode-and-cell-potentials" target="_blank" style="color: #fff3cd; text-decoration: underline;">표준 수소 전극 및 기준 전극 다이어그램</a>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #ff7675, #fd79a8); color: white; padding: 25px; border-radius: 15px; margin: 30px 0; text-align: center;">
+            <h2 style="margin-top: 0;">기준 전극의 필수 조건</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                    <strong>일정한 전위</strong><br>
+                    시료의 조성에 무관하게 일정한 전위 유지
+                </div>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                    <strong>이상적 비분극 전극</strong><br>
+                    전류가 흘러도 전위 변화 없음
+                </div>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                    <strong>낮은 전류 밀도</strong><br>
+                    실제 전압계의 임피던스 저항 극복
+                </div>
+                <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px;">
+                    <strong>온도 안정성</strong><br>
+                    온도 변화에 대한 전위 변화 최소화
+                </div>
+            </div>
+        </div>
+        
+        <div class="electrode-grid">
+            <div class="electrode-card">
+                <h3 style="color: #2c3e50; text-align: center;">표준 수소 전극 (SHE)</h3>
+                <div class="electrode-diagram">
+                    <div class="she-electrode">
+                        <div class="hydrogen-inlet">
+                            H₂
+                            <div class="gas-line"></div>
+                        </div>
+                        <div style="font-size: 12px; color: #7f8c8d;">1 atm</div>
+                        <div class="pt-electrode">
+                            Pt
+                            <div class="pt-black"></div>
+                        </div>
+                        <div class="solution-hcl">1 M HCl</div>
+                    </div>
+                </div>
+                <div class="reaction-equation">
+                    <strong>2H⁺ + 2e⁻ ⇌ H₂(g)</strong><br>
+                    E° = 0.000 V (정의)
+                </div>
+                <div style="font-size: 14px; color: #7f8c8d;">
+                    • 모든 전극 전위의 기준<br>
+                    • 실제 사용에는 부적합<br>
+                    • H₂ 가스 공급 필요
+                </div>
+            </div>
+            
+            <div class="electrode-card">
+                <h3 style="color: #2c3e50; text-align: center;">은/염화은 전극 (Ag/AgCl)</h3>
+                <div class="electrode-diagram">
+                    <div class="agcl-electrode">
+                        <div class="ag-wire">Ag</div>
+                        <div class="agcl-coating">AgCl</div>
+                        <div style="font-size: 10px; color: #7f8c8d;">AgCl 층</div>
+                        <div class="kcl-solution">KCl (포화)</div>
+                    </div>
+                </div>
+                <div class="reaction-equation">
+                    <strong>AgCl(s) + e⁻ ⇌ Ag(s) + Cl⁻(aq)</strong><br>
+                    E° = +0.197 V (1M KCl)
+                </div>
+                <div style="font-size: 14px; color: #7f8c8d;">
+                    • 가장 널리 사용<br>
+                    • 안정하고 재현성 우수<br>
+                    • 온도 계수 낮음
+                </div>
+            </div>
+            
+            <div class="electrode-card">
+                <h3 style="color: #2c3e50; text-align: center;">포화 칼로멜 전극 (SCE)</h3>
+                <div class="electrode-diagram">
+                    <div class="calomel-electrode">
+                        <div class="pt-wire">Pt</div>
+                        <div class="hg-pool">Hg pool</div>
+                        <div class="hg2cl2-paste">Hg₂Cl₂<br>paste</div>
+                        <div class="kcl-saturated">KCl (포화)</div>
+                    </div>
+                </div>
+                <div class="reaction-equation">
+                    <strong>Hg₂Cl₂(s) + 2e⁻ ⇌ 2Hg(l) + 2Cl⁻(aq)</strong><br>
+                    E° = +0.242 V (25°C)
+                </div>
+                <div style="font-size: 14px; color: #7f8c8d;">
+                    • 전통적으로 널리 사용<br>
+                    • 제조가 쉬움<br>
+                    • 수은 독성 문제
+                </div>
+            </div>
+            
+            <div class="electrode-card">
+                <h3 style="color: #2c3e50; text-align: center;">수은/황산수은 전극</h3>
+                <div class="electrode-diagram">
+                    <div class="hg-sulfate-electrode">
+                        <div class="pt-wire">Pt</div>
+                        <div class="hg-pool">Hg pool</div>
+                        <div class="hg2so4-layer">Hg₂SO₄</div>
+                        <div class="k2so4-solution">K₂SO₄ (포화)</div>
+                    </div>
+                </div>
+                <div class="reaction-equation">
+                    <strong>Hg₂SO₄(s) + 2e⁻ ⇌ 2Hg(l) + SO₄²⁻(aq)</strong><br>
+                    E° = +0.615 V (25°C)
+                </div>
+                <div style="font-size: 14px; color: #7f8c8d;">
+                    • 황산염 용액에 적합<br>
+                    • 염화물 간섭 없음<br>
+                    • 특수 용도
+                </div>
+            </div>
+        </div>
+        
+        <div class="potential-table">
+            <h2 style="color: #2c3e50; text-align: center;">수용액 전기화학에서 사용되는 기준 전극과 전위 (25°C)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>전극 반응</th>
+                        <th>이름</th>
+                        <th>용액</th>
+                        <th>전위 (vs. SHE, V)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AgCl(s) + e⁻ ⇌ Ag(s) + Cl⁻(aq)</td>
+                        <td>Ag|AgCl|Cl⁻, silver-silver chloride electrode</td>
+                        <td>A<sub>Cl⁻</sub> = 1 M</td>
+                        <td>0.2224</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>포화 KCl (4.2 M)</td>
+                        <td>0.1976</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>KCl (1 M)</td>
+                        <td>0.2368</td>
+                    </tr>
+                    <tr>
+                        <td>Hg₂Cl₂(s) + 2e⁻ ⇌ 2Hg(l) + 2Cl⁻(aq)</td>
+                        <td>Hg|Hg₂Cl₂|Cl⁻, calomel electrode</td>
+                        <td>A<sub>Cl⁻</sub> = 1</td>
+                        <td>0.2682</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>포화 KCl (4.2 M)</td>
+                        <td>0.2415</td>
+                    </tr>
+                    <tr>
+                        <td>Hg₂SO₄(s) + 2e⁻ ⇌ 2Hg(l) + SO₄²⁻(aq)</td>
+                        <td>Hg|Hg₂SO₄|SO₄²⁻, mercury sulfate electrode</td>
+                        <td>A<sub>SO₄²⁻</sub> = 1</td>
+                        <td>0.6158</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>포화 K₂SO₄</td>
+                        <td>0.650</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="potential-comparison">
+            <div>
+                <div class="electrode-point">
+                    <div class="electrode-label">SHE<br>0.000 V</div>
+                </div>
+            </div>
+            <div>
+                <div class="electrode-point">
+                    <div class="electrode-label">Ag/AgCl<br>+0.197 V</div>
+                </div>
+            </div>
+            <div>
+                <div class="electrode-point">
+                    <div class="electrode-label">SCE<br>+0.242 V</div>
+                </div>
+            </div>
+            <div>
+                <div class="electrode-point">
+                    <div class="electrode-label">Hg/Hg₂SO₄<br>+0.615 V</div>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 30px 0;">
+            <h2 style="color: #2c3e50; text-align: center; margin-top: 0;">기준 전극의 구조적 특징</h2>
+            
+            <div class="junction-types">
+                <div class="junction-card">
+                    <h4>다공성 유리 연결부</h4>
+                    <div class="porous-frit"></div>
+                    <p style="font-size: 14px;">• 전해질 용출률: ~3 mL/day<br>• 낮은 전기저항 (0.1 kΩ)<br>• 오염 용액에 적합</p>
+                </div>
+                
+                <div class="junction-card">
+                    <h4>플라스틱 섬유 연결부</h4>
+                    <div style="width: 100%; height: 10px; background: linear-gradient(90deg, #74b9ff, #0984e3); border-radius: 5px; margin: 10px 0;"></div>
+                    <p style="font-size: 14px;">• 중간 용출률<br>• 중간 전기저항<br>• 범용 사용</p>
+                </div>
+                
+                <div class="junction-card">
+                    <h4>핀홀 연결부</h4>
+                    <div style="width: 100%; height: 10px; background: #2d3436; border-radius: 5px; margin: 10px 0; position: relative;">
+                        <div style="width: 2px; height: 2px; background: white; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+                    </div>
+                    <p style="font-size: 14px;">• 낮은 용출률<br>• 높은 전기저항<br>• 순수 용액에 적합</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="color: #2c3e50; text-align: center; margin-top: 0;">추천 오픈소스 다이어그램</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div style="background: linear-gradient(135deg, #3498db, #2980b9); color: white; padding: 20px; border-radius: 10px;">
+                    <h4>OpenStax - 표준 수소 전극</h4>
+                    <p>• Figure 17.5: 완전한 SHE 구조</p>
+                    <p>• Figure 17.6: SHE vs Cu²⁺/Cu 전지</p>
+                    <p>• License: CC-BY 4.0</p>
+                    <a href="https://openstax.org/books/chemistry-2e/pages/17-3-electrode-and-cell-potentials" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; padding: 20px; border-radius: 10px;">
+                    <h4>LibreTexts - 기준 전극 유형</h4>
+                    <p>• Ag/AgCl 전극 구조</p>
+                    <p>• Calomel 전극 시스템</p>
+                    <p>• License: CC-BY-NC-SA 4.0</p>
+                    <a href="https://chem.libretexts.org/Bookshelves/Analytical_Chemistry/Supplemental_Modules_(Analytical_Chemistry)/Electrochemistry" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #27ae60, #229954); color: white; padding: 20px; border-radius: 10px;">
+                    <h4>Wikipedia - 전극 유형 비교</h4>
+                    <p>• 다양한 기준 전극</p>
+                    <p>• 염다리 구조</p>
+                    <p>• License: CC-BY-SA 4.0</p>
+                    <a href="https://en.wikipedia.org/wiki/Electrochemical_cell" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white; padding: 20px; border-radius: 10px;">
+                    <h4>MIT OCW - 고급 전극 시스템</h4>
+                    <p>• 전기화학 에너지 시스템</p>
+                    <p>• 고온/고압 기준 전극</p>
+                    <p>• License: CC-BY-NC-SA 4.0</p>
+                    <a href="https://ocw.mit.edu/courses/10-626-electrochemical-energy-systems-spring-2014/" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <p style="color: #7f8c8d; font-style: italic;">
+                    Table 17.1 (OpenStax): 수용액 전기화학에서 사용되는 기준 전극과 전위 (25°C)
+                </p>
+            </div>
+        </div>
+        
+        <div style="background: linear-gradient(135deg, #00b894, #00a085); color: white; padding: 25px; border-radius: 15px; text-align: center;">
+            <h2 style="margin-top: 0;">전지 전위 측정 공식</h2>
+            <div style="font-size: 24px; margin: 20px 0;">
+                <strong>E<sub>cell</sub> = (E<sub>cat</sub> - E<sub>an</sub>) + E<sub>j</sub></strong>
+            </div>
+            <p style="font-style: italic; margin-bottom: 0;">여기서 E<sub>j</sub>는 접촉 전위 (Junction potential)</p>
+        </div>
+    </div>
+</body>
+</html>

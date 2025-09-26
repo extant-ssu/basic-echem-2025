@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이온 선택성 전극과 Glass 전극</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            color: #333;
+        }
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 32px;
+        }
+        .electrode-section {
+            display: flex;
+            justify-content: space-around;
+            margin: 40px 0;
+            gap: 30px;
+        }
+        .electrode-container {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .electrode-diagram {
+            position: relative;
+            height: 450px;
+            background: linear-gradient(to bottom, #ecf0f1 0%, #bdc3c7 100%);
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            border: 2px solid #34495e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* pH electrode components */
+        .ph-electrode-body {
+            width: 25px;
+            height: 200px;
+            background: linear-gradient(to bottom, #95a5a6, #7f8c8d);
+            border-radius: 12px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .internal-reference {
+            width: 8px;
+            height: 120px;
+            background: #bdc3c7;
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+        .internal-solution {
+            width: 80px;
+            height: 60px;
+            background: rgba(46, 204, 113, 0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .glass-bulb {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #34495e;
+            border-radius: 50%;
+            background: rgba(52, 152, 219, 0.3);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .glass-membrane {
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 6px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            border-radius: 3px;
+            animation: glow 2s ease-in-out infinite;
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #e74c3c; }
+            50% { box-shadow: 0 0 15px #e74c3c, 0 0 20px #e74c3c; }
+        }
+
+        /* Complete ISE system */
+        .ise-system {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            height: 100%;
+            position: relative;
+        }
+        .ise-electrode {
+            width: 80px;
+            height: 200px;
+            background: linear-gradient(to bottom, #95a5a6, #7f8c8d);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .reference-electrode {
+            width: 80px;
+            height: 200px;
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .sample-beaker {
+            width: 160px;
+            height: 100px;
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            border-radius: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .voltmeter-ise {
+            width: 100px;
+            height: 70px;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .connecting-wires {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .wire-ise {
+            height: 3px;
+            background: #2c3e50;
+            position: absolute;
+            top: 50px;
+        }
+        .left-wire-ise {
+            left: 20px;
+            width: 120px;
+            transform: rotate(-20deg);
+            transform-origin: right center;
+        }
+        .right-wire-ise {
+            right: 20px;
+            width: 120px;
+            transform: rotate(20deg);
+            transform-origin: left center;
+        }
+        .reaction-box {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+            font-size: 18px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .donnan-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #fd79a8, #e84393);
+            border-radius: 15px;
+            color: white;
+        }
+        .membrane-side {
+            text-align: center;
+            flex: 1;
+        }
+        .membrane-barrier {
+            width: 20px;
+            height: 150px;
+            background: linear-gradient(to bottom, #2d3436, #636e72);
+            border-radius: 10px;
+            position: relative;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        .ion-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+        }
+        .ion {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .na-ion { background: #74b9ff; }
+        .cl-ion { background: #fd79a8; }
+        .x-ion { background: #fdcb6e; color: #2d3436; }
+        .equation-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .equation-box {
+            background: #f1f2f6;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #0984e3;
+        }
+        .potential-graph {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to right, #00b894, #00a085);
+            border-radius: 10px;
+            position: relative;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .potential-line {
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            width: 80%;
+            height: 3px;
+            background: #2d3436;
+            transform-origin: left center;
+            animation: potential-change 4s ease-in-out infinite;
+        }
+        @keyframes potential-change {
+            0%, 100% { transform: rotateZ(0deg) scaleX(0.5); }
+            50% { transform: rotateZ(-10deg) scaleX(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>이온 선택성 전극(ISE)과 Glass 전극</h1>
+        
+        <div style="background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #2c3e50; padding: 25px; border-radius: 15px; margin: 30px 0; text-align: center;">
+            <h2 style="margin-top: 0;">고품질 오픈소스 다이어그램 참조</h2>
+            <p><strong>ResearchGate & ASD Library</strong> - CC-BY 4.0 License</p>
+            <a href="https://asdlib.org/imageandvideoexchangeforum/schematic-diagram-of-a-potentiometric-electrochemical-cell/" target="_blank" style="color: #e84393; text-decoration: underline;">전위차 전극 시스템 다이어그램</a>
+        </div>
+        
+        <div class="electrode-section">
+            <div class="electrode-container">
+                <h2 style="color: #2c3e50; text-align: center;">Glass pH 전극 구조</h2>
+                <div class="electrode-diagram">
+                    <div class="internal-solution">
+                        0.1 M HCl<br>
+                        (내부용액)
+                    </div>
+                    <div class="ph-electrode-body">
+                        <div class="internal-reference"></div>
+                    </div>
+                    <div class="glass-bulb">
+                        유리막<br>
+                        (~50 μm)
+                        <div class="glass-membrane"></div>
+                    </div>
+                </div>
+                <div style="text-align: center; font-size: 14px;">
+                    <p><strong>1.</strong> Ag/AgCl 내부 기준전극</p>
+                    <p><strong>2.</strong> 내부용액 (0.1 M HCl)</p>
+                    <p><strong>3.</strong> Glass 막 (~50 μm)</p>
+                    <p><strong>4.</strong> 수화된 겔층 (~10 nm)</p>
+                </div>
+            </div>
+            
+            <div class="electrode-container">
+                <h2 style="color: #2c3e50; text-align: center;">ISE 전체 시스템</h2>
+                <div class="electrode-diagram">
+                    <div class="ise-system">
+                        <div class="ise-electrode">
+                            ISE<br>
+                            (지시전극)
+                        </div>
+                        <div class="reference-electrode">
+                            REF<br>
+                            (기준전극)
+                        </div>
+                        <div class="sample-beaker">
+                            Sample Solution
+                        </div>
+                        <div class="voltmeter-ise">
+                            <div>V</div>
+                            <div>E_cell</div>
+                        </div>
+                        <div class="connecting-wires">
+                            <div class="wire-ise left-wire-ise"></div>
+                            <div class="wire-ise right-wire-ise"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; font-size: 16px; font-weight: bold;">
+                    E<sub>cell</sub> = E<sub>ISE</sub> - E<sub>ref</sub>
+                </div>
+            </div>
+        </div>
+        
+        <div class="reaction-box">
+            <h3 style="margin-top: 0;">Glass 전극의 이온 교환 반응</h3>
+            <div style="font-size: 24px; margin: 20px 0;">
+                <strong>H⁺ + Na⁺Gl⁻ ⇌ Na⁺ + H⁺Gl⁻</strong>
+            </div>
+            <p>H⁺ 이온이 유리의 수화층으로 확산하여 Na⁺ 이온을 치환</p>
+        </div>
+        
+        <div style="background: #dff9fb; padding: 25px; border-radius: 15px; margin: 30px 0;">
+            <h2 style="color: #22a6b3; text-align: center; margin-top: 0;">Donnan 평형 (Donnan Equilibrium)</h2>
+            
+            <div class="donnan-diagram">
+                <div class="membrane-side">
+                    <h4>전해질 I</h4>
+                    <div class="ion-container">
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <div class="ion cl-ion">Cl⁻</div>
+                            <div class="ion cl-ion">Cl⁻</div>
+                            <div class="ion cl-ion">Cl⁻</div>
+                        </div>
+                    </div>
+                    <div>0.1 M NaCl</div>
+                </div>
+                
+                <div class="membrane-barrier"></div>
+                
+                <div class="membrane-side">
+                    <h4>전해질 II</h4>
+                    <div class="ion-container">
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                            <div class="ion na-ion">Na⁺</div>
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <div class="ion x-ion">X¹⁰⁰⁻</div>
+                        </div>
+                    </div>
+                    <div>0.002 M Na<sub>z</sub>X (z=100)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="equation-section">
+            <div class="equation-box">
+                <h3 style="color: #0984e3; margin-top: 0;">Donnan 전위</h3>
+                <div style="font-size: 16px;">
+                    <p><strong>ΔΨ<sub>Donnan</sub> = (RT/F)ln[C<sub>Na⁺</sub>(I)/C<sub>Na⁺</sub>(II)]</strong></p>
+                    <p><strong>= (RT/F)ln[C<sub>Cl⁻</sub>(II)/C<sub>Cl⁻</sub>(I)]</strong></p>
+                    <br>
+                    <p><strong>ΔΨ<sub>Donnan</sub> = 0.059log(0.025/0.075)</strong></p>
+                    <p><strong>= -28 mV</strong></p>
+                </div>
+            </div>
+            
+            <div class="equation-box">
+                <h3 style="color: #0984e3; margin-top: 0;">전기적 중성 조건</h3>
+                <div style="font-size: 16px;">
+                    <p><strong>전해질 I:</strong> C<sub>Na⁺</sub>(I) = C<sub>Cl⁻</sub>(I)</p>
+                    <p><strong>전해질 II:</strong> C<sub>Na⁺</sub>(II) = C<sub>Cl⁻</sub>(II) + zC<sub>X<sup>z-</sup></sub>(II)</p>
+                    <br>
+                    <p><strong>결과:</strong></p>
+                    <p>• Cl⁻ 이온이 전해질 I에서 II로 이동</p>
+                    <p>• 전위는 전해질 I이 높아지고 II는 낮아짐</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="donnan-diagram" style="background: linear-gradient(135deg, #00cec9, #00b894); color: white; padding: 25px; border-radius: 15px; margin: 40px 0;">
+            <h2 style="text-align: center; margin-top: 0;">추천 오픈소스 다이어그램</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                    <h4>ASD Library - 전위차 전극</h4>
+                    <p>• 완전한 전위차 전기화학 전지</p>
+                    <p>• pH 전극 시스템 구조</p>
+                    <p>• License: CC-BY 4.0</p>
+                    <a href="https://asdlib.org/imageandvideoexchangeforum/schematic-diagram-of-a-potentiometric-electrochemical-cell/" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                    <h4>ResearchGate - ISE 시스템</h4>
+                    <p>• 3전극 전기화학 전지</p>
+                    <p>• 작업/기준/보조전극 구조</p>
+                    <p>• License: CC-BY 4.0</p>
+                    <a href="https://www.researchgate.net/figure/a-Schematic-of-a-conventional-electrochemical-cell-for-voltammetric-measurement-The_fig1_301827836" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                    <h4>OpenStax - 전극 전위</h4>
+                    <p>• 표준 수소 전극과의 비교</p>
+                    <p>• 농도 의존성</p>
+                    <p>• License: CC-BY 4.0</p>
+                    <a href="https://openstax.org/books/chemistry-2e/pages/17-3-electrode-and-cell-potentials" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 10px;">
+                    <h4>Wikipedia - 전극 유형</h4>
+                    <p>• 다양한 ISE 유형</p>
+                    <p>• Glass 막 전극 구조</p>
+                    <p>• License: CC-BY-SA 4.0</p>
+                    <a href="https://en.wikipedia.org/wiki/Electrochemical_cell" target="_blank" style="color: #fff3cd;">다이어그램 보기</a>
+                </div>
+            </div>
+        </div>
+        
+        <div style="background: #f1f2f6; padding: 25px; border-radius: 15px; border-left: 5px solid #e17055;">
+            <h3 style="color: #e17055; margin-top: 0;">Glass 전극의 Nernst 응답</h3>
+            <div style="text-align: center; font-size: 20px; margin: 20px 0;">
+                <strong>E<sub>m</sub> = (RT/F)ln(A<sub>H⁺</sub><sup>ex</sup>/A<sub>H⁺</sub><sup>in</sup>)</strong>
+            </div>
+            <p style="text-align: center; font-style: italic;">계면 1과 계면 2의 수화층 H⁺ 이온의 활동도가 같다고 가정</p>
+        </div>
+    </div>
+</body>
+</html>

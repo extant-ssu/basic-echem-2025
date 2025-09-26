@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전위차법 전기화학 전지의 기본 구조</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        .cell-diagram {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            width: 800px;
+            height: 300px;
+            margin: 30px auto;
+        }
+        .half-cell {
+            width: 180px;
+            height: 220px;
+            border: 3px solid #34495e;
+            border-radius: 10px;
+            position: relative;
+            background: linear-gradient(to bottom, #ecf0f1 0%, #bdc3c7 100%);
+        }
+        .left-cell {
+            position: absolute;
+            left: 50px;
+        }
+        .right-cell {
+            position: absolute;
+            right: 50px;
+        }
+        .electrode {
+            width: 12px;
+            height: 140px;
+            position: absolute;
+            left: 50%;
+            top: 15px;
+            transform: translateX(-50%);
+            border-radius: 6px;
+        }
+        .ag-electrode {
+            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
+        }
+        .indicator-electrode {
+            background: linear-gradient(to bottom, #f39c12, #e67e22);
+        }
+        .solution {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            right: 15px;
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+        }
+        .agcl-solution {
+            background: rgba(52, 152, 219, 0.4);
+        }
+        .sample-solution {
+            background: rgba(46, 204, 113, 0.4);
+        }
+        .salt-bridge {
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .external-circuit {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+        }
+        .wire {
+            height: 4px;
+            background: #2c3e50;
+            position: absolute;
+            top: 30px;
+        }
+        .left-wire {
+            left: 140px;
+            width: 200px;
+        }
+        .right-wire {
+            right: 140px;
+            width: 200px;
+        }
+        .voltmeter {
+            width: 100px;
+            height: 70px;
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .electron-flow {
+            position: absolute;
+            top: 32px;
+            left: 140px;
+            width: 200px;
+            height: 0;
+            border-top: 2px dashed #f39c12;
+        }
+        .electron-arrow {
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #f39c12;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+        }
+        .ion-flow-arrows {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+            color: #e74c3c;
+        }
+        .labels {
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-around;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .equation {
+            background: #ecf0f1;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            color: #2c3e50;
+            border-left: 4px solid #3498db;
+        }
+        .components {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .component {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        .component h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>전위차법 전기화학 전지의 기본 구조</h1>
+        
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 15px; margin: 30px 0; text-align: center;">
+            <h2 style="margin-top: 0;">고품질 오픈소스 다이어그램 참조</h2>
+            <p><strong>OpenStax Chemistry 2e</strong> - Figure 17.3 & 17.4</p>
+            <p>License: <strong>CC-BY 4.0</strong> (상업적 사용 가능)</p>
+            <a href="https://openstax.org/books/chemistry-2e/pages/17-2-galvanic-cells" target="_blank" style="color: #fff3cd; text-decoration: underline;">전기화학 전지 다이어그램 보기</a>
+        </div>
+        
+        <div class="cell-diagram">
+            <!-- Left half-cell (Reference electrode) -->
+            <div class="half-cell left-cell">
+                <div class="electrode ag-electrode"></div>
+                <div class="solution agcl-solution">
+                    Ag/AgCl<br>
+                    KCl (sat'd)
+                </div>
+            </div>
+            
+            <!-- Salt bridge -->
+            <div class="salt-bridge">
+                KCl
+            </div>
+            
+            <!-- Right half-cell (Indicator electrode) -->
+            <div class="half-cell right-cell">
+                <div class="electrode indicator-electrode"></div>
+                <div class="solution sample-solution">
+                    Sample<br>
+                    Solution
+                </div>
+            </div>
+            
+            <!-- External circuit -->
+            <div class="external-circuit">
+                <div class="wire left-wire"></div>
+                <div class="wire right-wire"></div>
+                <div class="electron-flow">
+                    <div class="electron-arrow"></div>
+                </div>
+                <div class="voltmeter">
+                    <div>V</div>
+                    <div>E_cell</div>
+                </div>
+            </div>
+            
+            <!-- Ion flow indication -->
+            <div class="ion-flow-arrows">
+                ← Cl⁻ | K⁺ →
+            </div>
+        </div>
+        
+        <div class="labels">
+            <span>기준 전극 (Ag/AgCl)</span>
+            <span>염다리 (KCl)</span>
+            <span>지시 전극</span>
+        </div>
+        
+        <div class="equation">
+            <strong>전지 전위:</strong> E<sub>cell</sub> = E<sub>지시전극</sub> - E<sub>기준전극</sub>
+        </div>
+        
+        <div class="components">
+            <div class="component">
+                <h3>기준 전극 (Reference Electrode)</h3>
+                <p>• 일정한 전위를 유지</p>
+                <p>• Ag/AgCl 전극 (E° = +0.197 V)</p>
+                <p>• KCl 포화용액 사용</p>
+            </div>
+            
+            <div class="component">
+                <h3>지시 전극 (Indicator Electrode)</h3>
+                <p>• 시료의 이온 농도에 반응</p>
+                <p>• 산화-환원 반응 발생</p>
+                <p>• 측정하고자 하는 이온에 선택적</p>
+            </div>
+            
+            <div class="component">
+                <h3>염다리 (Salt Bridge)</h3>
+                <p>• 두 전극을 전기적으로 연결</p>
+                <p>• 이온 이동 경로 제공</p>
+                <p>• 다공성 유리로 분리</p>
+            </div>
+            
+            <div class="component">
+                <h3>전위차계 (Voltmeter)</h3>
+                <p>• 높은 내부저항 (>10¹² Ω)</p>
+                <p>• 무전류 상태에서 측정</p>
+                <p>• mV 단위로 정밀 측정</p>
+            </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 15px; margin: 30px 0;">
+            <h2 style="color: #2c3e50; text-align: center; margin-top: 0;">추천 오픈소스 다이어그램</h2>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 10px; border-left: 4px solid #27ae60;">
+                    <h4 style="color: #27ae60; margin-top: 0;">OpenStax Chemistry 2e</h4>
+                    <p><strong>Figure 17.3:</strong> 완전한 전기화학 전지</p>
+                    <p><strong>Figure 17.4:</strong> 외부회로가 있는 표준 전지</p>
+                    <p><strong>License:</strong> CC-BY 4.0</p>
+                    <a href="https://openstax.org/books/chemistry-2e/pages/17-2-galvanic-cells" target="_blank" style="color: #27ae60;">다이어그램 보기</a>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 4px solid #f39c12;">
+                    <h4 style="color: #f39c12; margin-top: 0;">Chemistry LibreTexts</h4>
+                    <p><strong>Galvanic Cells:</strong> 상세한 전극 구조</p>
+                    <p><strong>Cell Diagrams:</strong> 전지 표기법</p>
+                    <p><strong>License:</strong> CC-BY-NC-SA 4.0</p>
+                    <a href="https://chem.libretexts.org/Bookshelves/General_Chemistry/Chemistry_1e_(OpenSTAX)/17:_Electrochemistry/17.02:_Galvanic_Cells" target="_blank" style="color: #f39c12;">다이어그램 보기</a>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px; font-style: italic; color: #7f8c8d;">
+                위 다이어그램들은 모두 Creative Commons 라이선스로 교육적 사용이 가능합니다.
+            </div>
+        </div>
+    </div>
+</body>
+</html>
