@@ -1448,6 +1448,182 @@
                         
                         <canvas id="bvCanvas" width="700" height="400" style="display: block; margin: 30px auto; border: 2px solid #ddd; border-radius: 10px; background: white;"></canvas>
                         
+                        <script>
+                        // 인터랙티브 데모 - Canvas 바로 아래 배치하여 즉시 실행
+                        (function() {
+                            const canvas = document.getElementById('bvCanvas');
+                            if (!canvas) {
+                                console.log('Canvas를 찾을 수 없습니다');
+                                return;
+                            }
+                            
+                            const ctx = canvas.getContext('2d');
+                            const overpotentialSlider = document.getElementById('overpotential');
+                            const i0Slider = document.getElementById('i0Value');
+                            const etaDisplay = document.getElementById('etaValue');
+                            const currentDisplay = document.getElementById('currentValue');
+                            const i0Display = document.getElementById('i0Display');
+                            
+                            if (!overpotentialSlider || !i0Slider) {
+                                console.log('슬라이더를 찾을 수 없습니다');
+                                return;
+                            }
+                            
+                            // 상수
+                            const F = 96485;
+                            const R = 8.314;
+                            const T = 298;
+                            const n = 1;
+                            const alpha = 0.5;
+                            
+                            // Butler-Volmer 방정식
+                            function butlerVolmer(eta, i0) {
+                                const term1 = Math.exp((alpha * n * F * eta) / (R * T));
+                                const term2 = Math.exp((-(1 - alpha) * n * F * eta) / (R * T));
+                                return i0 * (term1 - term2);
+                            }
+                            
+                            // 그래프 그리기
+                            function drawGraph(currentEta, i0) {
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                
+                                const margin = 60;
+                                const graphWidth = canvas.width - 2 * margin;
+                                const graphHeight = canvas.height - 2 * margin;
+                                const zeroY = canvas.height / 2;
+                                
+                                // 축
+                                ctx.strokeStyle = '#2c3e50';
+                                ctx.lineWidth = 2;
+                                ctx.beginPath();
+                                ctx.moveTo(margin, margin);
+                                ctx.lineTo(margin, canvas.height - margin);
+                                ctx.lineTo(canvas.width - margin, canvas.height - margin);
+                                ctx.stroke();
+                                
+                                // 영점 선
+                                ctx.strokeStyle = '#95a5a6';
+                                ctx.lineWidth = 1;
+                                ctx.setLineDash([5, 5]);
+                                ctx.beginPath();
+                                ctx.moveTo(margin, zeroY);
+                                ctx.lineTo(canvas.width - margin, zeroY);
+                                ctx.stroke();
+                                ctx.setLineDash([]);
+                                
+                                // 축 레이블
+                                ctx.fillStyle = '#2c3e50';
+                                ctx.font = 'bold 14px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('η (V)', canvas.width / 2, canvas.height - 20);
+                                ctx.save();
+                                ctx.translate(20, canvas.height / 2);
+                                ctx.rotate(-Math.PI / 2);
+                                ctx.fillText('i (mA/cm²)', 0, 0);
+                                ctx.restore();
+                                
+                                // Butler-Volmer 곡선
+                                ctx.strokeStyle = '#667eea';
+                                ctx.lineWidth = 3;
+                                ctx.beginPath();
+                                
+                                const etaMin = -0.5;
+                                const etaMax = 0.5;
+                                const points = 200;
+                                const maxCurrent = 50;
+                                
+                                for (let i = 0; i <= points; i++) {
+                                    const eta = etaMin + (etaMax - etaMin) * i / points;
+                                    const current = butlerVolmer(eta, i0);
+                                    const x = margin + ((eta - etaMin) / (etaMax - etaMin)) * graphWidth;
+                                    const y = zeroY - (current / maxCurrent) * (graphHeight / 2);
+                                    
+                                    if (i === 0) {
+                                        ctx.moveTo(x, y);
+                                    } else {
+                                        ctx.lineTo(x, y);
+                                    }
+                                }
+                                ctx.stroke();
+                                
+                                // 현재 점
+                                const currentI = butlerVolmer(currentEta, i0);
+                                const currentX = margin + ((currentEta - etaMin) / (etaMax - etaMin)) * graphWidth;
+                                const currentY = zeroY - (currentI / maxCurrent) * (graphHeight / 2);
+                                
+                                ctx.fillStyle = '#e74c3c';
+                                ctx.beginPath();
+                                ctx.arc(currentX, currentY, 6, 0, 2 * Math.PI);
+                                ctx.fill();
+                                
+                                // 보조선
+                                ctx.strokeStyle = '#e74c3c';
+                                ctx.lineWidth = 2;
+                                ctx.setLineDash([3, 3]);
+                                ctx.beginPath();
+                                ctx.moveTo(currentX, currentY);
+                                ctx.lineTo(currentX, canvas.height - margin);
+                                ctx.stroke();
+                                ctx.beginPath();
+                                ctx.moveTo(currentX, currentY);
+                                ctx.lineTo(margin, currentY);
+                                ctx.stroke();
+                                ctx.setLineDash([]);
+                                
+                                // 눈금
+                                ctx.fillStyle = '#555';
+                                ctx.font = '11px Arial';
+                                ctx.textAlign = 'center';
+                                
+                                for (let eta = -0.4; eta <= 0.4; eta += 0.2) {
+                                    const x = margin + ((eta - etaMin) / (etaMax - etaMin)) * graphWidth;
+                                    ctx.fillText(eta.toFixed(1), x, canvas.height - margin + 20);
+                                }
+                                
+                                ctx.textAlign = 'right';
+                                for (let current = -40; current <= 40; current += 20) {
+                                    const y = zeroY - (current / maxCurrent) * (graphHeight / 2);
+                                    ctx.fillText(current.toFixed(0), margin - 10, y + 5);
+                                }
+                                
+                                // Tafel 영역
+                                ctx.fillStyle = 'rgba(231, 76, 60, 0.1)';
+                                const tafelEta = 0.1;
+                                const tafelX1 = margin + ((tafelEta - etaMin) / (etaMax - etaMin)) * graphWidth;
+                                const tafelX2 = margin + ((-tafelEta - etaMin) / (etaMax - etaMin)) * graphWidth;
+                                ctx.fillRect(tafelX1, margin, canvas.width - margin - tafelX1, graphHeight);
+                                ctx.fillRect(margin, margin, tafelX2 - margin, graphHeight);
+                                
+                                ctx.fillStyle = '#e74c3c';
+                                ctx.font = '10px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('Tafel', tafelX1 + 40, margin + 20);
+                                ctx.fillText('Tafel', tafelX2 - 40, margin + 20);
+                            }
+                            
+                            // 업데이트
+                            function updateGraph() {
+                                const eta = parseFloat(overpotentialSlider.value) / 1000;
+                                const i0 = Math.pow(10, parseFloat(i0Slider.value));
+                                
+                                etaDisplay.textContent = eta.toFixed(3);
+                                i0Display.textContent = i0.toFixed(2);
+                                
+                                const current = butlerVolmer(eta, i0);
+                                currentDisplay.textContent = current.toFixed(2);
+                                
+                                drawGraph(eta, i0);
+                            }
+                            
+                            overpotentialSlider.addEventListener('input', updateGraph);
+                            i0Slider.addEventListener('input', updateGraph);
+                            
+                            // 초기 그래프
+                            updateGraph();
+                            console.log('Butler-Volmer 데모가 성공적으로 초기화되었습니다!');
+                        })();
+                        </script>
+                        
                         <div style="margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #27ae60;">
                             <p style="color: #2c3e50; margin: 0;"><strong>💡 팁:</strong> 과전압이 ±0.1V를 넘으면 Tafel 영역에 진입합니다!</p>
                         </div>
