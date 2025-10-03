@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기화학 제5장 - 반응 속도론</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            padding-bottom: 20px;
+            border-bottom: 4px solid #667eea;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+        
+        .nav-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .nav-btn.active {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .subsection {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .subsection h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 30px 0;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .equation-box {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #2196f3;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        
+        .equation {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.3em;
+            margin: 10px 0;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ff9800;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #667eea;
+        }
+        
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .control-group label {
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        input[type="range"] {
+            width: 200px;
+            height: 8px;
+            border-radius: 5px;
+            background: #ddd;
+            outline: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        .value-display {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-weight: bold;
+            min-width: 80px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ 전기화학 반응의 속도 ⚡</h1>
+        <p class="subtitle">제5장: 분자 수준에서 바라본 전극 반응의 동역학</p>
+        
+        <div class="nav-menu">
+            <button class="nav-btn active" onclick="showSection('section1')">1. Arrhenius 방정식</button>
+            <button class="nav-btn" onclick="showSection('section2')">2. 전이상태 이론</button>
+            <button class="nav-btn" onclick="showSection('section3')">3. Butler-Volmer</button>
+            <button class="nav-btn" onclick="showSection('section4')">4. 교환전류밀도</button>
+            <button class="nav-btn" onclick="showSection('section5')">5. i-η 곡선</button>
+            <button class="nav-btn" onclick="showSection('section6')">6. Tafel 관계</button>
+            <button class="nav-btn" onclick="showSection('section7')">7. 실제 반응 비교</button>
+        </div>
+
+        <!-- Section 1: Arrhenius 방정식 -->
+        <div id="section1" class="section active">
+            <h2 class="section-title">5.1 Arrhenius 방정식과 활성화 에너지</h2>
+            
+            <div class="subsection">
+                <h3>📊 Arrhenius 방정식</h3>
+                <div class="equation-box">
+                    <div class="equation">k = A exp(-E<sub>a</sub>/RT)</div>
+                    <div style="margin-top: 10px; font-size: 0.9em;">
+                        k: 속도상수 | A: 빈도인자 | E<sub>a</sub>: 활성화 에너지 | R: 기체상수 | T: 온도
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label>활성화 에너지 (kJ/mol): <span class="value-display" id="eaValue">50</span></label>
+                        <input type="range" id="eaSlider" min="20" max="100" value="50" step="5" oninput="updateArrhenius()">
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="arrheniusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <h4>🔥 실생활 예시: 냉장고의 과학</h4>
+                <p><strong>왜 음식을 냉장고에 보관할까?</strong></p>
+                <p>상온(25°C)에서 냉장고(4°C)로 온도를 낮추면 세균 증식 속도가 약 <strong>2.4배</strong> 감소합니다!</p>
+            </div>
+        </div>
+
+        <!-- Section 2: 전이상태 이론 -->
+        <div id="section2" class="section">
+            <h2 class="section-title">5.1.3 전이상태 이론 (Transition State Theory)</h2>
+            
+            <div class="subsection">
+                <h3>⛰️ 에너지 장벽과 반응 경로</h3>
+                
+                <div style="background: white; padding: 30px; border-radius: 10px; margin: 20px 0;">
+                    <svg width="100%" height="450" viewBox="0 0 800 450">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">
+                            그림 5.2(a): A ⇌ B 단분자 반응의 에너지 다이어그램
+                        </text>
+                        
+                        <line x1="100" y1="380" x2="700" y2="380" stroke="#2c3e50" stroke-width="2"/>
+                        <line x1="100" y1="380" x2="100" y2="80" stroke="#2c3e50" stroke-width="2"/>
+                        
+                        <text x="400" y="410" text-anchor="middle" font-size="14" fill="#2c3e50">reaction path</text>
+                        <text x="40" y="230" text-anchor="middle" font-size="14" fill="#2c3e50" transform="rotate(-90 40 230)">Gibbs free energy</text>
+                        
+                        <path d="M 150,280 Q 300,120 350,100 Q 400,90 550,260" 
+                              fill="none" 
+                              stroke="#667eea" 
+                              stroke-width="4"/>
+                        
+                        <line x1="120" y1="280" x2="200" y2="280" stroke="#2c3e50" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="500" y1="260" x2="580" y2="260" stroke="#2c3e50" stroke-width="1" stroke-dasharray="3,3"/>
+                        <line x1="300" y1="95" x2="400" y2="95" stroke="#e74c3c" stroke-width="1" stroke-dasharray="3,3"/>
+                        
+                        <circle cx="150" cy="280" r="6" fill="#3498db"/>
+                        <circle cx="350" cy="95" r="8" fill="#e74c3c"/>
+                        <circle cx="550" cy="260" r="6" fill="#27ae60"/>
+                        
+                        <text x="150" y="310" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">A</text>
+                        <text x="150" y="330" text-anchor="middle" font-size="14" fill="#666">reactant A</text>
+                        
+                        <text x="350" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#e74c3c">activated</text>
+                        <text x="350" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="#e74c3c">complex</text>
+                        
+                        <text x="550" y="290" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">B</text>
+                        <text x="550" y="310" text-anchor="middle" font-size="14" fill="#666">product B</text>
+                        
+                        <defs>
+                            <marker id="arrowhead-svg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#e74c3c"/>
+                            </marker>
+                            <marker id="arrowhead-svg-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#3498db"/>
+                            </marker>
+                            <marker id="arrowhead-svg-green" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#27ae60"/>
+                            </marker>
+                        </defs>
+                        
+                        <line x1="220" y1="280" x2="220" y2="100" 
+                              stroke="#e74c3c" stroke-width="2.5" 
+                              marker-end="url(#arrowhead-svg)"/>
+                        <text x="240" y="190" font-size="16" font-weight="bold" fill="#e74c3c">ΔG‡</text>
+                        <text x="240" y="208" font-size="14" font-weight="bold" fill="#e74c3c">f</text>
+                        
+                        <line x1="480" y1="260" x2="480" y2="100" 
+                              stroke="#3498db" stroke-width="2.5" 
+                              marker-end="url(#arrowhead-svg-blue)"/>
+                        <text x="455" y="180" font-size="16" font-weight="bold" fill="#3498db" text-anchor="end">ΔG‡</text>
+                        <text x="462" y="188" font-size="14" font-weight="bold" fill="#3498db">b</text>
+                        
+                        <line x1="620" y1="280" x2="620" y2="265" 
+                              stroke="#27ae60" stroke-width="2.5" stroke-dasharray="5,5"
+                              marker-end="url(#arrowhead-svg-green)"/>
+                        <text x="640" y="275" font-size="15" font-weight="bold" fill="#27ae60">ΔG°</text>
+                        <text x="671" y="283" font-size="12" fill="#27ae60">rxn</text>
+                    </svg>
+                </div>
+                
+                <div class="equation-box">
+                    <div class="equation">k = (k<sub>B</sub>T/h) exp(-ΔG<sup>‡</sup>/RT)</div>
+                    <div style="margin-top: 10px; font-size: 0.9em;">
+                        k<sub>B</sub>: 볼츠만 상수 | h: 플랑크 상수 | ΔG<sup>‡</sup>: 활성화 자유에너지
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>반응물 A</h4>
+                    <p>초기 상태의 분자들</p>
+                    <p>반응이 시작되기 전의 에너지 상태</p>
+                </div>
+                <div class="info-card">
+                    <h4>활성화 복합체</h4>
+                    <p>에너지가 가장 높은 전이상태</p>
+                    <p>옛 결합이 끊어지고 새 결합이 형성되는 순간</p>
+                </div>
+                <div class="info-card">
+                    <h4>생성물 B</h4>
+                    <p>최종 상태의 분자들</p>
+                    <p>반응 후의 에너지 상태</p>
+                </div>
+                <div class="info-card">
+                    <h4>활성화 에너지</h4>
+                    <p><strong>ΔG‡<sub>f</sub></strong>: 정반응 활성화 에너지</p>
+                    <p><strong>ΔG‡<sub>b</sub></strong>: 역반응 활성화 에너지</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Butler-Volmer -->
+        <div id="section3" class="section">
+            <h2 class="section-title">5.2 Butler-Volmer 방정식</h2>
+            
+            <div class="subsection">
+                <h3>⚡ 전기화학 반응의 에너지 다이어그램</h3>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label>과전압 η (V): <span class="value-display" id="etaValue">0.0</span></label>
+                        <input type="range" id="etaSlider" min="-0.3" max="0.3" value="0" step="0.05" oninput="updateOverpotentialSVG()">
+                    </div>
+                    <div class="control-group">
+                        <label>전달계수 α: <span class="value-display" id="alphaValue">0.5</span></label>
+                        <input type="range" id="alphaSlider" min="0.3" max="0.7" value="0.5" step="0.1" oninput="updateOverpotentialSVG()">
+                    </div>
+                </div>
+                
+                <div style="background: white; padding: 30px; border-radius: 10px; margin: 20px 0;">
+                    <svg id="overpotential-svg" width="100%" height="500" viewBox="0 0 800 500">
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#2c3e50">
+                            그림 5.3: Ox + e ⇌ Red 반응의 퍼텐셜 에너지와 전달(비대칭) 계수
+                        </text>
+                        
+                        <line x1="100" y1="420" x2="700" y2="420" stroke="#2c3e50" stroke-width="2"/>
+                        <line x1="100" y1="420" x2="100" y2="80" stroke="#2c3e50" stroke-width="2"/>
+                        
+                        <text x="400" y="450" text-anchor="middle" font-size="14" fill="#2c3e50">reaction path</text>
+                        <text x="40" y="250" text-anchor="middle" font-size="14" fill="#2c3e50" transform="rotate(-90 40 250)">potential energy</text>
+                        
+                        <g id="curves-group"></g>
+                        
+                        <text id="label-ox" x="150" y="350" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">Ox + e</text>
+                        <text id="label-red" x="650" y="370" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">Red</text>
+                        
+                        <defs>
+                            <marker id="arrow-eta" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#f39c12"/>
+                            </marker>
+                            <marker id="arrow-cat" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#3498db"/>
+                            </marker>
+                            <marker id="arrow-an" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#e74c3c"/>
+                            </marker>
+                        </defs>
+                        
+                        <g id="arrows-group"></g>
+                    </svg>
+                </div>
+                
+                <div class="highlight-box" id="bv-explanation" style="margin-top: 20px;">
+                    <strong>평형 상태 (η = 0):</strong><br>
+                    • 산화와 환원의 속도가 같음<br>
+                    • 순 전류 = 0<br>
+                    • 교환전류밀도 i₀만 흐름
+                </div>
+            </div>
+
+            <div class="equation-box">
+                <h4>Butler-Volmer 방정식</h4>
+                <div class="equation">
+                    i = FAk°[C<sub>Ox</sub>(0,t)exp(-αFη/RT) - C<sub>Red</sub>(0,t)exp((1-α)Fη/RT)]
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: 교환전류밀도 -->
+        <div id="section4" class="section">
+            <h2 class="section-title">5.3 교환전류밀도 (Exchange Current Density)</h2>
+            
+            <div class="subsection">
+                <h3>🔄 평형에서의 동적 평형</h3>
+                
+                <div class="equation-box">
+                    <div class="equation">i<sub>0</sub> = FAk°C<sub>Ox</sub><sup>(1-α)</sup>C<sub>Red</sub><sup>α</sup></div>
+                    <p style="margin-top: 10px;">평형에서: i<sub>cat</sub> = i<sub>an</sub> = i<sub>0</sub></p>
+                </div>
+
+                <div style="background: white; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <svg width="100%" height="300" viewBox="0 0 800 300">
+                        <line x1="400" y1="50" x2="400" y2="250" stroke="#2c3e50" stroke-width="4"/>
+                        <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">전극</text>
+                        
+                        <circle cx="200" cy="150" r="15" fill="#e74c3c"/>
+                        <text x="200" y="190" text-anchor="middle" font-size="16">Ox</text>
+                        
+                        <circle cx="600" cy="150" r="15" fill="#3498db"/>
+                        <text x="600" y="190" text-anchor="middle" font-size="16">Red</text>
+                        
+                        <path d="M 230 130 Q 320 100, 380 130" stroke="#e74c3c" stroke-width="3" fill="none" marker-end="url(#arrowRed)"/>
+                        <text x="300" y="100" text-anchor="middle" font-size="14" fill="#e74c3c">i<tspan baseline-shift="sub">cat</tspan></text>
+                        
+                        <path d="M 570 170 Q 480 200, 420 170" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowBlue)"/>
+                        <text x="500" y="220" text-anchor="middle" font-size="14" fill="#3498db">i<tspan baseline-shift="sub">an</tspan></text>
+                        
+                        <rect x="650" y="100" width="120" height="80" fill="#f1c40f" rx="10"/>
+                        <text x="710" y="130" text-anchor="middle" font-size="14" font-weight="bold">평형 상태</text>
+                        <text x="710" y="155" text-anchor="middle" font-size="12">i<tspan baseline-shift="sub">cat</tspan> = i<tspan baseline-shift="sub">an</tspan></text>
+                        <text x="710" y="175" text-anchor="middle" font-size="12">= i<tspan baseline-shift="sub">0</tspan></text>
+                        
+                        <defs>
+                            <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" />
+                            </marker>
+                            <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#3498db" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>반응</th>
+                        <th>전극</th>
+                        <th>i<sub>0</sub> (A/cm²)</th>
+                        <th>특성</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>H⁺/H₂</td>
+                        <td>Pt</td>
+                        <td>10⁻³</td>
+                        <td style="color: #27ae60; font-weight: bold;">매우 빠름 ⚡</td>
+                    </tr>
+                    <tr>
+                        <td>Fe³⁺/Fe²⁺</td>
+                        <td>Pt</td>
+                        <td>10⁻²</td>
+                        <td style="color: #27ae60; font-weight: bold;">빠름</td>
+                    </tr>
+                    <tr>
+                        <td>H⁺/H₂</td>
+                        <td>Fe</td>
+                        <td>10⁻⁶</td>
+                        <td style="color: #f39c12;">중간</td>
+                    </tr>
+                    <tr>
+                        <td>H⁺/H₂</td>
+                        <td>Hg</td>
+                        <td>10⁻¹²</td>
+                        <td style="color: #e74c3c; font-weight: bold;">매우 느림 🐌</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 5: i-η 곡선 -->
+        <div id="section5" class="section">
+            <h2 class="section-title">5.4 i-η 곡선의 특성</h2>
+            
+            <div class="subsection">
+                <h3>📈 Butler-Volmer 방정식의 그래프</h3>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label>log(i<sub>0</sub>) (A/cm²): <span class="value-display" id="i0Value">-5</span></label>
+                        <input type="range" id="i0Slider" min="-9" max="-3" value="-5" step="1" oninput="updateIEtaCurve()">
+                    </div>
+                    <div class="control-group">
+                        <label>α: <span class="value-display" id="alphaIEtaValue">0.5</span></label>
+                        <input type="range" id="alphaIEtaSlider" min="0.3" max="0.7" value="0.5" step="0.1" oninput="updateIEtaCurve()">
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="iEtaCurve"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="iEtaLogCurve"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Tafel 관계 -->
+        <div id="section6" class="section">
+            <h2 class="section-title">5.5 Tafel 관계와 선형 영역</h2>
+            
+            <div class="subsection">
+                <h3>📏 작은 과전압: 선형 관계</h3>
+                
+                <div class="equation-box">
+                    <div class="equation">η = -iR<sub>ct</sub></div>
+                    <div class="equation">R<sub>ct</sub> = RT/(i<sub>0</sub>F)</div>
+                    <p style="margin-top: 10px; font-size: 0.9em;">
+                        R<sub>ct</sub>: 전하전달 저항 (|η| ≤ 0.1 V에서 유효)
+                    </p>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>📊 큰 과전압: Tafel 관계</h3>
+                
+                <div class="equation-box">
+                    <div class="equation">η = a + b log|i|</div>
+                    <p style="margin-top: 10px;">
+                        a: Tafel 절편 | b: Tafel 기울기 (mV/decade)
+                    </p>
+                    <div class="equation" style="margin-top: 15px;">
+                        b = 2.303RT/(αF) ≈ 118 mV/decade (α=0.5, 25°C)
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="tafelPlot"></canvas>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>🔄 물질전달 효과가 중요한 경우</h3>
+                
+                <div class="chart-container">
+                    <canvas id="massTransferCurve"></canvas>
+                </div>
+                
+                <div class="info-grid" style="margin-top: 20px;">
+                    <div class="info-card">
+                        <h4>가역적 (Reversible)</h4>
+                        <p>i<sub>0</sub>/i<sub>l</sub> = 0.5</p>
+                        <p>매우 빠른 전하전달</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>준가역적 (Quasi-reversible)</h4>
+                        <p>i<sub>0</sub>/i<sub>l</sub> = 0.05</p>
+                        <p>중간 속도</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>비가역적 (Irreversible)</h4>
+                        <p>i<sub>0</sub>/i<sub>l</sub> = 5×10⁻⁴</p>
+                        <p>느린 전하전달</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: 실제 반응 비교 -->
+        <div id="section7" class="section">
+            <h2 class="section-title">5.7 다양한 전기화학 반응의 특성</h2>
+            
+            <div class="subsection">
+                <h3>⚡ 수소 발생 반응 (HER)</h3>
+                <div class="chart-container">
+                    <canvas id="herComparison"></canvas>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>전극 재료</th>
+                            <th>i<sub>0</sub> (A/cm²)</th>
+                            <th>과전압 @ 1 mA/cm²</th>
+                            <th>응용</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #d4edda;">
+                            <td><strong>Pt (백금)</strong></td>
+                            <td>10⁻³</td>
+                            <td>~0 mV</td>
+                            <td>연료전지, 수전해 (고가)</td>
+                        </tr>
+                        <tr>
+                            <td>Ni (니켈)</td>
+                            <td>10⁻⁵</td>
+                            <td>~100 mV</td>
+                            <td>알칼리 전해조 (경제적)</td>
+                        </tr>
+                        <tr>
+                            <td>Cu (구리)</td>
+                            <td>10⁻⁷</td>
+                            <td>~400 mV</td>
+                            <td>제한적 사용</td>
+                        </tr>
+                        <tr style="background: #f8d7da;">
+                            <td>Hg (수은)</td>
+                            <td>10⁻¹²</td>
+                            <td>~1000 mV</td>
+                            <td>불리함 (느림)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>💨 산소 발생/환원 반응 (OER/ORR)</h3>
+                
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h4>산소 환원 (ORR)</h4>
+                        <p><strong>반응:</strong> O₂ + 4H⁺ + 4e⁻ → 2H₂O</p>
+                        <p><strong>특징:</strong> 4전자 반응, 복잡한 메커니즘</p>
+                        <p><strong>최적 촉매:</strong> Pt/C</p>
+                    </div>
+                    <div class="info-card">
+                        <h4>산소 발생 (OER)</h4>
+                        <p><strong>반응:</strong> 2H₂O → O₂ + 4H⁺ + 4e⁻</p>
+                        <p><strong>특징:</strong> HER보다 훨씬 느림</p>
+                        <p><strong>최적 촉매:</strong> IrO₂, RuO₂</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <h4>🔬 최신 연구 동향: 백금 대체 촉매</h4>
+                    <p><strong>단원자 촉매 (Single-Atom Catalysts)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Fe-N-C:</strong> 철 원자가 질소에 배위된 탄소 촉매</li>
+                        <li><strong>성능:</strong> Pt와 유사한 ORR 활성</li>
+                        <li><strong>장점:</strong> 백금 대비 1/100 가격, 풍부한 원소</li>
+                        <li><strong>응용:</strong> 차세대 연료전지, 금속-공기 배터리</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>📊 교환전류밀도 전체 비교</h3>
+                <div class="chart-container" style="height: 500px;">
+                    <canvas id="exchangeCurrentComparison"></canvas>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9); border-left-color: #4caf50;">
+                <h4>💡 실용적 의미</h4>
+                <p><strong>배터리 설계:</strong> 높은 i<sub>0</sub> → 빠른 충방전, 높은 출력밀도</p>
+                <p><strong>연료전지:</strong> ORR의 느린 속도 → 백금 촉매 필수 → 비용 증가</p>
+                <p><strong>수전해:</strong> OER의 높은 과전압 → 에너지 효율 감소 → 촉매 개발 필요</p>
+                <p><strong>부식 방지:</strong> 낮은 i<sub>0</sub> → 부식 억제 (예: 스테인리스강)</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 네비게이션 함수
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Chart 1: Arrhenius Plot
+        let arrheniusChart;
+        function updateArrhenius() {
+            const Ea = parseFloat(document.getElementById('eaSlider').value);
+            document.getElementById('eaValue').textContent = Ea;
+            
+            const R = 8.314;
+            const A = 1e13;
+            const temperatures = [];
+            const invT = [];
+            const lnK = [];
+            
+            for (let T = 273; T <= 373; T += 5) {
+                temperatures.push(T);
+                invT.push(1000/T);
+                const k = A * Math.exp(-Ea * 1000 / (R * T));
+                lnK.push(Math.log(k));
+            }
+            
+            if (arrheniusChart) arrheniusChart.destroy();
+            
+            const ctx = document.getElementById('arrheniusChart').getContext('2d');
+            arrheniusChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: invT,
+                    datasets: [{
+                        label: 'ln(k)',
+                        data: lnK,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.1,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Arrhenius 플롯: ln(k) vs 1/T',
+                            font: { size: 18, weight: 'bold' }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '1/T × 1000 (K⁻¹)',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'ln(k)',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 3: Overpotential Effect SVG
+        function updateOverpotentialSVG() {
+            const eta = parseFloat(document.getElementById('etaSlider').value);
+            const alpha = parseFloat(document.getElementById('alphaSlider').value);
+            document.getElementById('etaValue').textContent = eta.toFixed(2);
+            document.getElementById('alphaValue').textContent = alpha.toFixed(1);
+            
+            const F = 96485;
+            const G_Ox_base = 320;
+            const G_Red = 350;
+            const deltaG_cat_0 = 120;
+            
+            const energy_shift = -eta * 150;
+            const G_Ox = G_Ox_base + energy_shift;
+            const deltaG_cat = deltaG_cat_0 - alpha * energy_shift;
+            const G_transition = G_Ox - deltaG_cat;
+            
+            const svg = document.getElementById('overpotential-svg');
+            const curvesGroup = document.getElementById('curves-group');
+            const arrowsGroup = document.getElementById('arrows-group');
+            
+            curvesGroup.innerHTML = '';
+            arrowsGroup.innerHTML = '';
+            
+            const transition_x = 300 + alpha * 200;
+            
+            // 평형 상태 곡선
+            let pathEta0 = `M 150,${G_Ox_base}`;
+            for (let i = 0; i <= 100; i++) {
+                const x = 150 + i * 5;
+                let y;
+                if (x <= 400) {
+                    const t = (x - 150) / 250;
+                    const smoothT = t * t * (3 - 2 * t);
+                    y = G_Ox_base - deltaG_cat_0 * smoothT;
+                } else {
+                    const t = (x - 400) / 250;
+                    const smoothT = t * t * (3 - 2 * t);
+                    const peak = G_Ox_base - deltaG_cat_0;
+                    y = peak + (G_Red - peak) * smoothT;
+                }
+                pathEta0 += ` L ${x},${y}`;
+            }
+            
+            const curveEta0 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            curveEta0.setAttribute('d', pathEta0);
+            curveEta0.setAttribute('fill', 'none');
+            curveEta0.setAttribute('stroke', '#95a5a6');
+            curveEta0.setAttribute('stroke-width', '2');
+            curveEta0.setAttribute('stroke-dasharray', '8,4');
+            curvesGroup.appendChild(curveEta0);
+            
+            // 현재 η 곡선
+            let pathCurrent = `M 150,${G_Ox}`;
+            for (let i = 0; i <= 100; i++) {
+                const x = 150 + i * 5;
+                let y;
+                if (x <= transition_x) {
+                    const t = (x - 150) / (transition_x - 150);
+                    const smoothT = t * t * (3 - 2 * t);
+                    y = G_Ox - deltaG_cat * smoothT;
+                } else {
+                    const t = (x - transition_x) / (650 - transition_x);
+                    const smoothT = t * t * (3 - 2 * t);
+                    y = G_transition + (G_Red - G_transition) * smoothT;
+                }
+                pathCurrent += ` L ${x},${y}`;
+            }
+            
+            const curveCurrent = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            curveCurrent.setAttribute('d', pathCurrent);
+            curveCurrent.setAttribute('fill', 'none');
+            curveCurrent.setAttribute('stroke', eta >= 0 ? '#e74c3c' : '#3498db');
+            curveCurrent.setAttribute('stroke-width', '4');
+            curvesGroup.appendChild(curveCurrent);
+            
+            document.getElementById('label-ox').setAttribute('y', G_Ox + 30);
+            
+            // 화살표들 추가
+            if (Math.abs(eta) > 0.05) {
+                const arrowEta = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                arrowEta.setAttribute('x1', '120');
+                arrowEta.setAttribute('y1', G_Ox_base);
+                arrowEta.setAttribute('x2', '120');
+                arrowEta.setAttribute('y2', G_Ox);
+                arrowEta.setAttribute('stroke', '#f39c12');
+                arrowEta.setAttribute('stroke-width', '3');
+                arrowEta.setAttribute('marker-end', 'url(#arrow-eta)');
+                arrowsGroup.appendChild(arrowEta);
+                
+                const labelEta = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                labelEta.setAttribute('x', '135');
+                labelEta.setAttribute('y', (G_Ox_base + G_Ox) / 2);
+                labelEta.setAttribute('fill', '#f39c12');
+                labelEta.setAttribute('font-size', '14');
+                labelEta.setAttribute('font-weight', 'bold');
+                labelEta.textContent = '-Fη';
+                arrowsGroup.appendChild(labelEta);
+            }
+            
+            const arrowCat = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            arrowCat.setAttribute('x1', '220');
+            arrowCat.setAttribute('y1', G_Ox);
+            arrowCat.setAttribute('x2', '220');
+            arrowCat.setAttribute('y2', G_transition);
+            arrowCat.setAttribute('stroke', '#3498db');
+            arrowCat.setAttribute('stroke-width', '2.5');
+            arrowCat.setAttribute('marker-end', 'url(#arrow-cat)');
+            arrowsGroup.appendChild(arrowCat);
+            
+            const labelCat1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            labelCat1.setAttribute('x', '240');
+            labelCat1.setAttribute('y', (G_Ox + G_transition) / 2);
+            labelCat1.setAttribute('fill', '#3498db');
+            labelCat1.setAttribute('font-size', '14');
+            labelCat1.setAttribute('font-weight', 'bold');
+            labelCat1.textContent = 'ΔG*cat';
+            arrowsGroup.appendChild(labelCat1);
+            
+            const arrowAn = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            arrowAn.setAttribute('x1', '580');
+            arrowAn.setAttribute('y1', G_Red);
+            arrowAn.setAttribute('x2', '580');
+            arrowAn.setAttribute('y2', G_transition);
+            arrowAn.setAttribute('stroke', '#e74c3c');
+            arrowAn.setAttribute('stroke-width', '2.5');
+            arrowAn.setAttribute('marker-end', 'url(#arrow-an)');
+            arrowsGroup.appendChild(arrowAn);
+            
+            const labelAn1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            labelAn1.setAttribute('x', '555');
+            labelAn1.setAttribute('y', (G_Red + G_transition) / 2);
+            labelAn1.setAttribute('fill', '#e74c3c');
+            labelAn1.setAttribute('font-size', '14');
+            labelAn1.setAttribute('font-weight', 'bold');
+            labelAn1.setAttribute('text-anchor', 'end');
+            labelAn1.textContent = 'ΔG*an';
+            arrowsGroup.appendChild(labelAn1);
+            
+            const explanation = document.getElementById('bv-explanation');
+            if (explanation) {
+                const deltaG_cat_change = -alpha * energy_shift;
+                const deltaG_an_change = (1 - alpha) * energy_shift;
+                
+                explanation.innerHTML = `
+                    <strong>현재 상태 (α = ${alpha.toFixed(1)}, η = ${eta.toFixed(2)} V):</strong><br>
+                    • Ox + e의 에너지 이동: -Fη ${eta >= 0 ? '↑' : '↓'}<br>
+                    • 환원 활성화 에너지 ΔG*<sub>cat</sub>: ${deltaG_cat_change >= 0 ? '증가' : '감소'}<br>
+                    • 산화 활성화 에너지 ΔG*<sub>an</sub>: ${deltaG_an_change >= 0 ? '증가' : '감소'}<br>
+                    <br>
+                    ${eta > 0.05 ? '<strong style="color: #e74c3c;">→ 산화 반응 가속</strong>' : 
+                      eta < -0.05 ? '<strong style="color: #3498db;">→ 환원 반응 가속</strong>' :
+                      '<strong>→ 평형 상태</strong>'}
+                `;
+            }
+        }
+
+        // Chart 4: i-η Curve
+        let iEtaChart, iEtaLogChart;
+        function updateIEtaCurve() {
+            const log_i0 = parseFloat(document.getElementById('i0Slider').value);
+            const alpha = parseFloat(document.getElementById('alphaIEtaSlider').value);
+            const i0 = Math.pow(10, log_i0);
+            
+            document.getElementById('i0Value').textContent = log_i0;
+            document.getElementById('alphaIEtaValue').textContent = alpha.toFixed(1);
+            
+            const F = 96485;
+            const R = 8.314;
+            const T = 298;
+            
+            const eta_values = [];
+            const current = [];
+            const current_log = [];
+            
+            for (let eta = -0.4; eta <= 0.4; eta += 0.01) {
+                eta_values.push(eta * 1000);
+                const i = i0 * (Math.exp(-alpha * F * eta / (R * T)) - Math.exp((1 - alpha) * F * eta / (R * T)));
+                current.push(i * 10000);
+                
+                if (Math.abs(i) > 1e-12) {
+                    current_log.push(Math.log10(Math.abs(i) * 10000));
+                } else {
+                    current_log.push(null);
+                }
+            }
+            
+            if (iEtaChart) iEtaChart.destroy();
+            if (iEtaLogChart) iEtaLogChart.destroy();
+            
+            const ctx1 = document.getElementById('iEtaCurve').getContext('2d');
+            iEtaChart = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: eta_values,
+                    datasets: [{
+                        label: '전류밀도',
+                        data: current,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.1,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Butler-Volmer i-η 곡선 (선형 스케일)',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: '과전압 η (mV)', font: { size: 14 } }
+                        },
+                        y: {
+                            title: { display: true, text: '전류밀도 i (mA/cm²)', font: { size: 14 } }
+                        }
+                    }
+                }
+            });
+            
+            const ctx2 = document.getElementById('iEtaLogCurve').getContext('2d');
+            iEtaLogChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: eta_values,
+                    datasets: [{
+                        label: 'log|i|',
+                        data: current_log,
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        tension: 0.1,
+                        borderWidth: 3,
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Butler-Volmer i-η 곡선 (로그 스케일)',
+                            font: { size: 16, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: '과전압 η (mV)', font: { size: 14 } }
+                        },
+                        y: {
+                            title: { display: true, text: 'log|i| (mA/cm²)', font: { size: 14 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 5: Tafel Plot - 작동하는 버전
+        function createTafelPlot() {
+            const ctx = document.getElementById('tafelPlot').getContext('2d');
+            
+            const F = 96485;
+            const R = 8.314;
+            const T = 298;
+            const log_i0 = -7;
+            
+            const tafelData = {
+                datasets: [
+                    {
+                        label: 'α = 0.5 환원 (118 mV/dec)',
+                        data: [],
+                        borderColor: '#3498db',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'α = 0.5 산화 (118 mV/dec)',
+                        data: [],
+                        borderColor: '#3498db',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'α = 0.75 환원 (79 mV/dec)',
+                        data: [],
+                        borderColor: '#e74c3c',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'α = 0.75 산화 (237 mV/dec)',
+                        data: [],
+                        borderColor: '#e74c3c',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0
+                    }
+                ]
+            };
+            
+            for (let eta = -300; eta <= -20; eta += 5) {
+                const log_i = log_i0 - (0.5 * F * Math.abs(eta/1000)) / (2.303 * R * T);
+                tafelData.datasets[0].data.push({x: eta, y: log_i});
+            }
+            
+            for (let eta = 20; eta <= 300; eta += 5) {
+                const log_i = log_i0 + (0.5 * F * (eta/1000)) / (2.303 * R * T);
+                tafelData.datasets[1].data.push({x: eta, y: log_i});
+            }
+            
+            for (let eta = -300; eta <= -20; eta += 5) {
+                const log_i = log_i0 - (0.75 * F * Math.abs(eta/1000)) / (2.303 * R * T);
+                tafelData.datasets[2].data.push({x: eta, y: log_i});
+            }
+            
+            for (let eta = 20; eta <= 300; eta += 5) {
+                const log_i = log_i0 + (0.25 * F * (eta/1000)) / (2.303 * R * T);
+                tafelData.datasets[3].data.push({x: eta, y: log_i});
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: tafelData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tafel 플롯: 전달계수의 영향',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: '과전압 η (mV)', font: { size: 14, weight: 'bold' } },
+                            min: -300,
+                            max: 300
+                        },
+                        y: {
+                            title: { display: true, text: 'log|i| (A/cm²)', font: { size: 14, weight: 'bold' } },
+                            min: -8,
+                            max: -4
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 6: Mass Transfer Effect - 작동하는 버전
+        function createMassTransferCurve() {
+            const ctx = document.getElementById('massTransferCurve').getContext('2d');
+            
+            const F = 96485;
+            const R = 8.314;
+            const T = 298;
+            const alpha = 0.5;
+            
+            const mtData = {
+                datasets: [
+                    {
+                        label: '가역적 (i₀/i_l = 0.5)',
+                        data: [],
+                        borderColor: '#27ae60',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.2
+                    },
+                    {
+                        label: '준가역적 (i₀/i_l = 0.05)',
+                        data: [],
+                        borderColor: '#3498db',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.2
+                    },
+                    {
+                        label: '비가역적 (i₀/i_l = 0.0005)',
+                        data: [],
+                        borderColor: '#e74c3c',
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.2
+                    }
+                ]
+            };
+            
+            const cases = [0.5, 0.05, 0.0005];
+            
+            cases.forEach((i0_over_il, idx) => {
+                for (let eta_mV = -400; eta_mV <= 400; eta_mV += 5) {
+                    const eta = eta_mV / 1000;
+                    const exp_cat = Math.exp(-alpha * F * eta / (R * T));
+                    const exp_an = Math.exp((1 - alpha) * F * eta / (R * T));
+                    
+                    let i_normalized;
+                    if (eta > 0) {
+                        i_normalized = i0_over_il * (exp_an - exp_cat) / (1 + i0_over_il * exp_an);
+                    } else {
+                        i_normalized = i0_over_il * (exp_an - exp_cat) / (1 + i0_over_il * Math.abs(exp_cat));
+                    }
+                    
+                    mtData.datasets[idx].data.push({x: eta_mV, y: i_normalized});
+                }
+            });
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: mtData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '그림 5.8(a): 전하 전달과 물질 전달이 동시에 작동하는 반응',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: '과전압 η (mV)', font: { size: 14, weight: 'bold' } },
+                            min: -400,
+                            max: 400
+                        },
+                        y: {
+                            title: { display: true, text: 'i/i_l (normalized current)', font: { size: 14, weight: 'bold' } },
+                            min: -1,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 7: HER Comparison - 작동하는 버전
+        function createHERComparison() {
+            const ctx = document.getElementById('herComparison').getContext('2d');
+            
+            const electrodes = [
+                { name: 'Pt', i0: 1e-3, color: '#27ae60' },
+                { name: 'Ni', i0: 1e-5, color: '#3498db' },
+                { name: 'Cu', i0: 1e-7, color: '#f39c12' },
+                { name: 'Hg', i0: 1e-12, color: '#e74c3c' }
+            ];
+            
+            const herData = {
+                datasets: electrodes.map(electrode => {
+                    const data = [];
+                    const F = 96485;
+                    const R = 8.314;
+                    const T = 298;
+                    const alpha = 0.5;
+                    
+                    for (let eta = -500; eta <= 0; eta += 10) {
+                        const i = electrode.i0 * Math.exp(-alpha * F * (eta/1000) / (R * T));
+                        data.push({ x: eta, y: Math.log10(i * 10000) });
+                    }
+                    
+                    return {
+                        label: electrode.name,
+                        data: data,
+                        borderColor: electrode.color,
+                        borderWidth: 3,
+                        fill: false,
+                        tension: 0.2
+                    };
+                })
+            };
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: herData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '수소 발생 반응 (HER): 전극별 성능 비교',
+                            font: { size: 18, weight: 'bold' }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            title: { display: true, text: '과전압 η (mV)', font: { size: 14, weight: 'bold' } },
+                            min: -500,
+                            max: 0
+                        },
+                        y: {
+                            title: { display: true, text: 'log|i| (mA/cm²)', font: { size: 14, weight: 'bold' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 8: Exchange Current Comparison - 작동하는 버전
+        function createExchangeCurrentComparison() {
+            const ctx = document.getElementById('exchangeCurrentComparison').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['H⁺/H₂ (Pt)', 'Fe³⁺/Fe²⁺ (Pt)', 'H⁺/H₂ (Ni)', 'Cd²⁺/Cd', 'H⁺/H₂ (Cu)', 'H⁺/H₂ (Hg)'],
+                    datasets: [{
+                        label: 'log(i₀) [A/cm²]',
+                        data: [-3, -2, -5, -7, -7, -12],
+                        backgroundColor: [
+                            '#27ae60',
+                            '#2ecc71',
+                            '#3498db',
+                            '#f39c12',
+                            '#e67e22',
+                            '#e74c3c'
+                        ],
+                        borderColor: '#2c3e50',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '다양한 전기화학 반응의 교환전류밀도 비교',
+                            font: { size: 18, weight: 'bold' }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'log(i₀) [A/cm²]',
+                                font: { size: 14, weight: 'bold' }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 초기화
+        window.onload = function() {
+            updateArrhenius();
+            updateOverpotentialSVG();
+            updateIEtaCurve();
+            createTafelPlot();
+            createMassTransferCurve();
+            createHERComparison();
+            createExchangeCurrentComparison();
+        };
+    </script>
+</body>
+</html>
