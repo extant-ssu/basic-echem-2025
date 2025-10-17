@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제6장: 확산과 추출 전류-전압 곡선</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            min-height: 600px;
+            page-break-after: always;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 2em;
+            margin: 30px 0 20px 0;
+            border-left: 5px solid #764ba2;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        .equation {
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            font-size: 1.2em;
+            overflow-x: auto;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .highlight-box.blue {
+            background: #cfe2ff;
+            border-color: #0d6efd;
+        }
+
+        .highlight-box.green {
+            background: #d1e7dd;
+            border-color: #198754;
+        }
+
+        .highlight-box.red {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .concept-card h4 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .image-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .image-caption {
+            margin-top: 15px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        ul, ol {
+            margin: 15px 0 15px 30px;
+        }
+
+        li {
+            margin: 10px 0;
+            line-height: 1.8;
+        }
+
+        .key-point {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        .comparison-item h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        /* 퀴즈 스타일 */
+        .quiz-section {
+            background: #e7f3ff;
+            border: 3px solid #0d6efd;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .quiz-section h3 {
+            color: #0d6efd;
+            margin-bottom: 20px;
+        }
+
+        .quiz-question {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #0d6efd;
+        }
+
+        .quiz-question h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            list-style-type: none;
+            margin: 15px 0;
+            padding: 0;
+        }
+
+        .quiz-options li {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .quiz-options li:hover {
+            background: #e2e6ea;
+        }
+
+        .quiz-answer {
+            background: #d1e7dd;
+            border: 2px solid #198754;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-answer.show {
+            display: block;
+        }
+
+        .show-answer-btn {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .show-answer-btn:hover {
+            background: #0b5ed7;
+        }
+
+        /* 연습문제 스타일 */
+        .exercise-section {
+            background: #fff4e6;
+            border: 3px solid #ff922b;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .exercise-section h3 {
+            color: #ff922b;
+            margin-bottom: 20px;
+        }
+
+        .exercise-problem {
+            background: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ff922b;
+        }
+
+        /* 프린트 스타일 */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .slide {
+                box-shadow: none;
+                margin: 0;
+                padding: 20px;
+                page-break-after: always;
+            }
+
+            .navigation, .show-answer-btn {
+                display: none;
+            }
+
+            .quiz-answer {
+                display: block !important;
+            }
+
+            h1 {
+                color: #000;
+                border-bottom-color: #000;
+            }
+
+            h2 {
+                color: #000;
+                border-left-color: #000;
+            }
+
+            h3 {
+                color: #000;
+            }
+
+            .concept-card {
+                background: #f0f0f0;
+                color: #000;
+                border: 1px solid #000;
+            }
+
+            .key-point {
+                background: #e0e0e0;
+                color: #000;
+                border: 2px solid #000;
+            }
+
+            svg {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .comparison-table {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 목차 스타일 */
+        .toc {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .toc h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .toc-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .toc-list li {
+            padding: 10px;
+            margin: 5px 0;
+            border-left: 3px solid #667eea;
+            transition: all 0.3s;
+        }
+
+        .toc-list li:hover {
+            background: #f8f9fa;
+            border-left-width: 5px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        .toc-list a:hover {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- 타이틀 슬라이드 -->
+        <div class="slide">
+            <h1>제6장: 확산과 추출 전류-전압 곡선</h1>
+            <h2 style="text-align: center; border: none; padding: 0; margin-top: 40px;">물질이 움직이는 이야기</h2>
+            <div style="text-align: center; margin-top: 60px; font-size: 1.2em;">
+                <p><strong>대상:</strong> 숭실대 화학과 3학년</p>
+                <p><strong>과목:</strong> 기초전기화학 (2025년 2학기)</p>
+                <p style="margin-top: 40px;"><strong>주제:</strong> 확산(물질전달)이 전기화학 반응 속도와<br>실제 소자 성능을 제한하는 원리</p>
+            </div>
+            <div class="image-container" style="margin-top: 60px;">
+                <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="300" fill="#f8f9fa"/>
+                    <!-- 고농도 영역 -->
+                    <circle cx="100" cy="150" r="80" fill="#4dabf7" opacity="0.8"/>
+                    <text x="100" y="155" font-size="16" fill="white" text-anchor="middle" font-weight="bold">고농도</text>
+                    
+                    <!-- 저농도 영역 -->
+                    <circle cx="300" cy="150" r="80" fill="#4dabf7" opacity="0.2"/>
+                    <text x="300" y="155" font-size="16" fill="#333" text-anchor="middle" font-weight="bold">저농도</text>
+                    
+                    <!-- 확산 화살표 -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#e03131" />
+                        </marker>
+                    </defs>
+                    <line x1="180" y1="150" x2="220" y2="150" stroke="#e03131" stroke-width="4" marker-end="url(#arrowhead)"/>
+                    <text x="200" y="140" font-size="14" fill="#e03131" text-anchor="middle" font-weight="bold">확산</text>
+                </svg>
+                <p class="image-caption">확산: 농도 차이에 의한 물질의 자발적 이동</p>
+            </div>
+        </div>
+
+        <!-- 목차 -->
+        <div class="toc">
+            <h2>📋 목차</h2>
+            <ul class="toc-list">
+                <li><a href="#part1">PART 1: 확산의 기본 원리와 시간 의존성</a>
+                    <ul style="margin-left: 20px; list-style: circle;">
+                        <li>1.1 Butler-Volmer의 한계와 물질전달</li>
+                        <li>1.2 확산층과 Fick의 법칙</li>
+                        <li>1.3 i-E 곡선과 반응의 가역성</li>
+                    </ul>
+                </li>
+                <li><a href="#part2">PART 2: 시간 의존성과 강제 대류</a>
+                    <ul style="margin-left: 20px; list-style: circle;">
+                        <li>2.1 Cottrell 방정식</li>
+                        <li>2.2 미세 전극</li>
+                        <li>2.3 회전 디스크 전극 (RDE)</li>
+                        <li>2.4 Koutecky-Levich 분석</li>
+                    </ul>
+                </li>
+                <li><a href="#battery">BOX: 배터리 급속 충전</a></li>
+                <li><a href="#quiz">복습 퀴즈</a></li>
+                <li><a href="#exercises">연습문제</a></li>
+            </ul>
+        </div>
+
+        <!-- PART 1 시작 -->
+        <div class="slide" id="part1">
+            <h1>PART 1: 확산의 기본 원리와 시간 의존성</h1>
+            <div class="highlight-box blue">
+                <h3>🎯 학습 목표</h3>
+                <ul>
+                    <li>Butler-Volmer 방정식의 한계와 물질전달의 필요성 이해</li>
+                    <li>확산층의 개념과 Fick의 법칙 이해</li>
+                    <li>한계 전류의 물리적 의미 파악</li>
+                    <li>i-E 곡선의 특성과 반응 가역성 분석</li>
+                    <li>Cottrell 방정식을 통한 시간 의존성 이해</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 1.1 Butler-Volmer의 한계 -->
+        <div class="slide">
+            <h2>1.1 도입: Butler-Volmer 방정식의 한계와 물질전달</h2>
+            
+            <div class="highlight-box">
+                <h3>🚗 지난 시간 복습: Butler-Volmer (BV)의 세계</h3>
+                <p><strong>BV 방정식은 전하전달(Charge Transfer) 속도를 설명하는 핵심이었습니다.</strong></p>
+            </div>
+
+            <div class="highlight-box blue">
+                <h3>BV의 핵심 가정</h3>
+                <p>전극 표면의 반응물 농도 \(C_{\text{Ox}}(0,t), C_{\text{Red}}(0,t)\)가 용액 내부 \(C(\infty,t)\) 농도와 항상 <strong>같다</strong>고 가정했습니다.</p>
+            </div>
+
+            <div class="highlight-box red">
+                <h3>⚠️ 현실: 이 가정은 언제 깨지는가?</h3>
+                <p>전위(\(E\))를 높여 반응이 <strong>매우 빨라지면</strong>, 전극 표면의 반응물이 용액 내부로부터 공급받는 속도보다 더 빠르게 소모되어 농도가 떨어집니다.</p>
+                <p style="margin-top: 15px; font-weight: bold; color: #dc3545;">→ 이 가정이 깨지는 순간, 물질전달(Mass Transfer)이 전류를 제한하기 시작합니다!</p>
+            </div>
+
+            <div class="image-container">
+                <svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="800" height="400" fill="#f8f9fa"/>
+                    <rect x="50" y="50" width="20" height="300" fill="#333"/>
+                    <text x="30" y="380" font-size="14" fill="#333">전극</text>
+                    <rect x="500" y="50" width="250" height="300" fill="#4dabf7" opacity="0.7"/>
+                    <text x="550" y="380" font-size="14" fill="#333">용액 내부 (C∞)</text>
+                    <defs>
+                        <linearGradient id="diffusionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#fff;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#4dabf7;stop-opacity:0.7" />
+                        </linearGradient>
+                    </defs>
+                    <rect x="70" y="50" width="430" height="300" fill="url(#diffusionGradient)"/>
+                    <line x1="450" y1="200" x2="120" y2="200" stroke="#e03131" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="240" y="190" font-size="16" fill="#e03131" font-weight="bold">확산 방향</text>
+                    <text x="80" y="30" font-size="16" fill="#333" font-weight="bold">C(0,t) ≈ 0</text>
+                    <text x="600" y="30" font-size="16" fill="#333" font-weight="bold">C(∞,t) = C*</text>
+                    <line x1="70" y1="360" x2="500" y2="360" stroke="#666" stroke-width="2" stroke-dasharray="5,5"/>
+                    <text x="250" y="395" font-size="14" fill="#666">확산층 δ</text>
+                </svg>
+                <p class="image-caption">전극 표면 근처의 농도 구배: 반응이 빠를 때 표면 농도가 감소합니다</p>
+            </div>
+        </div>
+
+        <!-- 물질전달의 3가지 메커니즘 -->
+        <div class="slide">
+            <h2>오늘의 핵심: 물질전달 (Mass Transfer) 3가지</h2>
+            
+            <p style="font-size: 1.2em; margin: 20px 0;">전류가 흐르려면 전하(전자)뿐만 아니라 반응물 <strong>물질</strong>도 전극 표면으로 이동해야 합니다.</p>
+
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>1️⃣ 확산 (Diffusion)</h4>
+                    <p><strong>오늘의 주인공!</strong></p>
+                    <p>농도 차이에 의해 물질이 움직이는 것</p>
+                    <p style="margin-top: 10px;">💡 높은 농도 → 낮은 농도</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>2️⃣ 이동 (Migration)</h4>
+                    <p>전기장(전위)에 의해 이온이 움직이는 것</p>
+                    <p style="margin-top: 10px;">💡 전해질을 충분히 넣으면 무시 가능</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>3️⃣ 대류 (Convection)</h4>
+                    <p>용액이 물리적으로 움직여 물질이 전달되는 것</p>
+                    <p style="margin-top: 10px;">💡 휘젓거나 RDE처럼 회전</p>
+                </div>
+            </div>
+
+            <div class="highlight-box green">
+                <h3>실험 조건 설정</h3>
+                <p><strong>이번 장에서는 확산만 고려합니다:</strong></p>
+                <ul>
+                    <li><strong>이동 제거:</strong> 지지 전해질을 충분히 넣어서 전기장을 차폐</li>
+                    <li><strong>대류 제거:</strong> 용액을 휘젓지 않고 정지 상태 유지 (또는 강제 대류로 제어)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 1.2 확산층과 Fick의 법칙 -->
+        <div class="slide">
+            <h2>1.2 확산층과 Fick의 제1법칙: 한계 전류의 탄생 🛑</h2>
+            
+            <h3>핵심 개념: 확산층 (Diffusion Layer, δ)</h3>
+            
+            <div class="highlight-box blue">
+                <p>전극 표면 근처에는 유체 흐름이 거의 정지되어 있어 <strong>오직 확산</strong>만이 물질 전달을 책임지는 얇은 영역이 생깁니다. 이 영역을 <strong>확산층(δ)</strong>이라고 부릅니다.</p>
+            </div>
+
+            <div class="comparison-table">
+                <div class="comparison-item">
+                    <h4>물리적 의미</h4>
+                    <p>반응물 농도가 용액 내부 \(C(\infty,t)\)에서 전극 표면 \(C(0,t)\)까지 변하는 <strong>경계 영역</strong>입니다.</p>
+                </div>
+                
+                <div class="comparison-item">
+                    <h4>확산의 원동력</h4>
+                    <p>\(C(\infty,t)\)와 \(C(0,t)\) 사이의 <strong>농도 구배(Concentration Gradient)</strong>가 확산을 일으키는 원동력입니다.</p>
+                </div>
+            </div>
+
+            <h3>Fick의 제1법칙 (단순화): 확산 속도 (Flux)</h3>
+            
+            <p>확산층을 통한 반응물(Red)의 이동 속도(\(v_{\text{mt}}\), Flux)는 <strong>농도 구배</strong>에 비례합니다.</p>
+
+            <div class="equation">
+                $$v_{\text{mt}} = D_{\text{Red}}\frac{[C_{\text{Red}}(\infty,t) - C_{\text{Red}}(0,t)]}{\delta} \quad \text{...(6.1)}$$
+            </div>
+
+            <p>이 속도에 \(nFA\)를 곱하면 전류(\(i_{\text{an}}\))가 됩니다:</p>
+
+            <div class="equation">
+                $$i_{\text{an}} = nFA\frac{D_{\text{Red}}}{\delta}[C_{\text{Red}}(\infty,t) - C_{\text{Red}}(0,t)] \quad \text{...(6.3)}$$
+            </div>
+
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                <p><strong>변수 설명:</strong></p>
+                <ul>
+                    <li>\(D_{\text{Red}}\): 환원종의 확산 계수 (cm²/s)</li>
+                    <li>\(\delta\): 확산층 두께 (cm)</li>
+                    <li>\(n\): 전자 수</li>
+                    <li>\(F\): Faraday 상수 (96,485 C/mol)</li>
+                    <li>\(A\): 전극 면적 (cm²)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 한계 전류 -->
+        <div class="slide">
+            <h2>한계 전류 (Limiting Current, \(i_l\)): 전류의 최대치</h2>
+            
+            <div class="highlight-box red">
+                <h3>⚡ 한계 전류란?</h3>
+                <p>전위(\(E\))를 계속 높여 반응 속도를 무한히 빠르게 만들면, 표면의 반응물(Red)이 완전히 고갈됩니다.</p>
+            </div>
+
+            <div class="highlight-box">
+                <p><strong>조건:</strong> \(C_{\text{Red}}(0,t) = 0\) (표면 농도가 0)</p>
+                <p><strong>결과:</strong> 이때 확산 속도는 <strong>최대</strong>가 되며, 이 최대 전류를 <strong>한계 전류(\(i_l\))</strong>라고 합니다.</p>
+            </div>
+
+            <div class="equation">
+                $$i_{l,\text{an}} = nFA\frac{D_{\text{Red}}}{\delta}C_{\text{Red}}(\infty,t) \quad \text{...(6.4)}$$
+            </div>
+
+            <div class="key-point">
+                ⭐ 응용 통찰: \(\delta\)와 \(D\)가 일정하다면, \(i_l\)은 용액 내부의 농도 \(C(\infty,t)\)에 정확히 정비례합니다. 
+                <br>→ 이것이 바로 화학 센서나 분석 화학에서 농도를 측정하는 <strong>정량 분석</strong>의 원리입니다!
+            </div>
+
+            <div class="image-container">
+                <svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="800" height="500" fill="#f8f9fa"/>
+                    <line x1="100" y1="400" x2="700" y2="400" stroke="#333" stroke-width="2"/>
+                    <line x1="100" y1="400" x2="100" y2="50" stroke="#333" stroke-width="2"/>
+                    <text x="400" y="450" font-size="18" text-anchor="middle" fill="#333">전위 (E)</text>
+                    <text x="40" y="230" font-size="18" text-anchor="middle" fill="#333" transform="rotate(-90, 40, 230)">전류 (i)</text>
+                    <path d="M 120 380 Q 250 350, 350 250 T 680 100" stroke="#667eea" stroke-width="4" fill="none"/>
+                    <line x1="100" y1="100" x2="700" y2="100" stroke="#e03131" stroke-width="2" stroke-dasharray="10,5"/>
+                    <text x="710" y="105" font-size="16" fill="#e03131" font-weight="bold">i = i_l</text>
+                    <text x="150" y="370" font-size="14" fill="#666">낮은 전위</text>
+                    <text x="150" y="390" font-size="12" fill="#666">(전하전달 제어)</text>
+                    <text x="350" y="240" font-size="14" fill="#666">중간 전위</text>
+                    <text x="350" y="260" font-size="12" fill="#666">(혼합 제어)</text>
+                    <text x="600" y="120" font-size="14" fill="#666">높은 전위</text>
+                    <text x="600" y="140" font-size="12" fill="#666">(확산 제어)</text>
+                    <line x1="200" y1="340" x2="200" y2="310" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="400" y1="210" x2="400" y2="180" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="650" y1="160" x2="650" y2="130" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                </svg>
+                <p class="image-caption">추출 i-E 곡선: S자 형태를 보이며, 높은 전위에서 한계 전류에 도달합니다</p>
+            </div>
+        </div>
+
+        <!-- PART 1 퀴즈 -->
+        <div class="slide">
+            <div class="quiz-section">
+                <h3>🎓 PART 1 복습 퀴즈</h3>
+                
+                <div class="quiz-question">
+                    <h4>문제 1: Butler-Volmer 방정식의 핵심 가정은 무엇인가?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 전극 표면의 반응물 농도가 항상 0이다</li>
+                        <li>B) 전극 표면의 반응물 농도가 용액 내부 농도와 같다</li>
+                        <li>C) 확산이 항상 전류를 제한한다</li>
+                        <li>D) 전하전달이 매우 느리다</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q1')">정답 보기</button>
+                    <div class="quiz-answer" id="q1">
+                        <strong>정답: B</strong><br>
+                        Butler-Volmer 방정식은 전극 표면의 반응물 농도가 용액 내부 농도와 항상 같다고 가정합니다. 이 가정은 반응이 매우 빨라질 때 깨지게 되며, 이때 물질전달이 전류를 제한하기 시작합니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 2: 한계 전류 i_l이 발생하는 조건은?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 전극 표면의 반응물 농도가 최대일 때</li>
+                        <li>B) 전극 표면의 반응물 농도가 0에 가까울 때</li>
+                        <li>C) 확산 계수가 0일 때</li>
+                        <li>D) 전위가 0일 때</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q2')">정답 보기</button>
+                    <div class="quiz-answer" id="q2">
+                        <strong>정답: B</strong><br>
+                        한계 전류는 전위를 계속 높여 반응이 매우 빠르게 일어나 전극 표면의 반응물 농도가 0에 가까워질 때 발생합니다. 이때 확산 속도가 최대가 되며, 전류는 i_l로 제한됩니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 3: 확산층(δ)의 의미는?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 전극의 두께</li>
+                        <li>B) 전해질의 두께</li>
+                        <li>C) 농도가 변하는 경계 영역의 두께</li>
+                        <li>D) 전극과 기준전극 사이의 거리</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q3')">정답 보기</button>
+                    <div class="quiz-answer" id="q3">
+                        <strong>정답: C</strong><br>
+                        확산층(δ)은 전극 표면 근처에서 반응물 농도가 용액 내부 농도에서 전극 표면 농도까지 변하는 경계 영역의 두께입니다. 이 영역에서는 오직 확산만이 물질 전달을 담당합니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PART 2 시작 -->
+        <div class="slide" id="part2">
+            <h1>PART 2: 시간 의존성과 강제 대류</h1>
+            <div class="highlight-box blue">
+                <h3>🎯 학습 목표</h3>
+                <ul>
+                    <li>Cottrell 방정식을 통한 시간에 따른 전류 변화 이해</li>
+                    <li>전극 형태(구형, 미세전극)에 따른 확산 특성 파악</li>
+                    <li>회전 디스크 전극(RDE)의 원리와 Levich 방정식 이해</li>
+                    <li>Koutecky-Levich 분석을 통한 반응 메커니즘 규명</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 2.1 Cottrell 방정식 -->
+        <div class="slide">
+            <h2>2.1 시간-전류법: Cottrell 방정식 (시간의 영향)</h2>
+            
+            <h3>측정 기법: 시간-전류법 (Chronoamperometry)</h3>
+            
+            <div class="highlight-box">
+                <p><strong>원리:</strong> 정지된 평면 전극에 전위를 <strong>순간적으로</strong> 인가하여 시간에 따른 전류(\(i\)) 변화를 측정합니다.</p>
+            </div>
+
+            <div class="highlight-box red">
+                <h3>⚠️ 문제점</h3>
+                <p>시간이 흐를수록 확산층(δ)이 계속 두꺼워집니다.</p>
+                <div class="equation">
+                    $$\delta \propto \sqrt{D_{\text{Red}}t} \quad \text{(확산층 두께는 시간의 제곱근에 비례)}$$
+                </div>
+            </div>
+
+            <h3>Cottrell 방정식: 전류의 시간 의존성 📉</h3>
+            
+            <p>확산층이 두꺼워지면 농도 구배가 완만해지므로, 전류는 시간이 지남에 따라 <strong>감소</strong>합니다.</p>
+
+            <div class="equation">
+                $$i_l(t) = \frac{nFAD_{\text{Red}}^{1/2}C_{\text{Red}}(\infty,t)}{\pi^{1/2}t^{1/2}} \quad \text{...(6.12)}$$
+            </div>
+
+            <div class="key-point">
+                핵심 특징: \(i \propto t^{-1/2}\)
+            </div>
+
+            <div class="highlight-box blue">
+                <h3>Cottrell 플롯</h3>
+                <p>\(i\) 대 \(t^{-1/2}\)로 플롯하면 직선이 나옵니다. 이 직선의 기울기로부터 확산 계수(\(D_{\text{Red}}\))를 계산합니다.</p>
+            </div>
+
+            <div class="image-container">
+                <svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="800" height="500" fill="#f8f9fa"/>
+                    <g transform="translate(50, 50)">
+                        <text x="150" y="-20" font-size="16" fill="#333" font-weight="bold">i vs t</text>
+                        <line x1="50" y1="350" x2="300" y2="350" stroke="#333" stroke-width="2"/>
+                        <line x1="50" y1="350" x2="50" y2="50" stroke="#333" stroke-width="2"/>
+                        <path d="M 60 80 Q 120 150, 180 220 Q 220 260, 290 310" stroke="#e03131" stroke-width="3" fill="none"/>
+                        <text x="175" y="380" font-size="14" text-anchor="middle" fill="#333">시간 (t)</text>
+                        <text x="20" y="200" font-size="14" text-anchor="middle" fill="#333" transform="rotate(-90, 20, 200)">전류 (i)</text>
+                        <text x="180" y="150" font-size="13" fill="#e03131">i ∝ t⁻¹/²</text>
+                    </g>
+                    <g transform="translate(450, 50)">
+                        <text x="150" y="-20" font-size="16" fill="#333" font-weight="bold">i vs t⁻¹/²</text>
+                        <line x1="50" y1="350" x2="300" y2="350" stroke="#333" stroke-width="2"/>
+                        <line x1="50" y1="350" x2="50" y2="50" stroke="#333" stroke-width="2"/>
+                        <line x1="60" y1="310" x2="290" y2="80" stroke="#51cf66" stroke-width="3"/>
+                        <text x="175" y="380" font-size="14" text-anchor="middle" fill="#333">t⁻¹/² (s⁻¹/²)</text>
+                        <text x="20" y="200" font-size="14" text-anchor="middle" fill="#333" transform="rotate(-90, 20, 200)">전류 (i)</text>
+                        <text x="200" y="120" font-size="13" fill="#51cf66">직선!</text>
+                        <text x="150" y="320" font-size="12" fill="#666">기울기 ∝ D¹/²</text>
+                    </g>
+                </svg>
+                <p class="image-caption">Cottrell 플롯: i vs t는 곡선이지만, i vs t⁻¹/²는 직선입니다</p>
+            </div>
+        </div>
+
+        <!-- 2.2 미세 전극 -->
+        <div class="slide">
+            <h2>2.2 전극 형태의 혁신: 미세 전극 (Microelectrodes) ⚙️</h2>
+            
+            <h3>평면 전극의 한계 극복</h3>
+            
+            <div class="highlight-box red">
+                <p>평면 전극의 전류는 Cottrell 식에 따라 계속 감소하여 분석이 복잡합니다.</p>
+                <p><strong>해결책:</strong> 전극 형태에 변화를 주자!</p>
+            </div>
+
+            <h3>1. 미세 전극 (Microelectrodes)</h3>
+            
+            <p>전극의 크기(\(r_0\))를 매우 작게(\(r_0 < 20\mu\text{m}\)) 만들면 확산 형태가 <strong>1차원 확산</strong>에서 <strong>구면/방사형 확산</strong>으로 바뀝니다.</p>
+
+            <div class="comparison-table">
+                <div class="comparison-item">
+                    <h4>평면 전극</h4>
+                    <ul>
+                        <li>1차원 확산 (수직 방향만)</li>
+                        <li>확산층이 계속 두꺼워짐</li>
+                        <li>전류가 시간에 따라 감소</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-item" style="border-color: #51cf66;">
+                    <h4>미세 전극 (구형)</h4>
+                    <ul>
+                        <li>방사형 확산 (모든 방향에서)</li>
+                        <li>정상 상태 도달</li>
+                        <li><strong>시간에 무관한 일정 전류</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="equation">
+                <p><strong>정상 상태 전류:</strong></p>
+                $$i_{l,\text{disk}}(\tau) = \frac{4nFAD_{\text{Red}}C_{\text{Red}}(\infty,t)}{\pi r_0}f(\tau) \quad \text{...(6.29)}$$
+                $$\text{단, } \tau = \frac{4D_{\text{Red}}t}{r_0^2}$$
+            </div>
+
+            <div class="key-point">
+                ⭐ 응용 통찰: 미세 전극은 <strong>빠른 응답</strong>과 <strong>높은 감도</strong>를 가집니다.
+                <br>예시: 글루코스 센서, 단일 분자 관찰, 생체 내 분석
+            </div>
+        </div>
+
+        <!-- 2.3 RDE -->
+        <div class="slide">
+            <h2>2.3 회전 디스크 전극 (RDE): 강제 대류</h2>
+            
+            <h3>RDE의 원리</h3>
+            
+            <p>전극을 일정한 속도(ω)로 회전시켜 <strong>확산층 두께(δ_d)를 일정하게 고정</strong>합니다.</p>
+
+            <div class="equation">
+                $$\delta_d \propto \omega^{-1/2} \quad \text{(회전이 빠를수록 확산층은 얇아짐)}$$
+            </div>
+
+            <h3>Levich 방정식 (RDE의 한계 전류)</h3>
+            
+            <div class="equation">
+                $$i_l = 0.62nFAD^{2/3}\nu^{-1/6}C(\infty)\omega^{1/2} \quad \text{...(6.41)}$$
+            </div>
+
+            <div class="key-point">
+                핵심 특징: \(i_l \propto \omega^{1/2}\)
+                <br>한계 전류는 회전 속도의 제곱근에 <strong>정비례</strong>합니다!
+            </div>
+        </div>
+
+        <!-- 2.4 K-L 분석 -->
+        <div class="slide">
+            <h2>2.4 Koutecky-Levich 분석: 반응 메커니즘 규명</h2>
+            
+            <p style="font-size: 1.2em;">RDE의 가장 큰 장점은 <strong>전하전달 속도(\(i_{ct}\))</strong>와 <strong>물질전달 속도(\(i_l\))</strong>의 영향을 <strong>분리</strong>하여 분석할 수 있다는 것입니다!</p>
+
+            <div class="equation">
+                $$\frac{1}{i(\eta)} = \frac{1}{i_{ct}(\eta)} + \frac{1}{i_l} \quad \text{...(6.45b)}$$
+            </div>
+
+            <h3>Koutecky-Levich 방정식</h3>
+
+            <div class="equation">
+                $$\boxed{\frac{1}{i(\eta)} = \frac{1}{i_{ct}(\eta)} + \frac{1}{0.62nFAD^{2/3}\nu^{-1/6}C(\infty)\omega^{1/2}}} \quad \text{...(6.46)}$$
+            </div>
+
+            <div class="highlight-box blue">
+                <h3>K-L 플롯 분석: \(1/i\) 대 \(1/\omega^{1/2}\)</h3>
+                
+                <p><strong>1️⃣ y절편: \(1/i_{ct}(\eta)\)</strong></p>
+                <ul>
+                    <li><strong>의미:</strong> 순수한 전하전달 정보</li>
+                    <li><strong>활용:</strong> 전달 계수(α)와 속도 상수(\(k^{\circ}\)) 결정</li>
+                </ul>
+
+                <p><strong>2️⃣ 기울기: \(1/i_l\) 관련 항</strong></p>
+                <ul>
+                    <li><strong>의미:</strong> 물질전달 속도 정보</li>
+                    <li><strong>활용:</strong> 전자 수(\(n\)) 결정 → 반응 메커니즘 규명</li>
+                </ul>
+            </div>
+
+            <div class="key-point">
+                ⭐ 응용의 정점: K-L 분석은 <strong>연료전지 및 전기화학 촉매</strong>의 성능을 정량적으로 평가하고 반응 메커니즘을 밝혀내는 데 가장 핵심적인 도구입니다!
+            </div>
+        </div>
+
+        <!-- PART 2 퀴즈 -->
+        <div class="slide">
+            <div class="quiz-section">
+                <h3>🎓 PART 2 복습 퀴즈</h3>
+                
+                <div class="quiz-question">
+                    <h4>문제 4: Cottrell 방정식에서 전류는 시간에 어떻게 의존하는가?</h4>
+                    <ul class="quiz-options">
+                        <li>A) i ∝ t</li>
+                        <li>B) i ∝ t⁻¹/²</li>
+                        <li>C) i ∝ t²</li>
+                        <li>D) 시간에 무관</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q4')">정답 보기</button>
+                    <div class="quiz-answer" id="q4">
+                        <strong>정답: B</strong><br>
+                        Cottrell 방정식에 따르면 정지된 평면 전극에서 전류는 i ∝ t⁻¹/²로 감소합니다. 이는 확산층이 시간이 지남에 따라 두꺼워지기 때문입니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 5: 미세 전극의 주요 장점은?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 전류가 계속 감소한다</li>
+                        <li>B) 정상 상태 전류에 도달한다</li>
+                        <li>C) 확산층이 계속 두꺼워진다</li>
+                        <li>D) 전하전달만 일어난다</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q5')">정답 보기</button>
+                    <div class="quiz-answer" id="q5">
+                        <strong>정답: B</strong><br>
+                        미세 전극은 방사형 확산으로 인해 시간에 무관한 정상 상태 전류에 도달합니다. 이는 고감도 센서와 빠른 응답이 필요한 응용에 유리합니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 6: Levich 방정식에서 한계 전류는 회전 속도와 어떤 관계인가?</h4>
+                    <ul class="quiz-options">
+                        <li>A) i_l ∝ ω</li>
+                        <li>B) i_l ∝ ω¹/²</li>
+                        <li>C) i_l ∝ ω⁻¹/²</li>
+                        <li>D) i_l ∝ ω²</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q6')">정답 보기</button>
+                    <div class="quiz-answer" id="q6">
+                        <strong>정답: B</strong><br>
+                        Levich 방정식에 따르면 RDE의 한계 전류는 회전 속도의 제곱근에 정비례합니다 (i_l ∝ ω¹/²). 이를 통해 확산 계수를 정확하게 측정할 수 있습니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 7: K-L 플롯의 y절편으로부터 얻을 수 있는 정보는?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 확산 계수</li>
+                        <li>B) 전하전달 속도 상수</li>
+                        <li>C) 전극 면적</li>
+                        <li>D) 회전 속도</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q7')">정답 보기</button>
+                    <div class="quiz-answer" id="q7">
+                        <strong>정답: B</strong><br>
+                        K-L 플롯의 y절편은 1/i_ct에 해당하며, 여기서 전하전달 속도 상수(k°)와 전달 계수(α)를 결정할 수 있습니다. 기울기로부터는 전자 수(n)를 얻습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배터리 BOX -->
+        <div class="slide" id="battery">
+            <h1>BOX. 배터리 급속 충전: 리튬 이온 확산 제한 🔋</h1>
+            
+            <h2>1. 문제 상황: 리튬 석출 (Lithium Plating)</h2>
+            
+            <div class="highlight-box">
+                <h3>리튬 이온 배터리의 충전 과정</h3>
+                <p>리튬 이온($\text{Li}^+$)이 전해질을 통과하여 음극 활물질(흑연) 내부로 삽입되는 반응입니다.</p>
+            </div>
+
+            <div class="highlight-box red">
+                <h3>⚠️ 위험한 시나리오</h3>
+                <ol>
+                    <li><strong>확산 속도 < 소모 속도:</strong> 충전 전류가 너무 높으면 Li⁺ 표면 농도 급감</li>
+                    <li><strong>농도 분극:</strong> 전극 표면의 Li⁺ 농도가 0에 근접</li>
+                    <li><strong>리튬 석출:</strong> 전위가 과도하게 낮아져 금속 리튬이 표면에 석출</li>
+                </ol>
+                <p style="margin-top: 15px; font-weight: bold;">→ 배터리 용량 감소, 덴드라이트 형성, 화재 위험!</p>
+            </div>
+
+            <h2>2. Cottrell 방정식과의 연결</h2>
+            
+            <p>배터리 엔지니어들은 Cottrell 방정식의 아이디어를 사용하여 <strong>안전 충전 전류</strong>를 모델링합니다.</p>
+
+            <div class="equation">
+                $$i_{safe}(t) \propto \frac{1}{\sqrt{t}} \times D_{solid}^{1/2} \times C_{Li^+}(\infty)$$
+            </div>
+
+            <div class="highlight-box blue">
+                <h3>모델링의 의미</h3>
+                <ul>
+                    <li><strong>충전 초기:</strong> 높은 전류로 빠른 충전 가능</li>
+                    <li><strong>충전 후반:</strong> 전류를 낮춰야 리튬 석출 방지</li>
+                </ul>
+                <p style="margin-top: 15px; font-weight: bold;">→ 이것이 배터리가 80%까지는 빠르게, 마지막 20%는 느리게 충전되는 이유입니다!</p>
+            </div>
+
+            <div class="key-point">
+                💡 확산 이론(\(i_l\))은 수십조 원 규모의 <strong>전기차 배터리 안전성</strong>과 <strong>충전 속도</strong>를 결정하는 핵심 물리 법칙입니다!
+            </div>
+        </div>
+
+        <!-- 종합 퀴즈 -->
+        <div class="slide" id="quiz">
+            <h1>🎯 종합 복습 퀴즈</h1>
+            
+            <div class="quiz-section">
+                <div class="quiz-question">
+                    <h4>문제 8: 다음 중 확산을 증가시키는 방법이 아닌 것은?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 농도 구배를 크게 한다</li>
+                        <li>B) 온도를 높인다 (D 증가)</li>
+                        <li>C) 확산층을 두껍게 한다</li>
+                        <li>D) 전극을 회전시킨다 (RDE)</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q8')">정답 보기</button>
+                    <div class="quiz-answer" id="q8">
+                        <strong>정답: C</strong><br>
+                        확산층이 두꺼워지면 농도 구배가 완만해져 확산 속도가 감소합니다. A, B, D는 모두 확산을 증가시키는 방법입니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 9: 연료전지 촉매에서 산소 환원 반응이 4전자 경로로 진행되는지 확인하려면?</h4>
+                    <ul class="quiz-options">
+                        <li>A) Cottrell 플롯을 그린다</li>
+                        <li>B) Levich 플롯을 그린다</li>
+                        <li>C) K-L 플롯을 그리고 기울기를 분석한다</li>
+                        <li>D) i-E 곡선만 측정한다</li>
+                    </ul>
+                    <button class="show-answer-btn" onclick="toggleAnswer('q9')">정답 보기</button>
+                    <div class="quiz-answer" id="q9">
+                        <strong>정답: C</strong><br>
+                        K-L 플롯의 기울기를 분석하면 반응에 참여하는 전자 수(n)를 결정할 수 있습니다. n=4이면 효율적인 4전자 경로로 반응이 진행됨을 의미합니다.
+                    </div>
+                </div>
+
+                <div class="quiz-question">
+                    <h4>문제 10: 배터리 급속 충전 시 후반부에 전류를 낮춰야 하는 이유는?</h4>
+                    <ul class="quiz-options">
+                        <li>A) 전극이 과열되어서</li>
+                        <li>B) Li⁺ 확산 경로가 길어져 확산 제한이 심해져서</li>
+                        <li>C) 전해질이 고갈되어서</li>
+                        <li>D) 전압이 너무 높아져서</li>
+                    </ul>
+<button class="show-answer-btn" onclick="toggleAnswer('q10')">정답 보기</button>
+                    <div class="quiz-answer" id="q10">
+                        <strong>정답: B</strong><br>
+                        충전이 진행되면서 Li⁺ 이온이 흑연 입자 깊숙이 들어가면서 확산 경로가 길어집니다. Cottrell 방정식처럼 i_safe는 시간에 따라 감소해야 리튬 석출을 방지할 수 있습니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 연습문제 -->
+        <div class="slide" id="exercises">
+            <h1>📝 연습문제</h1>
+            
+            <div class="exercise-section">
+                <h3>계산 문제</h3>
+                
+                <div class="exercise-problem">
+                    <h4>문제 1: 한계 전류 계산</h4>
+                    <p>다음 조건에서 한계 전류를 계산하시오:</p>
+                    <ul>
+                        <li>전자 수 n = 2</li>
+                        <li>전극 면적 A = 0.5 cm²</li>
+                        <li>확산 계수 D = 5 × 10⁻⁶ cm²/s</li>
+                        <li>확산층 두께 δ = 0.01 cm</li>
+                        <li>용액 농도 C(∞) = 1 × 10⁻⁶ mol/cm³</li>
+                        <li>F = 96,485 C/mol</li>
+                    </ul>
+                    <p style="margin-top: 15px;"><strong>힌트:</strong> \(i_l = nFA\frac{D}{\delta}C(\infty)\)</p>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex1')">풀이 보기</button>
+                    <div class="quiz-answer" id="ex1">
+                        <strong>풀이:</strong><br>
+                        <div class="equation">
+                            $$i_l = nFA\frac{D}{\delta}C(\infty)$$
+                            $$= 2 \times 96485 \times 0.5 \times \frac{5 \times 10^{-6}}{0.01} \times 1 \times 10^{-6}$$
+                            $$= 2 \times 96485 \times 0.5 \times 5 \times 10^{-4} \times 10^{-6}$$
+                            $$= 4.82 \times 10^{-5} \text{ A} = 48.2 \text{ μA}$$
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exercise-problem">
+                    <h4>문제 2: Cottrell 방정식 응용</h4>
+                    <p>시간-전류법 실험에서 t = 1초일 때 전류가 100 μA였다. t = 4초일 때 전류는?</p>
+                    <p><strong>힌트:</strong> Cottrell 방정식 \(i \propto t^{-1/2}\)</p>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex2')">풀이 보기</button>
+                    <div class="quiz-answer" id="ex2">
+                        <strong>풀이:</strong><br>
+                        Cottrell 방정식에서 \(i \propto t^{-1/2}\)이므로:
+                        <div class="equation">
+                            $$\frac{i_2}{i_1} = \sqrt{\frac{t_1}{t_2}}$$
+                            $$i_2 = i_1 \times \sqrt{\frac{1}{4}} = 100 \times 0.5 = 50 \text{ μA}$$
+                        </div>
+                        시간이 4배 증가하면 전류는 2배 감소합니다.
+                    </div>
+                </div>
+
+                <div class="exercise-problem">
+                    <h4>문제 3: Levich 방정식</h4>
+                    <p>RDE 실험에서 회전 속도를 100 rpm에서 400 rpm으로 증가시켰을 때, 한계 전류는 몇 배 증가하는가?</p>
+                    <p><strong>힌트:</strong> \(i_l \propto \omega^{1/2}\)</p>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex3')">풀이 보기</button>
+                    <div class="quiz-answer" id="ex3">
+                        <strong>풀이:</strong><br>
+                        Levich 방정식에서 \(i_l \propto \omega^{1/2}\)이므로:
+                        <div class="equation">
+                            $$\frac{i_{l,2}}{i_{l,1}} = \sqrt{\frac{\omega_2}{\omega_1}} = \sqrt{\frac{400}{100}} = \sqrt{4} = 2$$
+                        </div>
+                        회전 속도가 4배 증가하면 한계 전류는 2배 증가합니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="exercise-section" style="margin-top: 30px;">
+                <h3>개념 문제</h3>
+                
+                <div class="exercise-problem">
+                    <h4>문제 4: 확산층 두께의 영향</h4>
+                    <p>다음 상황에서 확산층 두께가 어떻게 변하는지 설명하시오:</p>
+                    <ol style="margin-left: 20px;">
+                        <li>시간이 지남에 따라 (정지된 전극)</li>
+                        <li>RDE의 회전 속도를 증가시킬 때</li>
+                        <li>미세 전극을 사용할 때</li>
+                    </ol>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex4')">해설 보기</button>
+                    <div class="quiz-answer" id="ex4">
+                        <strong>해설:</strong><br>
+                        <ol>
+                            <li><strong>시간 경과 (정지 전극):</strong> δ ∝ √t 관계에 따라 확산층이 계속 두꺼워집니다. 이는 Cottrell 방정식에서 전류가 감소하는 이유입니다.</li>
+                            <li><strong>RDE 회전 증가:</strong> δ ∝ ω⁻¹/² 관계에 따라 확산층이 얇아집니다. 강제 대류가 신선한 반응물을 빠르게 공급하기 때문입니다.</li>
+                            <li><strong>미세 전극:</strong> 방사형 확산으로 인해 확산층이 전극 크기에 비례하여 매우 얇게 유지되며, 정상 상태에 빠르게 도달합니다.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-problem">
+                    <h4>문제 5: K-L 분석의 응용</h4>
+                    <p>K-L 플롯에서 다음을 관찰했을 때 어떤 결론을 내릴 수 있는가?</p>
+                    <ol style="margin-left: 20px;">
+                        <li>y절편이 0에 가까운 경우</li>
+                        <li>서로 다른 과전압에서 기울기가 같은 경우</li>
+                        <li>기울기로부터 계산한 n 값이 3.8인 경우</li>
+                    </ol>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex5')">해설 보기</button>
+                    <div class="quiz-answer" id="ex5">
+                        <strong>해설:</strong><br>
+                        <ol>
+                            <li><strong>y절편 ≈ 0:</strong> 전하전달이 매우 빠르다는 의미입니다. 즉, 반응이 완전히 확산 제어 영역에 있으며 가역적입니다.</li>
+                            <li><strong>같은 기울기:</strong> 전자 수(n)가 과전압에 무관하게 일정하다는 의미입니다. 이는 반응 메커니즘이 전위에 따라 변하지 않음을 나타냅니다.</li>
+                            <li><strong>n ≈ 3.8:</strong> 실험 오차를 고려하면 n = 4로 해석할 수 있습니다. 이는 산소 환원 반응에서 4전자 경로로 진행되는 효율적인 촉매임을 의미합니다.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="exercise-problem">
+                    <h4>문제 6: 실제 응용 시나리오</h4>
+                    <p>당뇨병 환자를 위한 연속 혈당 모니터링 센서를 개발하고 있습니다. 왜 미세 전극이 이 응용에 적합한지 설명하시오.</p>
+                    
+                    <button class="show-answer-btn" onclick="toggleAnswer('ex6')">해설 보기</button>
+                    <div class="quiz-answer" id="ex6">
+                        <strong>해설:</strong><br>
+                        미세 전극이 혈당 센서에 적합한 이유:
+                        <ul>
+                            <li><strong>정상 상태 전류:</strong> 시간에 무관한 일정한 신호로 연속 모니터링 가능</li>
+                            <li><strong>빠른 응답:</strong> 작은 크기와 방사형 확산으로 혈당 변화에 빠르게 반응</li>
+                            <li><strong>높은 감도:</strong> i_ss ∝ 1/r₀ 관계로 작은 농도 변화도 감지 가능</li>
+                            <li><strong>작은 크기:</strong> 피하에 삽입 가능하며 환자에게 불편함이 적음</li>
+                            <li><strong>낮은 샘플 소비:</strong> 작은 전극으로 적은 양의 혈액/조직액으로 측정 가능</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 총정리 -->
+        <div class="slide">
+            <h1>3. 총정리 및 응용 전망 🚀</h1>
+            
+            <table style="margin: 30px 0;">
+                <thead>
+                    <tr>
+                        <th>개념</th>
+                        <th>주요 특징</th>
+                        <th>핵심 통찰 (응용)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>확산층 (δ)</strong></td>
+                        <td>\(\delta \sim \sqrt{Dt}\)</td>
+                        <td>확산층 두께를 제어하여 <strong>응답 속도와 감도</strong>를 결정</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cottrell</strong></td>
+                        <td>\(i \propto t^{-1/2}\)</td>
+                        <td><strong>배터리 급속 충전</strong> 시 리튬 이온의 확산 제한 모델링</td>
+                    </tr>
+                    <tr>
+                        <td><strong>가역성 λ</strong></td>
+                        <td>\(\lambda \propto \sqrt{t_s}\)</td>
+                        <td><strong>실제 응용 조건(\(t_s\))</strong>에 맞는 반응 메커니즘을 평가</td>
+                    </tr>
+                    <tr>
+                        <td><strong>미세 전극</strong></td>
+                        <td>\(i_{ss} \propto 1/r_0\)</td>
+                        <td><strong>고감도 센서</strong> 및 <strong>빠른 응답</strong> 소자 개발에 활용</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RDE/K-L</strong></td>
+                        <td>\(i_l \propto \omega^{1/2}\)</td>
+                        <td><strong>연료전지 촉매</strong>의 <strong>전자 수(n)</strong> 및 반응 속도를 정확히 규명</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>개념들의 상호연결</h2>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>1. 확산의 본질</h4>
+                    <p>농도 구배에 의한 자발적 물질 이동</p>
+                    <p>→ 전기화학 반응의 속도 제한</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>2. 시간 의존성</h4>
+                    <p>Cottrell: \(i \propto t^{-1/2}\)</p>
+                    <p>→ 배터리 충전 프로토콜 설계</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>3. 전극 형태</h4>
+                    <p>미세전극: 정상상태 도달</p>
+                    <p>→ 고감도 센서 응용</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>4. 강제 대류</h4>
+                    <p>RDE: \(i_l \propto \omega^{1/2}\)</p>
+                    <p>→ 촉매 성능 평가</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>5. 메커니즘 규명</h4>
+                    <p>K-L 분석: 전자 수 결정</p>
+                    <p>→ 연료전지 최적화</p>
+                </div>
+
+                <div class="concept-card">
+                    <h4>6. 실제 응용</h4>
+                    <p>리튬 석출 방지</p>
+                    <p>→ 안전한 급속 충전</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 최종 마무리 -->
+        <div class="slide">
+            <h1>결론</h1>
+            
+            <div class="highlight-box" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+                <h2 style="color: white; border: none;">확산 이론(\(i_l\))은 단순한 화학 방정식이 아니라...</h2>
+                <p style="font-size: 1.3em; margin: 20px 0;">수십조 원 규모의 <strong>전기차 배터리 안전성</strong>과 <strong>충전 속도</strong>를 결정하는 핵심 물리 법칙입니다!</p>
+            </div>
+
+            <h2>제6장에서 배운 핵심 개념들</h2>
+            
+            <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; margin: 30px 0;">
+                <h3 style="color: #667eea;">핵심 요약</h3>
+                <ol style="font-size: 1.1em; line-height: 2;">
+                    <li><strong>물질전달의 중요성:</strong> 전하뿐만 아니라 물질도 이동해야 전류가 흐른다</li>
+                    <li><strong>한계 전류:</strong> 확산 속도가 전류를 제한하는 최대값 (i_l ∝ C)</li>
+                    <li><strong>시간 의존성:</strong> Cottrell 방정식으로 전류의 시간 변화 예측</li>
+                    <li><strong>전극 설계:</strong> 미세전극으로 정상상태 도달 및 고감도 달성</li>
+                    <li><strong>강제 대류:</strong> RDE로 확산층 제어 및 정량 분석</li>
+                    <li><strong>메커니즘 규명:</strong> K-L 분석으로 전자 수와 반응 경로 결정</li>
+                    <li><strong>실제 응용:</strong> 배터리 급속 충전의 안전성 확보</li>
+                </ol>
+            </div>
+
+            <h2>다음 강의 예고</h2>
+            
+            <div class="highlight-box green">
+                <h3>제7장: 전기화학 임피던스 분광법 (EIS)</h3>
+                <p>주파수 영역에서 전기화학 시스템을 분석하는 강력한 도구를 배웁니다!</p>
+                <ul>
+                    <li>교류 임피던스의 개념</li>
+                    <li>Nyquist 플롯과 Bode 플롯</li>
+                    <li>등가회로 모델링</li>
+                    <li>배터리 진단 응용</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 50px; padding: 30px; background: #f8f9fa; border-radius: 10px;">
+                <h2 style="color: #667eea;">수고하셨습니다! 🎉</h2>
+                <p style="font-size: 1.2em; margin-top: 20px;">
+                    전기화학의 세계로 한 걸음 더 나아갔습니다.<br>
+                    퀴즈와 연습문제를 통해 복습하시고,<br>
+                    다음 시간에 만나요!
+                </p>
+            </div>
+        </div>
+
+        <!-- 참고자료 -->
+        <div class="slide">
+            <h1>📚 참고자료 및 추가 학습</h1>
+            
+            <div class="highlight-box blue">
+                <h3>추천 교재</h3>
+                <ul>
+                    <li>Allen J. Bard & Larry R. Faulkner, "Electrochemical Methods: Fundamentals and Applications"</li>
+                    <li>C. M. A. Brett & A. M. O. Brett, "Electrochemistry: Principles, Methods, and Applications"</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box green">
+                <h3>온라인 자료</h3>
+                <ul>
+                    <li>MIT OpenCourseWare: Electrochemical Energy Systems</li>
+                    <li>YouTube: "Electrochemistry Lectures" by Prof. Steve Fletcher</li>
+                </ul>
+            </div>
+
+            <div class="highlight-box">
+                <h3>실험 시뮬레이션</h3>
+                <ul>
+                    <li>CHI Instruments - Electrochemical Simulation Software</li>
+                    <li>Gamry Instruments - Electrochemistry Tutorial</li>
+                </ul>
+            </div>
+
+            <h2>복습 체크리스트</h2>
+            <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid #667eea;">
+                <p><strong>다음 항목을 스스로 설명할 수 있는지 확인하세요:</strong></p>
+                <ul style="line-height: 2;">
+                    <li>☐ Butler-Volmer 방정식의 한계와 물질전달의 필요성</li>
+                    <li>☐ 확산층의 개념과 한계 전류의 물리적 의미</li>
+                    <li>☐ Fick의 법칙과 농도 구배의 관계</li>
+                    <li>☐ Cottrell 방정식과 시간 의존성</li>
+                    <li>☐ 미세 전극의 장점과 응용</li>
+                    <li>☐ RDE의 원리와 Levich 방정식</li>
+                    <li>☐ K-L 분석을 통한 전자 수 결정 방법</li>
+                    <li>☐ 배터리 급속 충전과 확산 제한의 관계</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // MathJax 설정
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+
+        // 퀴즈 정답 토글 함수
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+            } else {
+                answer.classList.add('show');
+            }
+        }
+
+        // 페이지 로드 시
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('전기화학 제6장 강의자료가 로드되었습니다.');
+            
+            // 프린트 버튼 추가 (선택사항)
+            const printBtn = document.createElement('button');
+            printBtn.textContent = '🖨️ 프린트';
+            printBtn.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #667eea;
+                color: white;
+                border: none;
+                padding: 15px 25px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 1em;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                z-index: 1000;
+            `;
+            printBtn.onclick = function() {
+                window.print();
+            };
+            document.body.appendChild(printBtn);
+        });
+
+        // 스크롤 진행 표시 (선택사항)
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            
+            // 진행 바가 있다면 업데이트
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+                progressBar.style.width = scrolled + '%';
+            }
+        });
+    </script>
+</body>
+</html>
