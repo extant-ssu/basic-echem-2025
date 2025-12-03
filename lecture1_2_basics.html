@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제1-2강: EIS 기초 개념 | 숭실대 화학과</title>
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* 메인 테마 및 레이아웃 (index.html과 통일성 유지) */
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #ff9f43;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 네비게이션 */
+        .nav-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .home-btn {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: opacity 0.3s;
+        }
+        
+        .home-btn:hover { opacity: 0.8; }
+
+        /* 섹션 스타일 */
+        section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            border-left: 5px solid var(--primary);
+            padding-left: 15px;
+            color: var(--secondary);
+            margin-top: 0;
+        }
+
+        h3 { color: var(--text-dark); margin-top: 30px; }
+
+        /* 개념 카드 스타일 */
+        .concept-card {
+            background: #f1f3f5;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid #e9ecef;
+        }
+
+        .highlight {
+            color: var(--secondary);
+            font-weight: bold;
+            background: rgba(118, 75, 162, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* 비교 테이블 */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .comparison-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+        }
+
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        /* 시각화 영역 */
+        .visual-container {
+            width: 100%;
+            height: 400px;
+            background: white;
+            border-radius: 15px;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .analogy-box {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .analogy-item {
+            text-align: center;
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .analogy-icon {
+            font-size: 3em;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        /* 컨트롤 패널 */
+        .control-panel {
+            background: #eee;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        input[type=range] {
+            width: 100%;
+        }
+
+        /* 말풍선 팁 */
+        .prof-tip {
+            border-left: 4px solid var(--accent);
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+        .prof-tip strong { display: block; margin-bottom: 5px; color: #856404; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="nav-header">
+            <div>
+                <h1 style="margin:0; font-size:1.5em;">⚡ 01-02강: EIS 기초 개념</h1>
+                <p style="margin:5px 0 0 0; opacity:0.9;">기초전기화학 | 숭실대학교 화학과</p>
+            </div>
+            <a href="index.html" class="home-btn"><i class="fas fa-home"></i> 메인으로</a>
+        </nav>
+
+        <section>
+            <h2>1. EIS란 무엇인가? (직관적 이해)</h2>
+            <p>화학을 하는 우리에게 가장 익숙한 것은 <strong>반응(Reaction)</strong>입니다. 전기화학 셀 안에 있는 전극 표면에서는 끊임없이 산화/환원 반응이 일어나고, 이온들이 이동하죠.</p>
+            
+            <div class="concept-card">
+                <p><strong>EIS (Electrochemical Impedance Spectroscopy)</strong>는 시스템을 파괴하지 않을 정도로 <span class="highlight">아주 작은 전기적 진동(AC)</span>을 주고, 시스템이 이 진동에 어떻게 <strong>저항(반응)</strong>하는지를 주파수별로 측정하는 방법입니다.</p>
+            </div>
+
+            <h3>💡 교수님의 비유: "블라인드 테스트"</h3>
+            <div class="analogy-box">
+                <div class="analogy-item">
+                    <div class="analogy-icon"><i class="fas fa-bolt"></i></div>
+                    <h4>DC 기법 (CV, LSV)</h4>
+                    <p>"전력 질주 시키기"</p>
+                    <p style="font-size:0.9em; color:#666;">시스템에 큰 전압을 걸어 억지로 반응을 일으킴. 정보를 얻지만 시스템 상태가 변함.</p>
+                </div>
+                <div class="analogy-item">
+                    <div class="analogy-icon"><i class="fas fa-wave-square"></i></div>
+                    <h4>AC 기법 (EIS)</h4>
+                    <p>"살짝 흔들어보기"</p>
+                    <p style="font-size:0.9em; color:#666;">평형 상태에서 아주 살짝 간지럽히듯 흔들어봄. 시스템 고유의 성질을 파괴 없이 알아냄.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>2. 왜 교류(AC)를 사용하는가?</h2>
+            <p>직류(DC)는 한 방향으로만 흐르지만, 교류(AC)는 왔다 갔다 합니다. 이 "왔다 갔다" 하는 성질 때문에 우리는 시간에 따른 <strong>위상(Phase)</strong> 정보를 얻을 수 있습니다.</p>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>구분</th>
+                            <th>저항 (Resistance, R)</th>
+                            <th>임피던스 (Impedance, Z)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>적용 전원</strong></td>
+                            <td>직류 (DC) 이상적 상황</td>
+                            <td>교류 (AC) 실제 상황</td>
+                        </tr>
+                        <tr>
+                            <td><strong>특징</strong></td>
+                            <td>전류의 흐름만 방해함</td>
+                            <td>흐름 방해 + <strong>시간 지연(위상차)</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>구성 요소</strong></td>
+                            <td>저항기 (Resistor)</td>
+                            <td>저항(R), 커패시터(C), 인덕터(L)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="prof-tip">
+                <strong>🧪 화학자의 관점</strong>
+                <p>순수한 저항(R)은 전해질 용액의 저항과 같습니다. 즉시 반응하죠.<br>
+                하지만 <strong>커패시터(C)</strong>는 '이중층(Double Layer)'과 같습니다. 이온이 전극 표면에 정렬하는 데 <strong>시간이 걸리기 때문</strong>에 전압을 줘도 전류가 바로 흐르지 않고 약간 늦게(지연되어) 반응합니다. 이것이 EIS의 핵심입니다!</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. 임피던스와 위상차 (Phase Shift)</h2>
+            <p>EIS 데이터 해석의 핵심은 <strong>"전압을 줬을 때, 전류가 얼마나 늦게 따라오는가?"</strong>를 보는 것입니다.</p>
+            
+            <div class="concept-card" style="border-left: 5px solid var(--accent);">
+                수식: $$ Z = \frac{E(t)}{I(t)} = \frac{E_0 \sin(\omega t)}{I_0 \sin(\omega t + \phi)} $$
+                <ul>
+                    <li>$E(t)$: 우리가 걸어준 전압 (파란색)</li>
+                    <li>$I(t)$: 측정된 전류 (주황색)</li>
+                    <li>$\phi$ (Phi): 위상차 (얼마나 밀렸는가?)</li>
+                </ul>
+            </div>
+
+            <h3>🎮 인터랙티브 실습: 위상차 느껴보기</h3>
+            <p>아래 슬라이더를 움직여보세요. <strong>위상차($\phi$)</strong>가 커질수록 전류가 전압보다 얼마나 늦게 반응하는지 확인해보세요.</p>
+            
+            <div id="sineWavePlot" class="visual-container"></div>
+            
+            <div class="control-panel">
+                <label for="phaseSlider" style="font-weight:bold; min-width: 100px;">위상차 ($\phi$): <span id="phaseValue">0</span>°</label>
+                <input type="range" id="phaseSlider" min="0" max="90" value="0" step="1">
+            </div>
+            
+            <div style="margin-top: 15px; font-size: 0.9em; color: #555;">
+                <ul>
+                    <li><strong>0° (동위상):</strong> 순수 저항(Resistor). 전압을 주자마자 전류가 흐름. (용액 저항)</li>
+                    <li><strong>90° (지연):</strong> 순수 커패시터(Capacitor). 전압이 변해야 전류가 흐르기 시작함. (전기이중층)</li>
+                    <li><strong>0° ~ 90° 사이:</strong> 실제 전기화학 셀 (반응 + 확산 + 이중층)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. 전기화학 셀을 회로로 표현하기</h2>
+            <p>우리는 복잡한 화학 반응을 해석하기 위해, 이를 전기 회로 부품에 빗대어 설명합니다 (등가회로).</p>
+
+            <div class="analogy-box">
+                <div class="analogy-item">
+                    <svg width="100" height="60" viewBox="0 0 100 60">
+                        <line x1="0" y1="30" x2="20" y2="30" stroke="black" stroke-width="2"/>
+                        <polyline points="20,30 25,20 35,40 45,20 55,40 65,20 75,40 80,30" fill="none" stroke="black" stroke-width="2"/>
+                        <line x1="80" y1="30" x2="100" y2="30" stroke="black" stroke-width="2"/>
+                        <text x="40" y="55" font-family="Arial" font-size="12">R</text>
+                    </svg>
+                    <h4>저항 (Resistor)</h4>
+                    <p class="highlight">용액 저항 ($R_s$), 전하 전달 저항 ($R_{ct}$)</p>
+                    <p style="font-size:0.9em;">이온이 전해질을 통과할 때 겪는 방해, 혹은 전자가 이동할 때 겪는 에너지 장벽.</p>
+                </div>
+
+                <div class="analogy-item">
+                    <svg width="100" height="60" viewBox="0 0 100 60">
+                        <line x1="0" y1="30" x2="45" y2="30" stroke="black" stroke-width="2"/>
+                        <line x1="45" y1="15" x2="45" y2="45" stroke="black" stroke-width="2"/>
+                        <line x1="55" y1="15" x2="55" y2="45" stroke="black" stroke-width="2"/>
+                        <line x1="55" y1="30" x2="100" y2="30" stroke="black" stroke-width="2"/>
+                        <text x="45" y="55" font-family="Arial" font-size="12">C</text>
+                    </svg>
+                    <h4>커패시터 (Capacitor)</h4>
+                    <p class="highlight">전기 이중층 커패시턴스 ($C_{dl}$)</p>
+                    <p style="font-size:0.9em;">전극 표면에 이온들이 층을 이루며 전하를 저장하는 능력. (배터리처럼)</p>
+                </div>
+            </div>
+
+            <p style="text-align: center; margin-top: 30px;">
+                <a href="eis_lecture_visuals.html" style="background: var(--primary); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold; box-shadow: 0 4px 15px rgba(102,126,234,0.4);">
+                    다음 강의: 데이터 보는 법 (Nyquist Plot) →
+                </a>
+            </p>
+        </section>
+    </div>
+
+    <script>
+        // Plotly 그래프 초기화 및 업데이트 로직
+        const plotDiv = document.getElementById('sineWavePlot');
+        const slider = document.getElementById('phaseSlider');
+        const phaseValue = document.getElementById('phaseValue');
+
+        function drawPlot(phaseShiftDeg) {
+            const t = [];
+            const voltage = [];
+            const current = [];
+            const phaseShiftRad = phaseShiftDeg * (Math.PI / 180);
+
+            // 데이터 생성 (2주기)
+            for (let i = 0; i <= 200; i++) {
+                const time = i / 20; // x축
+                t.push(time);
+                voltage.push(Math.sin(time)); // 전압 (기준)
+                current.push(Math.sin(time - phaseShiftRad)); // 전류 (위상차 적용, 전류가 뒤따라감)
+            }
+
+            const trace1 = {
+                x: t,
+                y: voltage,
+                mode: 'lines',
+                name: '인가 전압 (E)',
+                line: {color: '#667eea', width: 3}
+            };
+
+            const trace2 = {
+                x: t,
+                y: current,
+                mode: 'lines',
+                name: '응답 전류 (I)',
+                line: {color: '#ff9f43', width: 3, dash: 'solid'} // solid or dash
+            };
+
+            const layout = {
+                title: `AC 파형 비교 (위상차: ${phaseShiftDeg}°)`,
+                xaxis: {title: '시간 (Time)', showgrid: false},
+                yaxis: {title: '진폭 (Amplitude)', showgrid: true},
+                margin: {t: 50, l: 50, r: 20, b: 50},
+                legend: {x: 0, y: 1.1, orientation: 'h'},
+                hovermode: 'x unified'
+            };
+
+            const config = {responsive: true, displayModeBar: false};
+
+            Plotly.newPlot(plotDiv, [trace1, trace2], layout, config);
+        }
+
+        // 초기 그래프 그리기
+        drawPlot(0);
+
+        // 슬라이더 이벤트 리스너
+        slider.addEventListener('input', function() {
+            const val = this.value;
+            phaseValue.textContent = val;
+            drawPlot(val);
+        });
+    </script>
+</body>
+</html>

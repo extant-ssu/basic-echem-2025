@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제4강: 등가 회로 피팅 | 숭실대 화학과</title>
+    
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #667eea; --secondary: #764ba2; --accent: #ff9f43; --text-dark: #333; --bg-light: #f8f9fa; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-light); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 0; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .nav-header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 20px; border-radius: 0 0 20px 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+        .home-btn { color: white; text-decoration: none; font-weight: bold; }
+        section { background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        h2 { border-left: 5px solid var(--primary); padding-left: 15px; color: var(--secondary); margin-top: 0; }
+        
+        .fitting-game-area { background: #2d3436; color: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .score-board { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .score-value { font-size: 1.5em; font-weight: bold; color: #ff7675; }
+        .score-good { color: #55efc4; }
+        .control-panel { margin-top: 20px; }
+        .slider-group { margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .slider-group label { width: 150px; text-align: right; margin-right: 10px; }
+        .slider-group input { flex: 1; }
+        .prof-tip { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="nav-header">
+            <div>
+                <h1 style="margin:0; font-size:1.5em;">🧩 04강: 등가 회로 피팅</h1>
+                <p style="margin:5px 0 0 0; opacity:0.9;">데이터에서 의미 있는 숫자($R, C$) 뽑아내기</p>
+            </div>
+            <a href="index.html" class="home-btn"><i class="fas fa-home"></i> 메인으로</a>
+        </nav>
+
+        <section>
+            <h2>1. 피팅(Fitting)이란?</h2>
+            <p>실험 점들 위에 이론적 계산 선을 겹치는 과정입니다. 아래 게임을 통해 직접 체험해보세요.</p>
+        </section>
+
+        <section>
+            <h2>2. 🕹️ 실전: 피팅 게임 (Fitting Game)</h2>
+            <p><strong>파란 점(실험값)</strong>에 맞게 <strong>빨간 선(모델)</strong>을 조절하여 오차를 줄이세요!</p>
+            
+            <div class="fitting-game-area">
+                <div class="score-board">
+                    <span>현재 오차율 ($\chi^2$):</span>
+                    <span id="chiValue" class="score-value">Loading...</span>
+                </div>
+
+                <div id="fittingPlot" style="width:100%; height:400px; background: white; border-radius: 10px;"></div>
+
+                <div class="control-panel">
+                    <div class="slider-group">
+                        <label>용액 저항 ($R_s$)</label>
+                        <input type="range" id="fitRs" min="0" max="100" step="1" value="10">
+                        <span id="valRs">10</span> Ω
+                    </div>
+                    <div class="slider-group">
+                        <label>전하 전달 저항 ($R_{ct}$)</label>
+                        <input type="range" id="fitRct" min="10" max="500" step="5" value="100">
+                        <span id="valRct">100</span> Ω
+                    </div>
+                    <div class="slider-group">
+                        <label>커패시턴스 ($C_{dl}$)</label>
+                        <input type="range" id="fitCdl" min="1" max="100" step="1" value="10">
+                        <span id="valCdl">10</span> μF
+                    </div>
+                </div>
+            </div>
+
+            <div class="prof-tip">
+                <strong>💡 팁:</strong><br>
+                1. $R_s$: 반원의 시작점 이동<br>
+                2. $R_{ct}$: 반원의 크기 조절<br>
+                3. $C_{dl}$: 반원의 높이 미세 조절
+            </div>
+        </section>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="lecture5_applications.html" style="background: var(--primary); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold;">다음 강의 →</a>
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // 1. 정답 데이터 (Target)
+            const targetRs = 45;
+            const targetRct = 250;
+            const targetCdl = 40 * 1e-6; 
+
+            const freqs = [];
+            for(let i=5; i>=-1; i-=0.15) freqs.push(Math.pow(10, i));
+
+            const expData = { x: [], y: [] };
+            
+            freqs.forEach(f => {
+                const w = 2 * Math.PI * f;
+                const denom = 1 + Math.pow(w * targetRct * targetCdl, 2);
+                const real = targetRs + targetRct / denom;
+                const imag = (w * targetRct * targetRct * targetCdl) / denom;
+                
+                const noise = (Math.random() - 0.5) * 5; 
+                expData.x.push(real + noise);
+                expData.y.push(imag + noise); 
+            });
+
+            // 2. 피팅 계산 로직
+            function calculateModel(rs, rct, cdl_uF) {
+                const cdl = cdl_uF * 1e-6;
+                const x = [];
+                const y = [];
+                
+                freqs.forEach(f => {
+                    const w = 2 * Math.PI * f;
+                    const denom = 1 + Math.pow(w * rct * cdl, 2);
+                    x.push(rs + rct / denom);
+                    y.push((w * rct * rct * cdl) / denom);
+                });
+                return { x, y };
+            }
+
+            function calculateChiSquare(modelX, modelY) {
+                let error = 0;
+                for(let i=0; i<expData.x.length; i++) {
+                    const dx = expData.x[i] - modelX[i];
+                    const dy = expData.y[i] - modelY[i];
+                    error += (dx*dx + dy*dy);
+                }
+                return Math.sqrt(error) / expData.x.length; 
+            }
+
+            // 3. 그래프 그리기
+            function updateFit() {
+                const currentRs = parseFloat(document.getElementById('fitRs').value);
+                const currentRct = parseFloat(document.getElementById('fitRct').value);
+                const currentCdl = parseFloat(document.getElementById('fitCdl').value);
+
+                document.getElementById('valRs').innerText = currentRs;
+                document.getElementById('valRct').innerText = currentRct;
+                document.getElementById('valCdl').innerText = currentCdl;
+
+                const model = calculateModel(currentRs, currentRct, currentCdl);
+                const error = calculateChiSquare(model.x, model.y);
+                const scoreSpan = document.getElementById('chiValue');
+                
+                scoreSpan.innerText = error.toFixed(2);
+                
+                if(error < 2.0) {
+                    scoreSpan.className = "score-value score-good";
+                    scoreSpan.innerText = "PERFECT MATCH!! 🎉";
+                } else {
+                    scoreSpan.className = "score-value";
+                }
+
+                // Plotly 그리기 (newPlot 사용)
+                Plotly.newPlot('fittingPlot', [
+                    {
+                        x: expData.x, y: expData.y,
+                        mode: 'markers', name: '실험 데이터 (Target)',
+                        marker: { color: '#0984e3', size: 10, opacity: 0.7 }
+                    },
+                    {
+                        x: model.x, y: model.y,
+                        mode: 'lines', name: '내 피팅 (Model)',
+                        line: { color: '#d63031', width: 4 }
+                    }
+                ], {
+                    title: 'Nyquist Plot Fitting',
+                    xaxis: { title: "Z' (Ω)", range: [0, 400] },
+                    yaxis: { title: "-Z'' (Ω)", scaleanchor: "x", scaleratio: 1, range: [0, 200] },
+                    margin: { t: 40, b: 40, l: 50, r: 20 },
+                    legend: { x: 0.7, y: 1 }
+                }, {responsive: true});
+            }
+
+            // 이벤트 리스너 연결
+            ['fitRs', 'fitRct', 'fitCdl'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateFit);
+            });
+
+            // 초기 실행
+            updateFit();
+            
+            // 리사이즈
+            window.addEventListener('resize', function() {
+                Plotly.Plots.resize('fittingPlot');
+            });
+        });
+    </script>
+</body>
+</html>

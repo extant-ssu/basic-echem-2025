@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제5강: 실제 응용 사례 | 숭실대 화학과</title>
+    
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    
+    <script>
+        window.MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { --primary: #667eea; --secondary: #764ba2; --accent: #ff9f43; --text-dark: #333; --bg-light: #f8f9fa; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-light); color: var(--text-dark); line-height: 1.6; margin: 0; padding: 0; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+        .nav-header { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); color: white; padding: 20px; border-radius: 0 0 20px 20px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+        .home-btn { color: white; text-decoration: none; font-weight: bold; }
+        
+        section { background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        h2 { border-left: 5px solid var(--primary); padding-left: 15px; color: var(--secondary); margin-top: 0; }
+        
+        /* 응용 분야 카드 스타일 */
+        .app-card { display: flex; gap: 20px; margin-bottom: 30px; align-items: center; background: #f1f3f5; padding: 20px; border-radius: 15px; }
+        .app-icon { font-size: 2.5em; color: var(--primary); width: 60px; text-align: center; }
+        .app-desc h3 { margin: 0 0 5px 0; color: var(--text-dark); }
+        .app-desc p { margin: 0; color: #666; font-size: 0.95em; }
+
+        /* 컨트롤 패널 */
+        .control-panel { background: #333; color: white; padding: 20px; border-radius: 15px; margin-top: 20px; }
+        .slider-group { margin-bottom: 15px; }
+        .slider-group label { display: flex; justify-content: space-between; margin-bottom: 5px; font-weight: bold; }
+        .slider-group input { width: 100%; cursor: pointer; }
+        
+        /* 버튼 그룹 */
+        .btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .action-btn {
+            padding: 10px 20px; border: none; border-radius: 25px;
+            font-weight: bold; cursor: pointer; transition: all 0.2s;
+            background: #e9ecef; color: #495057;
+        }
+        .action-btn.active { background: var(--accent); color: white; transform: scale(1.05); box-shadow: 0 4px 10px rgba(255, 159, 67, 0.4); }
+        .action-btn:hover { background: #dee2e6; }
+        .action-btn.active:hover { background: var(--accent); }
+
+        .prof-tip { background: #fff3cd; border: 1px solid #ffeeba; color: #856404; padding: 15px; border-radius: 10px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="nav-header">
+            <div>
+                <h1 style="margin:0; font-size:1.5em;">🚀 05강: 실제 응용 사례</h1>
+                <p style="margin:5px 0 0 0; opacity:0.9;">배터리부터 바이오센서까지</p>
+            </div>
+            <a href="index.html" class="home-btn"><i class="fas fa-home"></i> 메인으로</a>
+        </nav>
+
+        <section>
+            <div class="app-card">
+                <div class="app-icon"><i class="fas fa-car-battery"></i></div>
+                <div class="app-desc">
+                    <h3>1. 리튬 이온 배터리 진단</h3>
+                    <p>배터리가 노화(Aging)되면 내부 저항이 어떻게 변하는지 확인해봅시다.</p>
+                </div>
+            </div>
+
+            <div id="batteryPlot" style="width:100%; height:400px;"></div>
+            
+            <div class="control-panel">
+                <div class="slider-group">
+                    <label>
+                        <span>충/방전 사이클 (Aging)</span>
+                        <span id="cycleValue" style="color: var(--accent);">0 Cycles (새 배터리)</span>
+                    </label>
+                    <input type="range" id="cycleSlider" min="0" max="1000" step="50" value="0">
+                </div>
+                <p style="font-size: 0.9em; color: #ccc; margin-top: 10px;">
+                    * 사이클이 증가할수록 전해질이 마르고($R_s \uparrow$), SEI 층이 두꺼워지며($R_{ct} \uparrow$) 배터리 성능이 저하됩니다.
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <div class="app-card">
+                <div class="app-icon"><i class="fas fa-dna"></i></div>
+                <div class="app-desc">
+                    <h3>2. 바이오센서 (Label-free Detection)</h3>
+                    <p>전극 표면에 항체와 항원이 결합할 때, 전자 이동이 얼마나 방해받는지($R_{ct}$ 증가) 측정합니다.</p>
+                </div>
+            </div>
+
+            <div id="bioPlot" style="width:100%; height:400px;"></div>
+
+            <div class="btn-group">
+                <button class="action-btn active" onclick="updateBioStep(1)">1. Bare Gold</button>
+                <button class="action-btn" onclick="updateBioStep(2)">2. Antibody 고정</button>
+                <button class="action-btn" onclick="updateBioStep(3)">3. Antigen 결합 (검출)</button>
+            </div>
+
+            <div class="prof-tip">
+                <strong>👨‍🏫 교수님의 코멘트:</strong><br>
+                임신중독증 마커 단백질이 항체에 붙으면 전자가 지나다닐 틈이 좁아집니다. <br>
+                즉, <strong>반원이 커질수록 "양성(Positive)"</strong>일 확률이 높다는 뜻이죠!
+            </div>
+        </section>
+
+        <section>
+            <div class="app-card">
+                <div class="app-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="app-desc">
+                    <h3>3. 금속 부식과 코팅 평가</h3>
+                    <p>코팅이 잘 되어 있으면 저항이 매우 큽니다. 코팅에 흠집(Defect)이 생기면 어떻게 될까요?</p>
+                </div>
+            </div>
+
+            <div id="corrosionPlot" style="width:100%; height:400px;"></div>
+
+            <div class="control-panel">
+                <div class="slider-group">
+                    <label>
+                        <span>코팅 상태 (Coating Quality)</span>
+                        <span id="coatingValue" style="color: var(--accent);">완벽함 (100%)</span>
+                    </label>
+                    <input type="range" id="coatingSlider" min="1" max="100" step="1" value="100">
+                </div>
+                <div style="font-size: 0.9em; color: #ccc;">
+                    왼쪽(0%)으로 갈수록 코팅이 벗겨져 부식이 빠르게 진행됩니다. (반원이 작아짐)
+                </div>
+            </div>
+        </section>
+
+        <p style="text-align: center; margin-top: 30px;">
+            <a href="lecture6_troubleshooting.html" style="background: var(--primary); color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: bold;">마지막 강의: 실험 노하우 →</a>
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // --- 1. 배터리 시뮬레이션 로직 ---
+            function updateBatteryPlot() {
+                const cycles = parseInt(document.getElementById('cycleSlider').value);
+                document.getElementById('cycleValue').innerText = cycles + " Cycles" + (cycles === 0 ? " (새 배터리)" : "");
+
+                // 배터리 노화 모델: 사이클이 돌수록 Rs 약간 증가, Rct 대폭 증가
+                // Aging Factor
+                const alpha = cycles / 1000; 
+                const Rs = 5 + (2 * alpha); // 5옴 -> 7옴 (전해질 건조)
+                const Rct = 20 + (100 * alpha * alpha); // 20옴 -> 120옴 (계면 저항 급증)
+                const Cdl = 0.001;
+
+                const x = [], y = [];
+                for(let f=10000; f>=0.1; f/=1.5) {
+                    const w = 2 * Math.PI * f;
+                    const denom = 1 + Math.pow(w * Rct * Cdl, 2);
+                    x.push(Rs + Rct/denom);
+                    y.push((w * Rct * Rct * Cdl)/denom);
+                }
+
+                Plotly.newPlot('batteryPlot', [{
+                    x: x, y: y, mode: 'lines+markers',
+                    marker: {size: 6, color: cycles, colorscale: 'Hot', cmin:0, cmax:1000},
+                    line: {color: '#ff7675', width: 3}
+                }], {
+                    title: '배터리 노화에 따른 임피던스 변화',
+                    xaxis: {title: "Z' (Ω)", range: [0, 150]},
+                    yaxis: {title: "-Z'' (Ω)", scaleanchor: "x", scaleratio: 1, range: [0, 80]},
+                    margin: {t:40, b:40, l:50, r:20},
+                    plot_bgcolor: "#fff"
+                }, {responsive: true});
+            }
+            document.getElementById('cycleSlider').addEventListener('input', updateBatteryPlot);
+            updateBatteryPlot(); // 초기 실행
+
+
+            // --- 2. 바이오센서 시뮬레이션 로직 ---
+            window.updateBioStep = function(step) {
+                // 버튼 스타일 업데이트
+                const btns = document.querySelectorAll('.action-btn');
+                btns.forEach((btn, idx) => {
+                    if(idx + 1 === step) btn.classList.add('active');
+                    else btn.classList.remove('active');
+                });
+
+                // 단계별 파라미터 설정
+                let Rs = 10;
+                let Rct = 50; // 기본 (Bare)
+                let label = "Bare Gold";
+                let color = "#bdc3c7";
+
+                if(step === 2) {
+                    Rct = 200; // 항체 고정 후 저항 증가
+                    label = "Antibody Immobilized";
+                    color = "#f1c40f";
+                } else if(step === 3) {
+                    Rct = 600; // 항원 결합 후 저항 대폭 증가
+                    label = "Antigen Bound (Detected!)";
+                    color = "#e74c3c";
+                }
+
+                const Cdl = 0.0001;
+                const x = [], y = [];
+                
+                // Warburg 효과 (45도 직선) 추가를 위해 저주파수 대역 처리
+                for(let f=100000; f>=0.1; f/=1.5) {
+                    const w = 2 * Math.PI * f;
+                    // Randles with Warburg (Simplified approximation for visual)
+                    // Z_warburg = sigma / sqrt(w) * (1-j)
+                    const sigma = 50; 
+                    const zw_real = sigma / Math.sqrt(w);
+                    const zw_imag = sigma / Math.sqrt(w);
+
+                    // 병렬 회로 (Rct + Zw) || Cdl 계산은 복잡하므로 
+                    // 시각화를 위해 Rct만 변하는 반원 모델 + 끝에 확산 꼬리 붙이기
+                    
+                    const denom = 1 + Math.pow(w * Rct * Cdl, 2);
+                    let z_real = Rs + Rct/denom;
+                    let z_imag = (w * Rct * Rct * Cdl)/denom;
+
+                    // 저주파수에서 확산(직선) 효과 흉내
+                    if (f < 10) {
+                        z_real += zw_real;
+                        z_imag += zw_imag;
+                    }
+
+                    x.push(z_real);
+                    y.push(z_imag);
+                }
+
+                Plotly.newPlot('bioPlot', [{
+                    x: x, y: y, mode: 'lines', fill: 'tozeroy',
+                    line: {color: color, width: 4},
+                    name: label
+                }], {
+                    title: `바이오센서 단계: ${label}`,
+                    xaxis: {title: "Z' (Ω)", range: [0, 800]},
+                    yaxis: {title: "-Z'' (Ω)", scaleanchor: "x", scaleratio: 1, range: [0, 500]},
+                    margin: {t:40, b:40, l:50, r:20}
+                }, {responsive: true});
+            };
+            window.updateBioStep(1); // 초기 실행
+
+
+            // --- 3. 부식 시뮬레이션 로직 ---
+            function updateCorrosionPlot() {
+                const quality = parseInt(document.getElementById('coatingSlider').value);
+                
+                // 코팅 품질 100 -> Rct 10000 (매우 큼)
+                // 코팅 품질 1 -> Rct 100 (부식 진행)
+                // Log scale mapping
+                const Rct = 100 * Math.pow(10, (quality/50)); 
+                const Rs = 10;
+                const Cdl = 0.0001;
+
+                document.getElementById('coatingValue').innerText = quality + "%";
+                if(quality < 30) document.getElementById('coatingValue').style.color = "red";
+                else document.getElementById('coatingValue').style.color = "var(--accent)";
+
+                const x = [], y = [];
+                for(let f=10000; f>=0.01; f/=2) {
+                    const w = 2 * Math.PI * f;
+                    const denom = 1 + Math.pow(w * Rct * Cdl, 2);
+                    x.push(Rs + Rct/denom);
+                    y.push((w * Rct * Rct * Cdl)/denom);
+                }
+
+                Plotly.newPlot('corrosionPlot', [{
+                    x: x, y: y, type: 'scatter', mode: 'lines',
+                    line: {color: '#3498db', width: 3}
+                }], {
+                    title: '코팅 품질에 따른 임피던스',
+                    // 코팅 저항은 로그 스케일로 변하므로 축 범위를 동적으로 보여주는게 좋음
+                    xaxis: {title: "Z' (Ω)"},
+                    yaxis: {title: "-Z'' (Ω)", scaleanchor: "x", scaleratio: 1},
+                    margin: {t:40, b:40, l:50, r:20}
+                }, {responsive: true});
+            }
+            document.getElementById('coatingSlider').addEventListener('input', updateCorrosionPlot);
+            updateCorrosionPlot();
+        });
+    </script>
+</body>
+</html>
